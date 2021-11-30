@@ -50,6 +50,7 @@ class InteractionHandler extends EventEmitter {
      */
     rebuild() {
         this.client.logger.log(this.constructor.name, `---- Live reload triggered ----`);
+        this.client.webhook.send(`${this.constructor.name} ---- Live reload triggered ----`)
 
         // let stashed = this.commands;
         try {
@@ -71,6 +72,7 @@ class InteractionHandler extends EventEmitter {
         }
 
         this.client.logger.log(this.constructor.name, `---- Live reload completed ----`);
+        this.client.webhook.send(`${this.constructor.name} ---- Live reload completed ----`)
         return this; // For the sake of transparency, this behaves just as build()
     }
 
