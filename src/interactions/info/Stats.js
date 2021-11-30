@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const KongouInteraction = require('../../abstract/KongouInteraction.js');
 
 class Stats extends KongouInteraction {
@@ -43,6 +43,7 @@ class Stats extends KongouInteraction {
             this.client.shard.broadcastEval('process.memoryUsage()'),
             this.client.shard.broadcastEval('this.queue.size')
         ]);
+
         const embed = new MessageEmbed()
             .setColor(this.client.color)
             .setTitle('Status')
