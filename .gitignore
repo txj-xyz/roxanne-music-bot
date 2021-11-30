@@ -1,0 +1,14 @@
+# eclipse project
+.project
+.settings
+.idea
+.vscode
+/slash-reloader-config.json
+/config.json
+/lavalink-server.json
+/lavasfy-servers.json
+/misc.json
+out
+node_modules
+db
+package-lock.json
