@@ -51,18 +51,23 @@ class Play extends KongouInteraction {
             }
 
             for(const res of playlist.tracks) {
-                fullResolvedList = [];
+                // fullResolvedList = [];
                 let resTrack = new ShoukakuTrack(res);
                 fullResolvedList.push(resTrack);
             }
             const firstTrack = fullResolvedList.shift();
             const startDispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack)
-            await interaction.editReply(`Queueing \`${String(playlist.tracks.length)}\` tracks from \`${playlist.playlistInfo?.name || playlist.title}\`!`).catch(() => null);
+            
+            if(playlist.loadType === "TRACK_LOADED"){
+                await interaction.editReply(`\`${firstTrack.info.author} - ${firstTrack.info.title}\` added to the Queue!`).catch(() => null);
+            } else {
+                await interaction.editReply(`Queueing \`${String(playlist.tracks.length)}\` tracks from \`${playlist.playlistInfo?.name || playlist.title}\`!`).catch(() => null);
+            }
             startDispatcher?.play();
             fullResolvedList = [];
 
             //post process the list of tracks
-            for(const postRes of playlist.tracks) {
+            for(const postRes of playlist.tracks.slice(1)) {
                 let resTrack = new ShoukakuTrack(postRes);
                 await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, resTrack);
             }
