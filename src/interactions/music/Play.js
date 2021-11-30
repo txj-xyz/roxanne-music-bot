@@ -43,12 +43,11 @@ class Play extends KongouInteraction {
             let playlist;
             let fullResolvedList = [];
             playlist = await lavaNode.load(query);
-            // await interaction.editReply(`Sorry, one moment <:embarrased:797258149567528960>, I dropped some tracks`).catch(() => null);
 
             if(playlist.loadType === "LOAD_FAILED" || playlist.tracks.length === 0){
-                return await interaction.editReply(`Sorry human, Spotify dropped my connection. Please try again.`).catch(() => null);
+                return await interaction.editReply(`Sorry human, Spotify returned an error, this playlist is not available for me to see.`);
             } else if(playlist.loadType === "NO_MATCHES") {
-                return await interaction.editReply(`Sorry human, I was not able to find anything from your search.`)
+                return await interaction.editReply(`Sorry human, I was not able to find anything from your search.`);
             }
 
             for(const res of playlist.tracks) {
