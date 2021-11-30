@@ -3,7 +3,7 @@ const { LavasfyClient } = require('lavasfy');
 const servers = require('../lavasfy-servers.json');
 const { Cheshire } = require('cheshire');
 const { Collection } = require('@discordjs/collection');
-const { token, webhookUrl } = require('../config.json');
+const { token, webhookUrl, spotifyClientID, spotifySecret } = require('../config.json');
 const KongouLogger = require('./modules/KongouLogger.js');
 const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
 // const LavasfyHandler = require('./modules/LavasfyHandler.js');
@@ -46,9 +46,8 @@ class Kongou extends Client {
         this.servers = servers;
         // Spotify Support
         this.lavasfy = new LavasfyClient({
-            clientID: "c5b8110ea0b64623be65364ba96705cf",
-            clientSecret: "19e8cb703abe4da6ac8ef7f513a40889",
-            playlistPageLoadLimit: 3,
+            clientID: spotifyClientID,
+            clientSecret: spotifySecret,
             filterAudioOnlyResult: true,
             autoResolve: true,
             useSpotifyMetadata: true,
