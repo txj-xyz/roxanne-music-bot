@@ -21,7 +21,7 @@ class Reload extends KongouInteraction {
     }
 
     async run({ interaction }) {
-        await interaction.deferReply();
+        await interaction.deferReply({ ephemeral: true });
         let embed, stashed;
 
         try {
