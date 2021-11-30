@@ -9,7 +9,7 @@ class Reload extends KongouInteraction {
     }
 
     get description() {
-        return 'breechblock open, feed in ammo!';
+        return 'Live reload all commands!';
     }
 
     get permissions() {
@@ -31,7 +31,7 @@ class Reload extends KongouInteraction {
             embed = new MessageEmbed()
                 .setColor(this.client.color)
                 .setTitle('Reload complete !')
-                .setDescription(`successfully reloaded ${this.client.interactions.commands.size} commands!`)
+                .setDescription(`Successfully live reloaded ${this.client.interactions.commands.size} commands!`)
                 .setTimestamp()
                 .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
         } catch (error) {
