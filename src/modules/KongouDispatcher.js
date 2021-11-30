@@ -63,7 +63,6 @@ class KongouDispatcher {
         this.player
             .setVolume(0.5)
             .playTrack(this.current.track);
-        this.client.webhook.send(`Started player on Guild \`"${this.guild.id} | ${this.guild.name}"\``)
     }
     
     destroy(reason) {
