@@ -9,7 +9,7 @@ class Eval extends KongouInteraction {
     }
 
     get description() {
-        return 'stop inspecting my cannons >3<';
+        return 'Evaluate code in the scope of Eval#Class';
     }
 
     get permissions() {
