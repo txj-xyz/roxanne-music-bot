@@ -14,7 +14,7 @@ class ShoukakuHandler extends Shoukaku {
         this.on('error',
             (name, error) => {
                 client.logger.error(error)
-                client.webhook.send(`\`\`\`\n${JSON.stringify(error, null, 2)}\n\`\`\``)
+                client.webhook.send(`\`\`\`\n${error}\n\`\`\``)
             }
         );
         this.on('close',
