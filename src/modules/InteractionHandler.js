@@ -33,7 +33,7 @@ class InteractionHandler extends EventEmitter {
                 const Command = new Interaction(this.client);
                 Command.category = directory.name.charAt(0).toUpperCase() + directory.name.substring(1);
                 this.commands.set(Command.name, Command);
-                // this.client.webhook.send(`${this.constructor.name} \tCommand '${Command.name}' loaded (@${Command.uid})`)
+                this.client.webhook.send(`${this.constructor.name} \tCommand '${Command.name}' loaded (@${Command.uid})`)
                 this.client.logger.debug(this.constructor.name, `\tCommand '${Command.name}' loaded (@${Command.uid})`);
             }
         }
@@ -105,6 +105,7 @@ class InteractionHandler extends EventEmitter {
                 return interaction.reply('You are not in the same voice channel I\'m currently connected to!');         
             // execute le commandz
             this.client.logger.log(this.constructor.name, `Executing command ${command.name} (@${command.uid})`);
+            this.client.webhook.send(`${this.constructor.name} Executing command ${command.name} (@${command.uid})`)
             await command.run({ interaction, dispatcher });
         } catch (error) {
             const embed = new MessageEmbed()
