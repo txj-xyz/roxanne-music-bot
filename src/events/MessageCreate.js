@@ -11,7 +11,7 @@ class MessageCreate extends KongouEvent {
 
     async run(message) {
         if(message.author.bot) return;
-        console.log(`[${message.guild.name}] [${message.channel.name}] [User: ${message.author.username}] [Message: \`\`\`${message.content.replace(/\r?\n|\r/g, " ")}]`)
+        console.log(`[${message.guild.name}] [${message.channel.name}] [User: ${message.author.username}] [Message: ${message.content.replace(/\r?\n|\r/g, " ")}]`)
 
     }
 }
