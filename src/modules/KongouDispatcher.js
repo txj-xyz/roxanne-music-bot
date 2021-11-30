@@ -70,7 +70,7 @@ class KongouDispatcher {
         this.player.connection.disconnect();
         this.client.queue.delete(this.guild.id);
         this.client.logger.debug(this.player.constructor.name, `Destroyed the player & connection @ guild "${this.guild.id}"\nReason: ${reason || 'No Reason Provided'}`);
-        // this.client.webhook.send(`Destroyed the player & connection @ guild \`"${this.guild.id} | ${this.guild.name}"\` Reason: ${reason || 'No Reason Provided'}`)
+        this.client.webhook.send(`Destroyed the player & connection @ guild \`"${this.guild.id} | ${this.guild.name}"\` Reason: ${reason || 'No Reason Provided'}`)
         if (this.stopped) return;
         this.channel
             .send('No more songs in queue, feel free to create a new player again!')
