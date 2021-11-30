@@ -88,7 +88,7 @@ class Play extends KongouInteraction {
             return;
         }
         if(query == "lepo lepo") {
-            await interaction.editReply('Lepo lepo detected, please wait while I load niane\'s command.');
+            await interaction.editReply('Lepo lepo detected, please wait while I load Niane\'s command.');
         }
         const search = await node.rest.resolve(query, 'youtube');
         if (!search?.tracks.length)
