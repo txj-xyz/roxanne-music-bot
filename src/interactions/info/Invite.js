@@ -7,7 +7,7 @@ class Invite extends KongouInteraction {
     }
 
     get description() {
-        return 'Invite Roxanne to your server';
+        return 'Invite me to your server';
     }
 
     static link(id) {
