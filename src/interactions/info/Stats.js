@@ -37,6 +37,7 @@ class Stats extends KongouInteraction {
     }
 
     async run({ interaction }) {
+        const message = await interaction.deferReply({ fetchReply: true });
         const [ guilds, channels, memory, players ] = await Promise.all([
             this.client.shard.broadcastEval('this.guilds.cache.size'),
             this.client.shard.broadcastEval('this.channels.cache.size'),
@@ -52,11 +53,12 @@ Guilds   :: ${guilds.reduce((sum, count) => sum + count)}
 Channels :: ${channels.reduce((sum, count) => sum + count)}
 Players  :: ${players.reduce((sum, count) => sum + count)}
 Memory   :: ${Stats.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0))}
+Ping     :: ${Math.round(message.createdTimestamp - interaction.createdTimestamp)} MS
 Uptime   :: ${Stats.humanizeTime(this.client.uptime)}
 \`\`\``)
             .setTimestamp()
             .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
-        await interaction.reply({ embeds: [ embed ] });
+        await interaction.editReply({ embeds: [ embed ] });
     }
 }
 module.exports = Stats;
