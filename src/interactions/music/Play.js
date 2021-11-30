@@ -1,6 +1,7 @@
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { ShoukakuTrack } = require( 'shoukaku' );
 const KongouInteraction = require('../../abstract/KongouInteraction.js');
+const countInterval = require("count-interval");
 
 class Play extends KongouInteraction {
     get name() {
@@ -45,7 +46,15 @@ class Play extends KongouInteraction {
             playlist = await lavaNode.load(query);
 
             if(playlist.loadType === "LOAD_FAILED" || playlist.tracks.length === 0){
-                return await interaction.editReply(`Sorry human, Spotify returned an error, this playlist is not available for me to see.`);
+                await interaction.editReply(`Sorry human, Spotify returned an error, Please wait while I try this again.`);
+                const loadSuccessResult = countInterval(async () => {
+                    lavaNode = await this.client.lavasfy.getNode();
+                    playlist = await lavaNode.load(query);
+                    console.log('yes, trying again')
+                    if(playlist.loadType === "PLAYLIST_LOADED"){
+                        clearInterval(loadSuccessResult)
+                    }
+                }, null, 5);
             } else if(playlist.loadType === "NO_MATCHES") {
                 return await interaction.editReply(`Sorry human, I was not able to find anything from your search.`);
             }
