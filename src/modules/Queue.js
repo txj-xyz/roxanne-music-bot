@@ -14,7 +14,7 @@ class Queue extends Map {
                 shardId: guild.shardId,
                 channelId: member.voice.channelId
             });
-            this.client.webhook.send(`${player.constructor.name} New connection @ guild \`"${guild.id}" | ${guild.name}\``)
+            this.client.webhook.send(`${player.constructor.name} New connection @ guild \`"${guild.id} | ${guild.name}"\``)
             this.client.logger.debug(player.constructor.name, `New connection @ guild "${guild.id}"`);
             const dispatcher = new KongouDispatcher({
                 client: this.client,
@@ -24,7 +24,7 @@ class Queue extends Map {
             });
             dispatcher.queue.push(track);
             this.set(guild.id, dispatcher);
-            this.client.webhook.send(`${dispatcher.constructor.name} New player dispatcher @ guild \`"${guild.id}" | ${guild.name}\``)
+            this.client.webhook.send(`${dispatcher.constructor.name} New player dispatcher @ guild \`"${guild.id} | ${guild.name}"\``)
             this.client.logger.debug(dispatcher.constructor.name, `New player dispatcher @ guild "${guild.id}"`);
             return dispatcher;
         }
