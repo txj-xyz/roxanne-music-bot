@@ -31,18 +31,35 @@ class Help extends KongouInteraction {
         if (!command) {
             const supportButton = new MessageActionRow()
             .addComponents(
-                new MessageButton()
-                    .setStyle('LINK')
-                    .setURL(Help.supportServer())
-                    .setLabel('Support Server')
+                [
+                    new MessageButton()
+                        .setEmoji('❓')
+                        .setStyle('LINK')
+                        .setURL(Help.supportServer())
+                        .setLabel('Support Server')
+                ],
+                [
+                    new MessageButton()
+                        .setEmoji('🎵')
+                        .setStyle('LINK')
+                        .setURL(`https://statuspage.freshping.io/58439-RoxanneMusicBot`)
+                        .setLabel('Music Status Page')
+                ],
+                [
+                    new MessageButton()
+                        .setEmoji('<:pogChump:837663069353410601>')
+                        .setStyle('LINK')
+                        .setURL(Help.invite(this.client.user.id))
+                        .setLabel('Invite me!')
+                ],
             );
             const embed = new MessageEmbed()
                 .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
                 .setTitle('• Help Menu')
                 .setColor(this.client.color)
                 .setDescription('Do /help [command] for a detailed help about that command')
-                .addField('<:kongou_desu:545882696048443392> Info', this.client.interactions.commands.filter(cmd => cmd.category === 'Info').map(cmd => `/${cmd.name}`).join(', '))
-                .addField('<:love_kongou:448387538617630751> Music', this.client.interactions.commands.filter(cmd => cmd.category === 'Music').map(cmd => `/${cmd.name}`).join(', '))
+                .addField('❓ Info', this.client.interactions.commands.filter(cmd => cmd.category === 'Info').map(cmd => `/${cmd.name}`).join(', '))
+                .addField('🎵 Music', this.client.interactions.commands.filter(cmd => cmd.category === 'Music').map(cmd => `/${cmd.name}`).join(', '))
                 .setFooter(`The Modified Shipgirl Music Project • ${this.client.interactions.commands.size} commands loaded`);
             return interaction.reply({ embeds: [ embed ], components: [supportButton] });
         }
