@@ -12,17 +12,17 @@ class Grab extends KongouInteraction {
         return 'Grabs the current song and sends it to you!';
     }
 
-    get playerCheck() {
-        return { voice: true, dispatcher: true, channel: true };
-    }
-
-    async run({ interaction, dispatcher }) {
+    async run({ interaction }) {
         await interaction.deferReply({ ephemeral: true });
+
+        const dispatcher = this.client.queue.get(interaction.guild.id) || undefined;
+        if(!dispatcher)
+            return await interaction.editReply(`There is nothing playing at the moment.`)
         const embed = new MessageEmbed()
             .setAuthor(
                 `Song saved`,
                 this.client.user.displayAvatarURL({
-                dynamic: true,
+                    dynamic: true,
                 })
             )
             .setThumbnail(
