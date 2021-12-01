@@ -13,17 +13,43 @@ class Grab extends KongouInteraction {
     }
 
     get playerCheck() {
-        return { voice: false, dispatcher: true, channel: false };
+        return { voice: true, dispatcher: true, channel: true };
     }
 
     async run({ interaction, dispatcher }) {
         await interaction.deferReply({ ephemeral: true });
         const embed = new MessageEmbed()
+            .setAuthor(
+                `Song saved`,
+                this.client.user.displayAvatarURL({
+                dynamic: true,
+                })
+            )
+            .setThumbnail(
+                `https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`
+            )
+            .setURL(dispatcher.current.info.uri)
             .setColor(this.client.color)
-            .setTitle('Now Playing')
-            .setThumbnail(`https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`)
-            .setDescription(`[${dispatcher.current.info.author} - ${dispatcher.current.info.title}](${dispatcher.current.info.uri}) [${KongouDispatcher.humanizeTime(dispatcher.current.info.length)}]`);
-        await interaction.editReply({ embeds: [ embed ] });
+            .setTitle(`**${dispatcher.current.info.title}**`)
+            .addField(
+                `⌛ Duration: `,
+                `\`${KongouDispatcher.humanizeTime(dispatcher.current.info.length)}\``,
+                true
+            )
+            .addField(`🎵 Author: `, `\`${dispatcher.current.info.author}\``, true)
+            .addField(
+                `▶ Play it:`,
+                `\`\/play query:${dispatcher.current.info.uri}\``
+            )
+            .addField(`🔎 Saved in:`, `<#${interaction.channelId}>`)
+            .setTimestamp();
+
+        await interaction.user.createDM();
+        await interaction.user.dmChannel.send({embeds: [ embed ]}).then(async() => {
+            await interaction.editReply(`I sent you the current song, check your DMs!`);
+        }).catch(async error => {
+            await interaction.editReply(`I'm sorry, your DMs are currently disabled, I cannot send you a message!`);
+        })
     }
 }
 module.exports = Grab;
