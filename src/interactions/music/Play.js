@@ -1,7 +1,7 @@
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { ShoukakuTrack } = require( 'shoukaku' );
 const KongouInteraction = require('../../abstract/KongouInteraction.js');
-const countInterval = require("count-interval");
+// const countInterval = require("count-interval");
 
 class Play extends KongouInteraction {
     get name() {
@@ -37,6 +37,9 @@ class Play extends KongouInteraction {
     async run({ interaction }) {
         await interaction.deferReply();
         const query = interaction.options.getString('query', true);
+        //Check for apple music
+        if(query.includes('apple.com')) return await interaction.editReply('Sorry human, Apple Music is not available at the moment. <:sad:585678099069403148>')
+
         const node = await this.client.shoukaku.getNode();
         let lavaNode = await this.client.lavasfy.getNode();
         
