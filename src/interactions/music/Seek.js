@@ -65,7 +65,7 @@ class Seek extends KongouInteraction {
                 await interaction.editReply(`Seeked to \`${Seek.humanTime(seekResolvedString)}\`!`);
             }
         } else {
-            return await interaction.editReply('Sorry human I was not able to seek through this song.');
+            return await interaction.editReply('Sorry human this song is not seekable!');
         }
             
     }
