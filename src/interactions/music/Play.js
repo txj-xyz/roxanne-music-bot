@@ -1,6 +1,7 @@
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { ShoukakuTrack } = require( 'shoukaku' );
 const KongouInteraction = require('../../abstract/KongouInteraction.js');
+const retry = require('async-await-retry');
 // const countInterval = require("count-interval");
 
 class Play extends KongouInteraction {
@@ -34,6 +35,23 @@ class Play extends KongouInteraction {
         }
     }
 
+    static async lavaRetry(lavasfyClient, query) {
+        return new Promise(async (resolve, reject) => {
+            const node = await lavasfyClient.getNode();
+            console.log('[lavaRetry()] Node ID ==> ', node.id)
+            await node.load(query).then(async r => {
+                if(r.loadType === "LOAD_FAILED") {
+                    console.log('[lavaRetry()] Retry event fired')
+                    reject('LOAD_FAILED')
+                }else if(r.loadType.includes("LOADED")) {
+                    resolve(r)
+                }else if(r.loadType === "NO_MATCHES"){
+                    resolve(r)
+                }
+            })
+        });
+    }
+
     async run({ interaction }) {
         await interaction.deferReply();
         const query = interaction.options.getString('query', true);
@@ -41,21 +59,23 @@ class Play extends KongouInteraction {
         if(query.includes('apple.com')) return await interaction.editReply('Sorry human, Apple Music is not available at the moment. <:sad:585678099069403148>')
 
         const node = await this.client.shoukaku.getNode();
-        let lavaNode = await this.client.lavasfy.getNode();
+        // let lavaNode = await this.client.lavasfy.getNode(); MOVED TO HANDLER
         
         if(Play.checkURL(query) && query.match(this.client.lavasfy.spotifyPattern)) {
             let playlist;
             let fullResolvedList = [];
-            playlist = await lavaNode.load(query);
+
+            try {
+                playlist = await retry(Play.lavaRetry, [this.client.lavasfy, query], {retriesMax: 10, interval: 1000, exponential: true, factor: 2})
+            } catch (err) {
+                return await interaction.editReply(`Sorry human, I was not able to load the playlist after 10 tries.`)
+            }
+
             if(playlist.loadType === "NO_MATCHES") {
                 return await interaction.editReply(`Sorry human, I was not able to find anything from your search.\n\`Message: ${playlist.exception.message}\``);
             }
-            if(playlist.loadType === "LOAD_FAILED" || playlist.tracks.length === 0){
-                return await interaction.editReply(`Sorry human, Spotify was not able to load the playlist. Please try again.\n\`Note: This is being fixed soon\``);
-            }
 
             for(const res of playlist.tracks) {
-                // fullResolvedList = [];
                 let resTrack = new ShoukakuTrack(res);
                 fullResolvedList.push(resTrack);
             }
@@ -70,7 +90,6 @@ class Play extends KongouInteraction {
             startDispatcher?.play();
             fullResolvedList = [];
 
-            //post process the list of tracks
             for(const postRes of playlist.tracks.slice(1)) {
                 let resTrack = new ShoukakuTrack(postRes);
                 await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, resTrack);
