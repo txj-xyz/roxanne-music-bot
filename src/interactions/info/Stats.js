@@ -49,12 +49,14 @@ class Stats extends KongouInteraction {
             .setColor(this.client.color)
             .setTitle('Status')
             .setDescription(`\`\`\`ml\n
-Guilds   :: ${guilds.reduce((sum, count) => sum + count)}
-Channels :: ${channels.reduce((sum, count) => sum + count)}
-Players  :: ${players.reduce((sum, count) => sum + count)}
-Memory   :: ${Stats.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0))}
-Ping     :: ${Math.round(message.createdTimestamp - interaction.createdTimestamp)} MS
-Uptime   :: ${Stats.humanizeTime(this.client.uptime)}
+Guilds     :: ${guilds.reduce((sum, count) => sum + count)}
+User Count :: ${this.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c)}
+Channels   :: ${channels.reduce((sum, count) => sum + count)}
+Players    :: ${players.reduce((sum, count) => sum + count)}
+Memory     :: ${Stats.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0))}
+Ping       :: ${Math.round(message.createdTimestamp - interaction.createdTimestamp)} MS
+Uptime     :: ${Stats.humanizeTime(this.client.uptime)
+}
 \`\`\``)
             .setTimestamp()
             .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
