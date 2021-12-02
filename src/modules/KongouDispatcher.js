@@ -22,12 +22,14 @@ class KongouDispatcher {
 
             const embed = new MessageEmbed()
                 .setColor(0xff0000)
-                .setTimestamp()
-                .setAuthor(
-                    `Now Playing: ${this.current.info.author + " - " || ""}${this.current.info.title} [${KongouDispatcher.humanizeTime(this.current.info.length)}]`, 
-                    `https://img.youtube.com/vi/${this.current.info.identifier}/default.jpg`, 
-                    this.current.info.uri
-                );
+                .setAuthor(`Now Playing`, this.client.user.displayAvatarURL({ dynamic: true }))
+                .setThumbnail(`https://img.youtube.com/vi/${this.current.info.identifier}/default.jpg`)
+                .setURL(this.current.info.uri)
+                .setTitle(`**${this.current.info.title}**`)
+                .addField(`⌛ Duration: `, `\`${KongouDispatcher.humanizeTime(this.current.info.length)}\``, true)
+                .addField(`🎵 Author: `, `\`${this.current.info.author}\``, true)
+                .setFooter(`• Powered by Kubernetes!`)
+                .setTimestamp();
             this.channel
                 .send({ embeds: [ embed ] })
                 .catch(() => null);
@@ -46,10 +48,22 @@ class KongouDispatcher {
         }
     }
 
-    static humanizeTime(ms) {
-        const seconds = Math.floor(ms / 1000 % 60);
-        const minutes = Math.floor(ms / 1000 / 60 % 60);
-        return [ minutes.toString().padStart(2, '0'), seconds.toString().padStart(2, '0') ].join(':');
+    static humanizeTime(millisec) {
+        let seconds = (millisec / 1000).toFixed(0);
+        let minutes = Math.floor(seconds / 60);
+        let hours = "";
+        if (minutes > 59) {
+            hours = Math.floor(minutes / 60);
+            hours = (hours >= 10) ? hours : "0" + hours;
+            minutes = minutes - (hours * 60);
+            minutes = (minutes >= 10) ? minutes : "0" + minutes;
+        }
+        seconds = Math.floor(seconds % 60);
+        seconds = (seconds >= 10) ? seconds : "0" + seconds;
+        if (hours != "") {
+            return hours + ":" + minutes + ":" + seconds;
+        }
+        return minutes + ":" + seconds;
     }
 
     get exists() {
