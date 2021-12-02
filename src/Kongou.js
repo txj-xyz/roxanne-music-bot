@@ -44,6 +44,7 @@ class Kongou extends Client {
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
         this.servers = servers;
+        
         // Spotify Support
         this.lavasfy = new LavasfyClient({
             clientID: spotifyClientID,
