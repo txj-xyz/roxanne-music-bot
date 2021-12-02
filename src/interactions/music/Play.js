@@ -59,8 +59,9 @@ class Play extends KongouInteraction {
         if(query.includes('apple.com')) return await interaction.editReply('Sorry human, Apple Music is not available at the moment. <:sad:585678099069403148>')
 
         const node = await this.client.shoukaku.getNode();
-        // let lavaNode = await this.client.lavasfy.getNode(); MOVED TO HANDLER
         
+
+        // Spotify Integration Tracks / Playlists
         if(Play.checkURL(query) && query.match(this.client.lavasfy.spotifyPattern)) {
             let playlist;
             let fullResolvedList = [];
@@ -97,6 +98,7 @@ class Play extends KongouInteraction {
             return;
         }
         
+        // Check Youtube URL / Playlist
         if (Play.checkURL(query)) {
             const result = await node.rest.resolve(query);
             if (!result) 
@@ -114,9 +116,8 @@ class Play extends KongouInteraction {
             dispatcher?.play();
             return;
         }
-        if(query == "lepo lepo") {
-            await interaction.editReply('Lepo lepo detected, please wait while I load Niane\'s command.');
-        }
+
+        // Single search request
         const search = await node.rest.resolve(query, 'youtube');
         if (!search?.tracks.length)
             return interaction.editReply('I didn\'t find any song on the query you provided!');
