@@ -60,7 +60,7 @@ class Help extends KongouInteraction {
                 .setDescription('Do /help [command] for a detailed help about that command')
                 .addField('❓ Info', this.client.interactions.commands.filter(cmd => cmd.category === 'Info').map(cmd => `/${cmd.name}`).join(', '))
                 .addField('🎵 Music', this.client.interactions.commands.filter(cmd => cmd.category === 'Music').map(cmd => `/${cmd.name}`).join(', '))
-                .setFooter(`The Modified Shipgirl Music Project • ${this.client.interactions.commands.size} commands loaded`);
+                .setFooter(`The Music Project • ${this.client.interactions.commands.size} commands loaded`);
             return interaction.reply({ embeds: [ embed ], components: [supportButton] });
         }
 
@@ -72,7 +72,7 @@ class Help extends KongouInteraction {
             .setTitle(`/${command.name}`)
             .setColor(this.client.color)
             .setDescription(command.description)
-            .setFooter(`The Modified Shipgirl Music Project • ${this.client.interactions.commands.size} commands loaded`);
+            .setFooter(`The Music Project • ${this.client.interactions.commands.size} commands loaded`);
         if (command.options?.length) {
             for (const option of command.options)
                 embed.addField(`/${command.name} ${option.name}`, option.description);
