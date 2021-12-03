@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const KongouInteraction = require('../../abstract/KongouInteraction.js');
 
 class Stats extends KongouInteraction {
