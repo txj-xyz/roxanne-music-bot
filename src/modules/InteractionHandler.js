@@ -109,6 +109,7 @@ class InteractionHandler extends EventEmitter {
             this.client.logger.log(this.constructor.name, `Executing command ${command.name} (@${command.uid})`);
             this.client.webhook.send(`${this.constructor.name} Executing command ${command.name} (@${command.uid})`)
             await command.run({ interaction, dispatcher });
+            this.client.commandsRun++;
         } catch (error) {
             const embed = new MessageEmbed()
                 .setColor(0xff99CC)
