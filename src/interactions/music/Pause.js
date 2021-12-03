@@ -15,6 +15,7 @@ class Pause extends KongouInteraction {
     }
 
     async run({ interaction, dispatcher }) {
+        dispatcher.player.connection.setMute(true);
         dispatcher.player.setPaused(true);
         await interaction.reply('I paused the playback in this guild!');
     }
