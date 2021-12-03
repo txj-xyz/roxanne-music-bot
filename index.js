@@ -15,6 +15,8 @@ const customClientOptions = {
 
 const sharderOptions = {
     clientOptions: Util.mergeDefault(Constants.DefaultOptions, customClientOptions),
+    // clusterCount: 2,
+    // guildsPerShard: 4,
     client: KongouClient,
     timeout: 90000,
     token
