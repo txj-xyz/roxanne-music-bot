@@ -55,8 +55,8 @@ Channels   :: ${channels.reduce((sum, count) => sum + count)}
 Players    :: ${players.reduce((sum, count) => sum + count)}
 Memory     :: ${Stats.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0))}
 Ping       :: ${Math.round(message.createdTimestamp - interaction.createdTimestamp)} MS
-Uptime     :: ${Stats.humanizeTime(this.client.uptime)
-}
+Uptime     :: ${Stats.humanizeTime(this.client.uptime)}
+CMDs Run   :: ${this.client.commandsRun}
 \`\`\``)
             .setTimestamp()
             .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
