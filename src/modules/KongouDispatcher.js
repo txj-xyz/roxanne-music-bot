@@ -60,6 +60,9 @@ class KongouDispatcher {
         }
         seconds = Math.floor(seconds % 60);
         seconds = (seconds >= 10) ? seconds : "0" + seconds;
+        if (hours > 59) {
+            return "Live! 🔴"
+        }
         if (hours != "") {
             return hours + ":" + minutes + ":" + seconds;
         }
