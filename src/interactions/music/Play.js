@@ -35,13 +35,14 @@ class Play extends KongouInteraction {
         }
     }
 
-    static async lavaRetry(lavasfyClient, query) {
+    static async spotifyRetry(lavasfyClient, query, interaction) {
         return new Promise(async (resolve, reject) => {
             const node = await lavasfyClient.getNode();
-            console.log('[lavaRetry()] Node ID ==> ', node.id)
+            console.log('[spotifyRetry()] Node ID ==> ', node.id)
             await node.load(query).then(async r => {
                 if(r.loadType === "LOAD_FAILED") {
-                    console.log('[lavaRetry()] Retry event fired')
+                    console.log('[spotifyRetry()] Retry event fired')
+                    await interaction.editReply(`Sorry human, Spotify is running a bit slow today, give me a second :)`);
                     reject('LOAD_FAILED')
                 }else if(r.loadType.includes("LOADED")) {
                     resolve(r)
@@ -67,7 +68,7 @@ class Play extends KongouInteraction {
             let fullResolvedList = [];
 
             try {
-                playlist = await retry(Play.lavaRetry, [this.client.lavasfy, query], {retriesMax: 10, interval: 1000, exponential: true, factor: 2})
+                playlist = await retry(Play.spotifyRetry, [this.client.lavasfy, query, interaction], {retriesMax: 10, interval: 1000, exponential: true, factor: 2})
             } catch (err) {
                 return await interaction.editReply(`Sorry human, I was not able to load the playlist after 10 tries.`)
             }
