@@ -40,7 +40,7 @@ class Kongou extends Client {
         this.shoukaku = new ShoukakuHandler(this);
         this.queue = new Queue(this);
         this.webhook = new WebhookClient({ url: webhookUrl });
-
+        this.commandsRun = 0;
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
         this.servers = servers;
