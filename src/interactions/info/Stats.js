@@ -50,7 +50,7 @@ class Stats extends KongouInteraction {
             .setTitle('Status')
             .setDescription(`\`\`\`ml\n
 Guilds     :: ${guilds.reduce((sum, count) => sum + count)}
-User Count :: ${this.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c)}
+User Count :: ${this.client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c)}
 Channels   :: ${channels.reduce((sum, count) => sum + count)}
 Players    :: ${players.reduce((sum, count) => sum + count)}
 Memory     :: ${Stats.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0))}
