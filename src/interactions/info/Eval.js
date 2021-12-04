@@ -30,7 +30,7 @@ class Eval extends KongouInteraction {
     }
 
     async run({ interaction }) {
-        await interaction.deferReply();
+        await interaction.deferReply( {ephemeral: true} );
         const code = interaction.options.getString('code', true);
         let res;
         try {
