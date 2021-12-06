@@ -34,7 +34,7 @@ class Eval extends KongouInteraction {
         const code = interaction.options.getString('code', true);
         let res;
         try {
-            res = eval(code);
+            res = await eval(code);
             res = inspect(res, { depth: 0 });
         } catch (error) {
             res = inspect(error, { depth: 0 });
