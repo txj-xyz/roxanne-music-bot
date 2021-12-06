@@ -4,7 +4,7 @@ const { join } = require('path');
 const { token } = require('./config.json');
 const { GUILDS, GUILD_MEMBERS, GUILD_BANS, GUILD_VOICE_STATES, GUILD_MESSAGES, GUILD_MESSAGE_REACTIONS } = Intents.FLAGS;
 
-const KongouClient = require('./src/Kongou.js');
+const RoxanneClient = require('./src/Roxanne.js');
 
 // cache settings on client file
 const customClientOptions = {
@@ -17,7 +17,7 @@ const sharderOptions = {
     clientOptions: Util.mergeDefault(Constants.DefaultOptions, customClientOptions),
     // clusterCount: 2,
     // guildsPerShard: 4,
-    client: KongouClient,
+    client: RoxanneClient,
     timeout: 90000,
     token
 };
@@ -28,7 +28,7 @@ const ratelimitOptions = {
     requestOffset: 500
 };
 
-const azuma = new Azuma(join(__dirname, '/src/KongouBaseCluster.js'), sharderOptions, ratelimitOptions);
+const azuma = new Azuma(join(__dirname, '/src/RoxanneBaseCluster.js'), sharderOptions, ratelimitOptions);
 
 azuma
     .spawn()
