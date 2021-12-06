@@ -59,6 +59,7 @@ class Help extends KongouInteraction {
                 .setColor(this.client.color)
                 .setDescription('Do /help [command] for a detailed help about that command')
                 .addField('❓ Info', this.client.interactions.commands.filter(cmd => cmd.category === 'Info').map(cmd => `/${cmd.name}`).join(', '))
+                // .addField('❓ Owner', this.client.interactions.commands.filter(cmd => cmd.category === 'Owner').map(cmd => `/${cmd.name}`).join(', '))
                 .addField('🎵 Music', this.client.interactions.commands.filter(cmd => cmd.category === 'Music').map(cmd => `/${cmd.name}`).join(', '))
                 .setFooter(`The Music Project • ${this.client.interactions.commands.size} commands loaded`);
             return interaction.reply({ embeds: [ embed ], components: [supportButton] });
