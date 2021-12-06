@@ -96,15 +96,15 @@ class InteractionHandler extends EventEmitter {
             const command = this.commands.get(interaction.commandName);
             if (!command) return;
             if (command.permissions && !InteractionHandler.checkPermission(command.permissions, interaction)) 
-                return interaction.reply('You don\'t have the required permissions to use this command!');
+                return interaction.reply({content: 'You don\'t have the required permissions to use this command!', ephemeral: true});
             // player related stuff
             if (command.playerCheck?.voice && !interaction.member.voice.channelId) 
-                return interaction.reply('You are not in a voice channel!');
+                return interaction.reply({content: 'You are not in a voice channel!', ephemeral: true});
             const dispatcher = this.client.queue.get(interaction.guildId);
             if (command.playerCheck?.dispatcher && !dispatcher) 
-                return interaction.reply('Nothing is playing in this server!');
+                return interaction.reply({content: 'Nothing is playing in this server!', ephemeral: true});
             if (command.playerCheck?.channel && dispatcher.player.connection.channelId !== interaction.member.voice.channelId) 
-                return interaction.reply('You are not in the same voice channel I\'m currently connected to!');         
+                return interaction.reply({content: 'You are not in the same voice channel I\'m currently connected to!', ephemeral: true});         
             // execute le commandz
             this.client.logger.log(this.constructor.name, `Executing command ${command.name} (@${command.uid})`);
             this.client.webhook.send(`${this.constructor.name} Executing command ${command.name} (@${command.uid})`)
