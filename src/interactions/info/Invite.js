@@ -1,7 +1,7 @@
-const KongouInteraction = require('../../abstract/KongouInteraction.js');
+const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const { MessageActionRow, MessageButton } = require('discord.js');
 
-class Invite extends KongouInteraction {
+class Invite extends RoxanneInteraction {
     get name() {
         return 'invite';
     }

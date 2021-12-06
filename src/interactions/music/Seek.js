@@ -1,7 +1,7 @@
-const KongouInteraction = require('../../abstract/KongouInteraction.js');
+const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
-class Seek extends KongouInteraction {
+class Seek extends RoxanneInteraction {
     get name() {
         return 'seek';
     }

@@ -1,7 +1,7 @@
-const KongouInteraction = require('../../abstract/KongouInteraction.js');
+const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const Wait = require('util').promisify(setTimeout);
 
-class Stop extends KongouInteraction {
+class Stop extends RoxanneInteraction {
     get name() {
         return 'stop';
     }

@@ -1,8 +1,8 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
-const KongouInteraction = require('../../abstract/KongouInteraction.js');
+const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 
-class Help extends KongouInteraction {
+class Help extends RoxanneInteraction {
     get name() {
         return 'help';
     }

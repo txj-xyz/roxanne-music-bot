@@ -1,4 +1,4 @@
-const KongouDispatcher = require('./KongouDispatcher.js');
+const RoxanneDispatcher = require('./RoxanneDispatcher.js');
 
 class Queue extends Map {
     constructor(client, iterable) {
@@ -17,7 +17,7 @@ class Queue extends Map {
             });
             this.client.webhook.send(`${player.constructor.name} New connection @ guild \`"${guild.id} | ${guild.name}"\``)
             this.client.logger.debug(player.constructor.name, `New connection @ guild "${guild.id}"`);
-            const dispatcher = new KongouDispatcher({
+            const dispatcher = new RoxanneDispatcher({
                 client: this.client,
                 guild,
                 channel,

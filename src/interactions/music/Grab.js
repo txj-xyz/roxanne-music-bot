@@ -1,9 +1,9 @@
 
-const KongouInteraction = require('../../abstract/KongouInteraction.js');
-const KongouDispatcher = require('../../modules/KongouDispatcher.js');
+const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
+const RoxanneDispatcher = require('../../modules/RoxanneDispatcher.js');
 const { MessageEmbed } = require('discord.js');
 
-class Grab extends KongouInteraction {
+class Grab extends RoxanneInteraction {
     get name() {
         return 'grab';
     }
@@ -24,7 +24,7 @@ class Grab extends KongouInteraction {
             .setURL(dispatcher.current.info.uri)
             .setColor(this.client.color)
             .setTitle(`**${dispatcher.current.info.title}**`)
-            .addField(`⌛ Duration: `, `\`${KongouDispatcher.humanizeTime(dispatcher.current.info.length)}\``, true)
+            .addField(`⌛ Duration: `, `\`${RoxanneDispatcher.humanizeTime(dispatcher.current.info.length)}\``, true)
             .addField(`🎵 Author: `, `\`${dispatcher.current.info.author}\``, true)
             .addField(`▶ Play it:`, `\`\/play query:${dispatcher.current.info.uri}\``)
             .addField(`🔎 Saved in:`, `<#${interaction.channelId}>`)

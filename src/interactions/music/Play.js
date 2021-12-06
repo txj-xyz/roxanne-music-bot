@@ -1,10 +1,10 @@
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { ShoukakuTrack } = require( 'shoukaku' );
-const KongouInteraction = require('../../abstract/KongouInteraction.js');
+const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const retry = require('async-await-retry');
 // const countInterval = require("count-interval");
 
-class Play extends KongouInteraction {
+class Play extends RoxanneInteraction {
     get name() {
         return 'play';
     }

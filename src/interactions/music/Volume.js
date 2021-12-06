@@ -1,7 +1,7 @@
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
-const KongouInteraction = require('../../abstract/KongouInteraction.js');
+const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 
-class Volume extends KongouInteraction {
+class Volume extends RoxanneInteraction {
     get name() {
         return 'volume';
     }

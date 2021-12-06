@@ -1,9 +1,9 @@
 
-const KongouInteraction = require('../../abstract/KongouInteraction.js');
-const KongouDispatcher = require('../../modules/KongouDispatcher.js');
+const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
+const RoxanneDispatcher = require('../../modules/RoxanneDispatcher.js');
 const { MessageEmbed } = require('discord.js');
 
-class Queue extends KongouInteraction {
+class Queue extends RoxanneInteraction {
     get name() {
         return 'queue';
     }
@@ -24,7 +24,7 @@ class Queue extends KongouInteraction {
             .setURL(dispatcher.current.info.uri)
             .setColor(this.client.color)
             .setTitle(`**${dispatcher.current.info.title}**`)
-            .addField(`⌛ Duration: `, `\`${KongouDispatcher.humanizeTime(dispatcher.current.info.length)}\``, true)
+            .addField(`⌛ Duration: `, `\`${RoxanneDispatcher.humanizeTime(dispatcher.current.info.length)}\``, true)
             .addField(`🎵 Author: `, `\`${dispatcher.current.info.author}\``, true)
             .setFooter(`• ${dispatcher.queue.length} total songs in queue`)
             .setTimestamp();

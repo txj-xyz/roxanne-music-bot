@@ -1,6 +1,6 @@
-const KongouEvent = require('../abstract/KongouEvent.js');
+const RoxanneEvent = require('../abstract/RoxanneEvent.js');
 
-class Ready extends KongouEvent {
+class Ready extends RoxanneEvent {
     get name() {
         return 'ready';
     }
