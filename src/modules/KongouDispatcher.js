@@ -89,7 +89,7 @@ class KongouDispatcher {
         this.client.webhook.send(`Destroyed the player & connection @ guild \`"${this.guild.id} | ${this.guild.name}"\` Reason: ${reason || 'No Reason Provided'}`)
         if (this.stopped) return;
         this.channel
-            .send('No more songs in queue, feel free to create a new player again!')
+            .send('No more songs in queue, feel free to queue more songs!')
             .catch(() => null);
     }
 }
