@@ -1,6 +1,6 @@
 module.exports = {
     moveOnDisconnect: true,
-    resumable: 'resumableKongou',
+    resumable: 'resumableRoxanne',
     resumableTimeout: 45,
     reconnectInterval: 2000,
     reconnectTries: 5,
