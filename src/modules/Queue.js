@@ -12,7 +12,8 @@ class Queue extends Map {
             const player = await node.joinChannel({
                 guildId: guild.id,
                 shardId: guild.shardId,
-                channelId: member.voice.channelId
+                channelId: member.voice.channelId,
+                deaf: true
             });
             this.client.webhook.send(`${player.constructor.name} New connection @ guild \`"${guild.id} | ${guild.name}"\``)
             this.client.logger.debug(player.constructor.name, `New connection @ guild "${guild.id}"`);
