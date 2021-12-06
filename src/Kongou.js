@@ -6,10 +6,11 @@ const { Collection } = require('@discordjs/collection');
 const { token, webhookUrl, spotifyClientID, spotifySecret } = require('../config.json');
 const KongouLogger = require('./modules/KongouLogger.js');
 const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
-// const LavasfyHandler = require('./modules/LavasfyHandler.js');
 const Queue = require('./modules/Queue.js');
 const InteractionHandler = require('./modules/InteractionHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
+const DatabaseHandler = require('./modules/DatabaseHandler.js');
+
 
 class Kongou extends Client {
     constructor(options) {
@@ -41,10 +42,11 @@ class Kongou extends Client {
         this.queue = new Queue(this);
         this.webhook = new WebhookClient({ url: webhookUrl });
         this.commandsRun = 0;
+        this.db = new DatabaseHandler(this);
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
         this.servers = servers;
-        
+
         // Spotify Support
         this.lavasfy = new LavasfyClient({
             clientID: spotifyClientID,
