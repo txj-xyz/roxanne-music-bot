@@ -49,14 +49,15 @@ class Stats extends KongouInteraction {
             .setColor(this.client.color)
             .setTitle('Status')
             .setDescription(`\`\`\`ml\n
-Guilds     :: ${guilds.reduce((sum, count) => sum + count)}
-User Count :: ${this.client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c)}
-Channels   :: ${channels.reduce((sum, count) => sum + count)}
-Players    :: ${players.reduce((sum, count) => sum + count)}
-Memory     :: ${Stats.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0))}
-Ping       :: ${Math.round(message.createdTimestamp - interaction.createdTimestamp)} MS
-Uptime     :: ${Stats.humanizeTime(this.client.uptime)}
-CMDs Run   :: ${this.client.commandsRun}
+Guilds      :: ${guilds.reduce((sum, count) => sum + count)}
+User Count  :: ${this.client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c)}
+Channels    :: ${channels.reduce((sum, count) => sum + count)}
+Players     :: ${players.reduce((sum, count) => sum + count)}
+Memory      :: ${Stats.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0))}
+Ping        :: ${Math.round(message.createdTimestamp - interaction.createdTimestamp)} MS
+Uptime      :: ${Stats.humanizeTime(this.client.uptime)}
+CMDs Run    :: ${this.client.commandsRun}
+Music Nodes :: ${Array.from(this.client.shoukaku.nodes.keys()).join(", ")}
 \`\`\``)
             .setTimestamp()
             .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
