@@ -8,6 +8,7 @@ const RoxanneLogger = require('./modules/RoxanneLogger.js');
 const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
 const Queue = require('./modules/Queue.js');
 const InteractionHandler = require('./modules/InteractionHandler.js');
+const ComponentHandler = require('./modules/ComponentHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
 const DatabaseHandler = require('./modules/DatabaseHandler.js');
 
@@ -44,6 +45,7 @@ class Roxanne extends Client {
         this.commandsRun = 0;
         this.db = new DatabaseHandler(this);
         this.interactions = new InteractionHandler(this).build();
+        new ComponentHandler(this);
         this.events = new EventHandler(this).build();
         this.servers = servers;
 
