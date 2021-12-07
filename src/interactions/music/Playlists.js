@@ -10,6 +10,10 @@ class PlaylistMenu extends RoxanneInteraction {
         return 'Get a list of common playlists';
     }
 
+    get playerCheck() {
+        return { voice: true, dispatcher: false, channel: false };
+    }
+
     async run({ interaction }) {
         const row = new MessageActionRow()
         .addComponents(
