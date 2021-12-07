@@ -17,7 +17,7 @@ class Queue extends RoxanneInteraction {
     }
 
     async run({ interaction, dispatcher }) {
-        const queue = dispatcher.queue.length > 20 ? dispatcher.queue.slice(0, 20) : dispatcher.queue;
+        const queue = dispatcher.queue.length > 10 ? dispatcher.queue.slice(0, 10) : dispatcher.queue;
         const embed = new MessageEmbed()
             .setAuthor(`Now Playing`, this.client.user.displayAvatarURL({ dynamic: true }))
             .setThumbnail(`https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`)

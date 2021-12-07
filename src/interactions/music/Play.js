@@ -23,7 +23,7 @@ class Play extends RoxanneInteraction {
     }
 
     get playerCheck() {
-        return { voice: true, dispatcher: false, channel: true };
+        return { voice: true, dispatcher: false, channel: false };
     }
 
     static checkURL(string) {
