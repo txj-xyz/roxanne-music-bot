@@ -23,10 +23,10 @@ class ComponentHandler extends EventEmitter {
                 
                 switch (interaction.values[0]) {
                     case "txb_playlist":
-                        this.play.playlistButtonSpotify(interaction, "https://open.spotify.com/playlist/1Ac9XPXCQaTUjTNbnNwYhV");
+                        this.play.buttonSpotifyPlaylist(interaction, "https://open.spotify.com/playlist/1Ac9XPXCQaTUjTNbnNwYhV");
                         break;
                     case "txj_playlist":
-                        this.play.playlistButtonSpotify(interaction, "https://open.spotify.com/playlist/4YLTXRl623J8WXYyZse3rk");
+                        this.play.buttonSpotifyPlaylist(interaction, "https://open.spotify.com/playlist/4YLTXRl623J8WXYyZse3rk");
                         break;
                 }
             }
