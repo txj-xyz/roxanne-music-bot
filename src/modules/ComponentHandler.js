@@ -40,25 +40,7 @@ class ComponentHandler extends EventEmitter {
                         break;
                 }
             }
-        } catch (error) {
-            const embed = new MessageEmbed()
-                .setColor(0xff99CC)
-                .setTitle(`${this.constructor.name} - Something errored!`)
-                .setDescription(`\`\`\`js\n ${error.toString()}\`\`\``)
-                .setTimestamp()
-                .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
-            this.client.webhook.send({ embeds: [ embed ] });
-            
-            if (interaction.replied || interaction.deferred) 
-                await interaction
-                    .editReply({ embeds: [ embed ] })
-                    .catch(error => this.emit('error', error));
-            else 
-                await interaction
-                    .reply({ embeds: [ embed ] })
-                    .catch(error => this.emit('error', error));
-            this.emit('error', error);
-        }
+        } catch (e) {return e;}
     }
 }
 
