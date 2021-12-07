@@ -11,19 +11,26 @@ class ComponentHandler extends EventEmitter {
         this.on('error', error => client.logger.error(error));
         this.client.on('interactionCreate', interaction => this.exec(interaction));
         this.play = this.client.interactions.commands.get('play');
-
     }
 
     async exec(interaction) {
+
+        if (!interaction.isSelectMenu()) return;
+        await interaction.deferUpdate();
         try {
-            if (!interaction.isSelectMenu()) return;
+            let requestingUser = await interaction.fetchReply();
+            if(requestingUser.interaction.user.id !== interaction.user.id) return;
+        } catch (error) {
+            return this.client.webhook.send(`${this.constructor.name} - ${error}`)
+        }
+        try {
             if(interaction.customId === "playlist_menu"){
-                await interaction.deferUpdate();
                 await interaction.editReply({content: 'Please wait, I am loading the query now :)', components: []});
                 
                 switch (interaction.values[0]) {
                     case "txb_playlist":
                         this.play.buttonSpotifyPlaylist(interaction, "https://open.spotify.com/playlist/1Ac9XPXCQaTUjTNbnNwYhV");
+                        
                         break;
                     case "txj_playlist":
                         this.play.buttonSpotifyPlaylist(interaction, "https://open.spotify.com/playlist/4YLTXRl623J8WXYyZse3rk");
