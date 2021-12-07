@@ -130,9 +130,9 @@ class Play extends RoxanneInteraction {
         dispatcher?.play();
     }
 
-    async playlistButtonSpotify(interaction, query) {
+    async buttonSpotifyPlaylist(interaction, query) {
         const node = await this.client.shoukaku.getNode();
-        // Spotify Integration Tracks / Playlists
+        // Spotify Integration Tracks / Playlists select menus
         if(Play.checkURL(query) && query.match(this.client.lavasfy.spotifyPattern)) {
             let playlist;
             let fullResolvedList = [];
@@ -163,6 +163,28 @@ class Play extends RoxanneInteraction {
                 let resTrack = new ShoukakuTrack(postRes);
                 await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, resTrack);
             }
+            return;
+        }
+    }
+
+    async buttonYoutubePlaylist(interaction, query) {
+        const node = await this.client.shoukaku.getNode();
+        // YouTube Playlist integration for select menus
+        if (Play.checkURL(query)) {
+            const result = await node.rest.resolve(query);
+            if (!result) 
+                return interaction.editReply('I didn\'t find any song on the query you provided!');
+            const { type, tracks, playlistName } = result;
+            const track = tracks.shift();
+            const playlist = type === 'PLAYLIST';
+            const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
+            if (playlist) {
+                for (const track of tracks) await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
+            }   
+            await interaction
+                .editReply(playlist ? `Added the playlist \`${playlistName}\` in queue!` : `Added the track \`${track.info.title}\` in queue!`)
+                .catch(() => null);
+            dispatcher?.play();
             return;
         }
     }
