@@ -36,6 +36,23 @@ class Stats extends RoxanneInteraction {
         }
     }
 
+    static updateDBStats(interaction, client, message, guilds, channels, memory, players) {
+        let obj = {
+            servers: Array.from(client.shoukaku.nodes.keys()).join(", "),
+            commandsRun: client.commandsRun,
+            uptime: Stats.humanizeTime(client.uptime),
+            ping: Math.round(message.createdTimestamp - interaction.createdTimestamp),
+            memory: Stats.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0)),
+            players: players.reduce((sum, count) => sum + count),
+            channels: channels.reduce((sum, count) => sum + count),
+            userCount: client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c),
+            guilds: guilds.reduce((sum, count) => sum + count)
+        }
+        // client.db.redis.set('stats', JSON.stringify(obj)).catch(_ => null);
+        // const dbResult = this.client.db.redis.get('stats')
+        return obj;
+    }
+
     async run({ interaction }) {
         const message = await interaction.deferReply({ fetchReply: true });
         const [ guilds, channels, memory, players ] = await Promise.all([
@@ -44,20 +61,21 @@ class Stats extends RoxanneInteraction {
             this.client.shard.broadcastEval('process.memoryUsage()'),
             this.client.shard.broadcastEval('this.queue.size')
         ]);
+        const dbQuery = Stats.updateDBStats(interaction, this.client, message, guilds, channels, memory, players);
 
         const embed = new MessageEmbed()
             .setColor(this.client.color)
             .setTitle('Status')
             .setDescription(`\`\`\`ml\n
-Guilds      :: ${guilds.reduce((sum, count) => sum + count)}
-User Count  :: ${this.client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c)}
-Channels    :: ${channels.reduce((sum, count) => sum + count)}
-Players     :: ${players.reduce((sum, count) => sum + count)}
-Memory      :: ${Stats.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0))}
-Ping        :: ${Math.round(message.createdTimestamp - interaction.createdTimestamp)} MS
-Uptime      :: ${Stats.humanizeTime(this.client.uptime)}
-CMDs Run    :: ${this.client.commandsRun}
-Music Nodes :: ${Array.from(this.client.shoukaku.nodes.keys()).join(", ")}
+Guilds      :: ${dbQuery.guilds}
+User Count  :: ${dbQuery.userCount}
+Channels    :: ${dbQuery.channels}
+Players     :: ${dbQuery.players}
+Memory      :: ${dbQuery.memory}
+Ping        :: ${dbQuery.ping} MS
+Uptime      :: ${dbQuery.uptime}
+CMDs Run    :: ${dbQuery.commandsRun}
+Music Nodes :: ${dbQuery.servers}
 \`\`\``)
             .setTimestamp()
             .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
