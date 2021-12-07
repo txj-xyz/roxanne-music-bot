@@ -11,7 +11,7 @@ class PlaylistMenu extends RoxanneInteraction {
     }
 
     get playerCheck() {
-        return { voice: true, dispatcher: false, channel: true };
+        return { voice: true, dispatcher: false, channel: false };
     }
 
     async run({ interaction }) {
@@ -38,7 +38,7 @@ class PlaylistMenu extends RoxanneInteraction {
                     },
                 ]),
         );
-        await interaction.reply({ content: 'Human! Select from the drop down what you\'d like to play!', components: [row]});
+        await interaction.reply({ content: 'Human! Select from the drop down what you\'d like to play!', ephemeral: true ,components: [row]});
     }
 }
 module.exports = PlaylistMenu;
