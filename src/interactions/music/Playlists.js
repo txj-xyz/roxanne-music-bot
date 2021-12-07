@@ -11,7 +11,6 @@ class PlaylistMenu extends RoxanneInteraction {
     }
 
     async run({ interaction }) {
-        // await interaction.deferReply();
         const row = new MessageActionRow()
         .addComponents(
             new MessageSelectMenu()
@@ -21,7 +20,6 @@ class PlaylistMenu extends RoxanneInteraction {
                     {
                         label: 'TXB Official Playlist',
                         description: 'Spotify playlist for TXB Tunes!',
-                        // value: 'https://open.spotify.com/playlist/0JbZFwAsheDP9hGssQYYBH',
                         value: 'txb_playlist'
                     },
                     {
@@ -32,7 +30,6 @@ class PlaylistMenu extends RoxanneInteraction {
                 ]),
         );
         await interaction.reply({ content: 'Human! Select from the drop down what you\'d like to play!', components: [row]});
-        // await interaction.editReply(`Took \`${Math.round(message.createdTimestamp - interaction.createdTimestamp)}ms\``);
     }
 }
 module.exports = PlaylistMenu;
