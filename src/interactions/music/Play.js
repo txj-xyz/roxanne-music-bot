@@ -38,10 +38,8 @@ class Play extends RoxanneInteraction {
     static async spotifyRetry(lavasfyClient, query, interaction) {
         return new Promise(async (resolve, reject) => {
             const node = await lavasfyClient.getNode();
-            console.log('[spotifyRetry()] Node ID ==> ', node.id)
             await node.load(query).then(async r => {
                 if(r.loadType === "LOAD_FAILED") {
-                    console.log('[spotifyRetry()] Retry event fired')
                     await interaction.editReply({content: `<a:embed_loading:695358635110301726> Please wait while grab songs from Spotify..`, components: []});
                     reject('LOAD_FAILED')
                 }else if(r.loadType.includes("LOADED")) {
