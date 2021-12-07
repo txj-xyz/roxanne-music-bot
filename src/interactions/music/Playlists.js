@@ -28,8 +28,13 @@ class PlaylistMenu extends RoxanneInteraction {
                     },
                     {
                         label: 'TXJ\'s Rap 2021 Playlist',
-                        description: 'Built for gamers',
+                        description: 'All heat bangers.',
                         value: 'txj_playlist',
+                    },
+                    {
+                        label: 'Drum and Bass Monstercat Playlist',
+                        description: 'Built for gamers, by gamers.',
+                        value: 'dnb_playlist',
                     },
                 ]),
         );
