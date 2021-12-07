@@ -173,7 +173,7 @@ class Play extends RoxanneInteraction {
         if (Play.checkURL(query)) {
             const result = await node.rest.resolve(query);
             if (!result) 
-                return interaction.editReply('I didn\'t find any song on the query you provided!');
+                return interaction.editReply({content: 'I didn\'t find any song on the query you provided!', components: []});
             const { type, tracks, playlistName } = result;
             const track = tracks.shift();
             const playlist = type === 'PLAYLIST';
@@ -182,7 +182,7 @@ class Play extends RoxanneInteraction {
                 for (const track of tracks) await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
             }   
             await interaction
-                .editReply(playlist ? `Added the playlist \`${playlistName}\` in queue!` : `Added the track \`${track.info.title}\` in queue!`)
+                .editReply({content: playlist ? `Added the playlist \`${playlistName}\` in queue!` : `Added the track \`${track.info.title}\` in queue!`, components: []})
                 .catch(() => null);
             dispatcher?.play();
             return;
