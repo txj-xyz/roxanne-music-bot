@@ -42,7 +42,7 @@ class Play extends RoxanneInteraction {
             await node.load(query).then(async r => {
                 if(r.loadType === "LOAD_FAILED") {
                     console.log('[spotifyRetry()] Retry event fired')
-                    await interaction.editReply(`Sorry human, Spotify is running a bit slow today, give me a second :)`);
+                    await interaction.editReply({content: `<a:embed_loading:695358635110301726> Please wait while grab songs from Spotify..`, components: []});
                     reject('LOAD_FAILED')
                 }else if(r.loadType.includes("LOADED")) {
                     resolve(r)
@@ -128,6 +128,43 @@ class Play extends RoxanneInteraction {
             .editReply(`Added the track \`${track.info.title}\` in queue!`)
             .catch(() => null);
         dispatcher?.play();
+    }
+
+    async playlistButtons(interaction, query) {
+        const node = await this.client.shoukaku.getNode();
+        // Spotify Integration Tracks / Playlists
+        if(Play.checkURL(query) && query.match(this.client.lavasfy.spotifyPattern)) {
+            let playlist;
+            let fullResolvedList = [];
+            try {
+                playlist = await retry(Play.spotifyRetry, [this.client.lavasfy, query, interaction], {retriesMax: 10, interval: 1000, exponential: true, factor: 2})
+            } catch (err) {
+                return await interaction.editReply({content: `Sorry human, I was not able to load the playlist after 10 tries.`, components: []})
+            }
+            if(playlist.loadType === "NO_MATCHES") {
+                return await interaction.editReply({content: `Sorry human, I was not able to find anything from your search.\n\`Message: ${playlist.exception.message}\``, components: []});
+            }
+            for(const res of playlist.tracks) {
+                let resTrack = new ShoukakuTrack(res);
+                fullResolvedList.push(resTrack);
+            }
+            const firstTrack = fullResolvedList.shift();
+            const startDispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack)
+            
+            if(playlist.loadType === "TRACK_LOADED"){
+                await interaction.editReply({content: `\`${firstTrack.info.author} - ${firstTrack.info.title}\` added to the Queue!`, components: []}).catch(() => null);
+            } else {
+                await interaction.editReply({content: `Queueing \`${String(playlist.tracks.length)}\` tracks from \`${playlist.playlistInfo?.name || playlist.title}\`!`, components: []}).catch(() => null);
+            }
+            startDispatcher?.play();
+            fullResolvedList = [];
+
+            for(const postRes of playlist.tracks.slice(1)) {
+                let resTrack = new ShoukakuTrack(postRes);
+                await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, resTrack);
+            }
+            return;
+        }
     }
 }
 module.exports = Play;
