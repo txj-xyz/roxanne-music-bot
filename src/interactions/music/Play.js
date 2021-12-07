@@ -130,7 +130,7 @@ class Play extends RoxanneInteraction {
         dispatcher?.play();
     }
 
-    async playlistButtons(interaction, query) {
+    async playlistButtonSpotify(interaction, query) {
         const node = await this.client.shoukaku.getNode();
         // Spotify Integration Tracks / Playlists
         if(Play.checkURL(query) && query.match(this.client.lavasfy.spotifyPattern)) {
