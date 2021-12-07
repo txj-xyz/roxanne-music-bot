@@ -7,6 +7,7 @@ class ComponentHandler extends EventEmitter {
         super();
         this.client = client;
         this.commands = new Collection();
+        this.client.logger.log(this.constructor.name, `Loaded ComponentEvent Listeners.`);
         this.on('error', error => client.logger.error(error));
         this.client.on('interactionCreate', interaction => this.exec(interaction));
     }
@@ -14,7 +15,20 @@ class ComponentHandler extends EventEmitter {
     async exec(interaction) {
         try {
             if (!interaction.isSelectMenu()) return;
-
+            if(interaction.customId === "playlist_menu"){
+                switch (interaction.values[0]) {
+                    case "txb_playlist":
+                        await interaction.deferUpdate();
+                        await interaction.editReply({content: 'Please wait, I am loading the query now :)', components: []})
+                        this.client.interactions.commands.get('play').playlistButtons(interaction, "https://open.spotify.com/playlist/1Ac9XPXCQaTUjTNbnNwYhV");
+                        break;
+                    case "txj_playlist":
+                        await interaction.deferUpdate();
+                        await interaction.editReply({content: 'Please wait, I am loading the query now :)', components: []}) 
+                        this.client.interactions.commands.get('play').playlistButtons(interaction, "https://open.spotify.com/playlist/4YLTXRl623J8WXYyZse3rk");
+                        break;
+                }
+            }
         } catch (error) {
             const embed = new MessageEmbed()
                 .setColor(0xff99CC)
