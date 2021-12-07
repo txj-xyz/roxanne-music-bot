@@ -38,7 +38,7 @@ class PlaylistMenu extends RoxanneInteraction {
                     },
                 ]),
         );
-        await interaction.reply({ content: 'Human! Select from the drop down what you\'d like to play!', ephemeral: true ,components: [row]});
+        await interaction.reply({ content: 'Human! Select from the drop down what you\'d like to play!', components: [row]});
     }
 }
 module.exports = PlaylistMenu;
