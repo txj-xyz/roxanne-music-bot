@@ -6,7 +6,7 @@ class Queue extends Map {
         this.client = client;
     }
 
-    async handle(guild, member, channel, node, track) {
+    async handle(guild, member, channel, node, track, first) {
         const existing = this.get(guild.id);
         if (!existing) {
             const player = await node.joinChannel({
@@ -29,7 +29,8 @@ class Queue extends Map {
             this.client.logger.debug(dispatcher.constructor.name, `New player dispatcher @ guild "${guild.id}"`);
             return dispatcher;
         }
-        existing.queue.push(track);
+        first ? existing.queue.unshift(track) : existing.queue.push(track);
+        // existing.queue.push(track);
         return null;
     }
 }
