@@ -28,6 +28,9 @@ class Help extends RoxanneInteraction {
 
     async run({ interaction }) {
         let command = interaction.options.getString('command');
+        if(command?.startsWith('/'))
+            command = command.slice(1);
+
         if (!command) {
             const supportButton = new MessageActionRow()
             .addComponents(
@@ -53,6 +56,7 @@ class Help extends RoxanneInteraction {
                         .setLabel('Invite me!')
                 ],
             );
+
             const embed = new MessageEmbed()
                 .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
                 .setTitle('• Help Menu')
@@ -61,15 +65,25 @@ class Help extends RoxanneInteraction {
                 .addField('❓ Info', `${this.client.interactions.commands.filter(cmd => cmd.category === 'Info').map(cmd => `\`/${cmd.name}`).join('\`, ')}\``)
                 // .addField('❓ Owner', this.client.interactions.commands.filter(cmd => cmd.category === 'Owner').map(cmd => `/${cmd.name}`).join(', '))
                 .addField('🎵 Music', `${this.client.interactions.commands.filter(cmd => cmd.category === 'Music').map(cmd => `\`/${cmd.name}`).join('\`, ')}\``)
-                .addField('🔗 GIF Tutorial', '[Full Video Here](https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif)')
+                .addField('🔗 GIF Tutorial', '[Full Size Link](https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif)')
                 .setImage('https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif')
                 .setFooter(`The Music Project • ${this.client.interactions.commands.size} commands loaded`);
             return interaction.reply({ embeds: [ embed ], components: [supportButton] });
         }
 
         command = this.client.interactions.commands.get(command);
-        if (!command) 
-            return interaction.reply('this command you specified don\'t exist');
+        if (!command) {
+            const commandNotFound = new MessageEmbed()
+                // .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
+                .setColor(this.client.color)
+                .setTitle('❗ Command Not Found')
+                // .setDescription('**❗ Command Not Found**, please see below on how to look for help.')
+                .addField('Help Usage', '\`/help command:grab\` or \`/help\`')
+                .addField('🔗 GIF Tutorial', '[Full Size Link](https://cdn.discordapp.com/attachments/849007348945256458/918235109319122944/GNuAN6Ds1HxKRgCX1ykM.gif)')
+                .setImage('https://cdn.discordapp.com/attachments/849007348945256458/918235109319122944/GNuAN6Ds1HxKRgCX1ykM.gif')
+                .setFooter(`The Music Project • Powered by Kubernetes!`);
+            return interaction.reply({ embeds: [ commandNotFound ], ephemeral: true});
+        }
         const embed = new MessageEmbed()
             .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
             .setTitle(`/${command.name}`)
