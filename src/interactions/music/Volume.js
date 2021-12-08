@@ -29,7 +29,10 @@ class Volume extends RoxanneInteraction {
     
     async run({ interaction, dispatcher }) {
         let volume = interaction.options.getInteger('value', true);
-        if (!Volume.inRange(volume, 1, 200)) volume = 30;
+        if (!Volume.inRange(volume, 1, 200)){
+            volume = 30;
+            return await interaction.reply(`The volume you requested is not in range [0-200], defaulting to ${volume}%`);
+        }
         dispatcher.player.setVolume(volume / 100);
         await interaction.reply(`The playback volume is now set to \`${volume}%\``);
     }
