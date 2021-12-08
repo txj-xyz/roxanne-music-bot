@@ -57,10 +57,12 @@ class Help extends RoxanneInteraction {
                 .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
                 .setTitle('• Help Menu')
                 .setColor(this.client.color)
-                .setDescription('Do /help [command] for a detailed help about that command')
-                .addField('❓ Info', this.client.interactions.commands.filter(cmd => cmd.category === 'Info').map(cmd => `/${cmd.name}`).join(', '))
+                .setDescription('Do \`/help [command]\` for a detailed help about that command')
+                .addField('❓ Info', `${this.client.interactions.commands.filter(cmd => cmd.category === 'Info').map(cmd => `\`/${cmd.name}`).join('\`, ')}\``)
                 // .addField('❓ Owner', this.client.interactions.commands.filter(cmd => cmd.category === 'Owner').map(cmd => `/${cmd.name}`).join(', '))
-                .addField('🎵 Music', this.client.interactions.commands.filter(cmd => cmd.category === 'Music').map(cmd => `/${cmd.name}`).join(', '))
+                .addField('🎵 Music', `${this.client.interactions.commands.filter(cmd => cmd.category === 'Music').map(cmd => `\`/${cmd.name}`).join('\`, ')}\``)
+                .addField('🔗 GIF Tutorial', '[Full Video Here](https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif)')
+                .setImage('https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif')
                 .setFooter(`The Music Project • ${this.client.interactions.commands.size} commands loaded`);
             return interaction.reply({ embeds: [ embed ], components: [supportButton] });
         }
