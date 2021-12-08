@@ -42,9 +42,9 @@ class Play extends RoxanneInteraction {
                 if(r.loadType === "LOAD_FAILED") {
                     await interaction.editReply({content: `<a:embed_loading:695358635110301726> Please wait while grab songs from Spotify..`, components: []});
                     reject('LOAD_FAILED')
-                }else if(r.loadType.includes("LOADED")) {
+                } else if(r.loadType.includes("LOADED")) {
                     resolve(r)
-                }else if(r.loadType === "NO_MATCHES"){
+                } else if(r.loadType === "NO_MATCHES") {
                     resolve(r)
                 }
             })
@@ -185,6 +185,18 @@ class Play extends RoxanneInteraction {
             dispatcher?.play();
             return;
         }
+    }
+    
+    async buttonYoutubeSearched(interaction) {
+        const search = await node.rest.resolve(query, 'youtube');
+        if (!search?.tracks.length)
+            return interaction.editReply({content: 'I didn\'t find any song on the query you provided!', components: []});
+        const track = search.tracks.shift();
+        const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
+        await interaction
+            .editReply({content: `Added the track \`${track.info.title}\` in queue!`, components: []})
+            .catch(() => null);
+        dispatcher?.play();
     }
 }
 module.exports = Play;
