@@ -40,7 +40,7 @@ class Play extends RoxanneInteraction {
             const node = await lavasfyClient.getNode();
             await node.load(query).then(async r => {
                 if(r.loadType === "LOAD_FAILED") {
-                    await interaction.editReply({content: `<a:embed_loading:695358635110301726> Please wait while grab songs from Spotify..`, components: []});
+                    await interaction.editReply({content: `<a:embed_loading:695358635110301726> Please wait while I grab songs from Spotify <a:embed_loading:695358635110301726>`, components: []});
                     reject('LOAD_FAILED')
                 } else if(r.loadType.includes("LOADED")) {
                     resolve(r)
