@@ -50,7 +50,7 @@ class Queue extends RoxanneInteraction {
     }
 
     async run({ interaction, dispatcher }) {
-        if(dispatcher.queue.length > 10) {
+        if(dispatcher.queue.length > 0) {
             const mapQueue = dispatcher.queue.map((track, index) => (
                 {
                     queue_id: index+1,
@@ -75,18 +75,17 @@ class Queue extends RoxanneInteraction {
                     .setDescription(`👉 **Queue List**\n\n${q.tracks.map(c => `**${c.queue_id}.)** [${c.title}](${c.url})`).join('\n')}`)
                 )
             }
-            await interaction.deferReply()
-
             new PagesBuilder(interaction)
                 .setColor(this.client.color)
                 .setPages(pages)
+                .setListenUsers(interaction.user.id)
                 .setListenTimeout(60 * 1000)
                 .setListenEndMethod('delete')
                 .setDefaultButtons(Queue.pageButtonList)
                 .build();
 
         } else {
-            await interaction.deferReply()
+            await interaction.deferReply();
             const embed = new MessageEmbed()
                 .setAuthor(`Now Playing`, this.client.user.displayAvatarURL({ dynamic: true }))
                 .setThumbnail(`https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`)
@@ -97,7 +96,7 @@ class Queue extends RoxanneInteraction {
                 .addField(`🎵 Author: `, `\`${dispatcher.current.info.author}\``, true)
                 .setFooter(`• ${dispatcher.queue.length} total songs in queue`)
                 .setTimestamp();
-            await interaction.reply({ embeds: [ embed ] });
+            await interaction.editReply({ embeds: [ embed ] });
         }
         
     }
