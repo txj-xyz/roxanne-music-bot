@@ -18,7 +18,7 @@ class Skip extends RoxanneInteraction {
     get options() {
         return [{
             name: 'to',
-            type: ApplicationCommandOptionType.String,
+            type: ApplicationCommandOptionType.Integer,
             description: `Queue number to skip player ahead to.`,
             required: false
         }];
@@ -29,7 +29,7 @@ class Skip extends RoxanneInteraction {
         tempQueue = dispatcher.queue;
         const skipVariable = interaction.options.getString('to', false);
 
-        if(Number(skipVariable)) {
+        if(skipVariable) {
             dispatcher.queue = dispatcher.queue.splice(Number(skipVariable) - 1, tempQueue.length);
             tempQueue = null;
             await interaction.editReply(`Skipping ${skipVariable} songs in the queue!`);
