@@ -2,7 +2,7 @@
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const RoxanneDispatcher = require('../../modules/RoxanneDispatcher.js');
 const { MessageEmbed, MessageButton } = require('discord.js');
-const { PagesBuilder } = require('discord.js-pages');
+const { PagesBuilder } = require('discord.js-pages'); // https://mrzillagold.github.io/discord.js-pages/modules.html
 
 class Queue extends RoxanneInteraction {
     get name() {
@@ -20,16 +20,18 @@ class Queue extends RoxanneInteraction {
     static pageButtonList = [
         {
             back: new MessageButton()
-                .setLabel('Previous')
+                .setEmoji('👈')
+                .setLabel('Back')
                 .setStyle('DANGER')
         },
         {
             stop: new MessageButton()
                 .setLabel('Cancel')
-                .setStyle('DANGER')
+                .setStyle('SECONDARY')
         },
         {
             next: new MessageButton()
+                .setEmoji('👉')
                 .setLabel('Next')
                 .setStyle('SUCCESS')
         }
