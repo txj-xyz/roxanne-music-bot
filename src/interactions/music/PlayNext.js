@@ -2,7 +2,7 @@ const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { ShoukakuTrack } = require( 'shoukaku' );
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const retry = require('async-await-retry');
-// const countInterval = require("count-interval");
+let tempBumpArray;
 
 class PlayNext extends RoxanneInteraction {
     get name() {
@@ -13,13 +13,31 @@ class PlayNext extends RoxanneInteraction {
         return 'Automatically fetches the video(s) and places it at the top of the queue!';
     }
     
+    static moveToFront(index, arr) {
+        for (var i=0; i < arr.length; i++) {
+            if (i === index) {
+                var a = arr.splice(i,1); // removes the item from array
+                arr.unshift(a[0]);       // adds it back to the beginning
+                return arr;
+            }
+        }
+    }
+
     get options() {
-        return [{
-            name: 'query',
-            type: ApplicationCommandOptionType.String,
-            description: 'The song you want to play',
-            required: true,
-        }];
+        return [
+            {
+                name: 'query',
+                type: ApplicationCommandOptionType.String,
+                description: 'The song you want to play',
+                required: false,
+            },
+            {
+                name: 'id',
+                type: ApplicationCommandOptionType.Integer,
+                description: `Queue number to play next.`,
+                required: false
+            }
+        ];
     }
 
     get playerCheck() {
@@ -53,7 +71,21 @@ class PlayNext extends RoxanneInteraction {
 
     async run({ interaction }) {
         await interaction.deferReply();
-        const query = interaction.options.getString('query', true);
+        if(!interaction.options.data.length){
+            return await interaction.editReply('Sorry human, You must provide an option for me! **See: \`/help\`**.');
+        }
+
+        // Optional ID to play next from the queue
+        const queueBumpID = interaction.options.getString('id', false);
+        if(queueBumpID){
+            //Move Queue ID to top of queue and rebuild array
+            const bumpedSongInfo = dispatcher.queue[queueBumpID - 1].info;
+            dispatcher.queue = PlayNext.moveToFront(queueBumpID - 1, tempBumpArray);
+            return await interaction.editReply(`Moved \`${bumpedSongInfo.info.author} - ${bumpedSongInfo.info.title}\` to the top of the Queue!`)
+        }
+
+        const query = interaction.options.getString('query', false);
+        if(!query) return await interaction.editReply('Sorry human, You must provide an option.');
         //Check for apple music
         if(query.includes('apple.com')) return await interaction.editReply('Sorry human, Apple Music is not available at the moment. <:sad:585678099069403148>')
 
