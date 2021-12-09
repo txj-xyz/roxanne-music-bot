@@ -69,19 +69,21 @@ class PlayNext extends RoxanneInteraction {
         });
     }
 
-    async run({ interaction }) {
+    async run({ interaction, dispatcher }) {
         await interaction.deferReply();
         if(!interaction.options.data.length){
             return await interaction.editReply('Sorry human, You must provide an option for me! **See: \`/help\`**.');
         }
 
         // Optional ID to play next from the queue
-        const queueBumpID = interaction.options.getString('id', false);
+        const queueBumpID = interaction.options.getInteger('id', false);
         if(queueBumpID){
             //Move Queue ID to top of queue and rebuild array
-            const bumpedSongInfo = dispatcher.queue[queueBumpID - 1].info;
+            tempBumpArray = dispatcher.queue;
+            // return console.log(PlayNext.moveToFront(queueBumpID - 1, tempBumpArray)[0])
             dispatcher.queue = PlayNext.moveToFront(queueBumpID - 1, tempBumpArray);
-            return await interaction.editReply(`Moved \`${bumpedSongInfo.info.author} - ${bumpedSongInfo.info.title}\` to the top of the Queue!`)
+            let songInfo = dispatcher.queue[0].info;
+            return await interaction.editReply(`Moved \`${songInfo.author} - ${songInfo.title}\` to the top of the Queue!`)
         }
 
         const query = interaction.options.getString('query', false);
@@ -137,14 +139,14 @@ class PlayNext extends RoxanneInteraction {
             const { type, tracks, playlistName } = result;
             const track = tracks.shift();
             const playlist = type === 'PLAYLIST';
-            const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
+            const dispatcher2 = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
             if (playlist) {
                 for (const track of tracks) await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track, true);
             }   
             await interaction
                 .editReply(playlist ? `Added the playlist \`${playlistName}\`  to play next in the queue!` : `Added the track \`${track.info.title}\`  to play next in the queue!`)
                 .catch(() => null);
-            dispatcher?.play();
+            dispatcher2?.play();
             return;
         }
 
@@ -153,11 +155,11 @@ class PlayNext extends RoxanneInteraction {
         if (!search?.tracks.length)
             return interaction.editReply('I didn\'t find any song on the query you provided!');
         const track = search.tracks.shift();
-        const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track, true);
+        const dispatcher2 = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track, true);
         await interaction
             .editReply(`Added the track \`${track.info.title}\` to play next in the queue!`)
             .catch(() => null);
-        dispatcher?.play();
+        dispatcher2?.play();
     }
 }
 module.exports = PlayNext;
