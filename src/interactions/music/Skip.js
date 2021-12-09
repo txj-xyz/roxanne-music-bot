@@ -27,7 +27,7 @@ class Skip extends RoxanneInteraction {
     async run({ interaction, dispatcher }) {
         await interaction.deferReply();
         tempQueue = dispatcher.queue;
-        const skipVariable = interaction.options.getString('to', false);
+        const skipVariable = interaction.options.getInteger('to', false);
 
         if(skipVariable) {
             dispatcher.queue = dispatcher.queue.splice(Number(skipVariable) - 1, tempQueue.length);
