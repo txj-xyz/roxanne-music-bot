@@ -1,5 +1,3 @@
-const { MessageEmbed } = require('discord.js');
-const { Collection } = require('@discordjs/collection');
 const EventEmitter = require('events');
 
 class ComponentHandler extends EventEmitter {
