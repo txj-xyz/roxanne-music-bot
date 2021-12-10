@@ -6,7 +6,6 @@ class ComponentHandler extends EventEmitter {
     constructor(client) {
         super();
         this.client = client;
-        this.commands = new Collection();
         this.client.logger.log(this.constructor.name, `Loaded ComponentEvent Listeners.`);
         this.on('error', error => client.logger.error(error));
         this.client.on('interactionCreate', interaction => this.exec(interaction));
