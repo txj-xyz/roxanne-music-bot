@@ -46,7 +46,6 @@ class MessageCreate extends RoxanneEvent {
             ],
             [
                 new MessageButton()
-                    .setEmoji('<:pogChump:837663069353410601>')
                     .setStyle('LINK')
                     .setURL(MessageCreate.invite(this.client.user.id))
                     .setLabel('Invite me!')

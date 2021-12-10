@@ -25,7 +25,6 @@ class Invite extends RoxanneInteraction {
         .addComponents(
             [
                 new MessageButton()
-                    .setEmoji('<:pogChump:837663069353410601>')
                     .setStyle('LINK')
                     .setURL(Invite.link(this.client.user.id))
                     .setLabel('Invite me here!')

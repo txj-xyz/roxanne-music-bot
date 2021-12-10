@@ -50,7 +50,6 @@ class Help extends RoxanneInteraction {
                 ],
                 [
                     new MessageButton()
-                        .setEmoji('<:pogChump:837663069353410601>')
                         .setStyle('LINK')
                         .setURL(Help.invite(this.client.user.id))
                         .setLabel('Invite me!')
