@@ -105,19 +105,24 @@ class Search extends RoxanneInteraction {
                 const responseNumber = Number(collected.first().content);
                 const responseFinalResult = mappedSearch[responseNumber - 1];
                 const responseShoukakuTrack = search.tracks[responseNumber - 1];
+                
+                if(!responseShoukakuTrack){
+                    pageBuild.stopListen();
+                    await searchMessage.delete();
+                    await interaction.channel.send('Sorry human, that is not a valid entry from the list. Please try again.')
+                    return;
+                }
+
 
                 const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, responseShoukakuTrack);
                 await interaction.channel.send(`Adding **${responseFinalResult.full_title}** to the queue!`);
-                
                 dispatcher?.play();
-                
-
                 await searchMessage.delete();
                 pageBuild.stopListen();
                 try {
                     await collected.first().delete(); //Needs MANAGE_MESSAGES permission to not error
                 } catch (error) { return null; }
-            }else{
+            } else {
                 // await searchMessage.delete();
                 pageBuild.stopListen();
                 await interaction.channel.send('Human, The response you gave was not a number from the results. Please try again.');
