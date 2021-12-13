@@ -85,7 +85,7 @@ class Search extends RoxanneInteraction {
         for (const q of chunked) {
             pages.push(
                 new MessageEmbed()
-                .setDescription(`👉 **Search Results**\n\n${q.tracks.map(c => `**${c.search_id}.)** [${c.author} - ${c.title}](${c.url})`).join('\n')}`)
+                .setDescription(`👉 **Search Results**\n\n${q.tracks.map(c => `**${c.search_id}.)** [${c.title}](${c.url})`).join('\n')}`)
             )
         }
         let pageBuild = new PagesBuilder(interaction)
@@ -110,7 +110,6 @@ class Search extends RoxanneInteraction {
                 if(!responseShoukakuTrack){
                     pageBuild.stopListen();
                     await searchMessage.delete();
-                    await interaction.channel.send('Sorry human, that is not a valid entry from the list. Please try again.')
                     return;
                 }
 
@@ -126,8 +125,7 @@ class Search extends RoxanneInteraction {
             } else {
                 // await searchMessage.delete();
                 pageBuild.stopListen();
-                await interaction.channel.send('Human, The response you gave was not a number from the results. Please try again.');
-            }    
+            }
         }).catch(() => null);
     }
 }
