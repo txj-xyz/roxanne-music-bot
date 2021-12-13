@@ -118,7 +118,9 @@ class Search extends RoxanneInteraction {
                     await collected.first().delete(); //Needs MANAGE_MESSAGES permission to not error
                 } catch (error) { return null; }
             }else{
-                await interaction.channel.send('Operation canceled, the response you gave was not a number from the results.');
+                // await searchMessage.delete();
+                pageBuild.stopListen();
+                await interaction.channel.send('Human, The response you gave was not a number from the results. Please try again.');
             }    
         }).catch(() => null);
     }
