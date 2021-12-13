@@ -22,12 +22,11 @@ class ComponentHandler extends EventEmitter {
         }
         try {
             if(interaction.customId === "playlist_menu"){
-                await interaction.editReply({content: 'Please wait, I am loading the query now :)', components: []});
+                await interaction.editReply({content: 'Please wait, I am loading the query now. :)', components: []});
                 
                 switch (interaction.values[0]) {
                     case "txb_playlist":
                         this.play.buttonSpotifyPlaylist(interaction, "https://open.spotify.com/playlist/1Ac9XPXCQaTUjTNbnNwYhV");
-                        
                         break;
                     case "txj_playlist":
                         this.play.buttonSpotifyPlaylist(interaction, "https://open.spotify.com/playlist/4YLTXRl623J8WXYyZse3rk");
@@ -37,6 +36,20 @@ class ComponentHandler extends EventEmitter {
                         break;
                     case "alda_playlist":
                         this.play.buttonSpotifyPlaylist(interaction, "https://open.spotify.com/playlist/6CtQMssfXfWwUnAwZclC6b");
+                        break;
+                }
+            } else if(interaction.customId === "radio_menu"){
+                await interaction.editReply({content: 'Please wait, I am loading the radio station. :)', components: []});
+                
+                switch (interaction.values[0]) {
+                    case "lofi_radio":
+                        this.play.buttonYoutubePlaylist(interaction, "https://www.youtube.com/watch?v=5qap5aO4i9A", true);
+                        break;
+                    case "coffee_lofi_radio":
+                        this.play.buttonYoutubePlaylist(interaction, "https://www.youtube.com/watch?v=-5KAN9_CzSA", true);
+                        break;
+                    case "good_life_radio":
+                        this.play.buttonYoutubePlaylist(interaction, "https://www.youtube.com/watch?v=36YnV9STBqc", true);
                         break;
                 }
             }
