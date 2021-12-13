@@ -36,6 +36,11 @@ class PlaylistMenu extends RoxanneInteraction {
                         description: 'Built for gamers, by gamers.',
                         value: 'dnb_playlist',
                     },
+                    {
+                        label: 'Rocking out w/ Alda',
+                        description: 'The perfect playlist for rockers alike.',
+                        value: 'alda_playlist',
+                    },
                 ]),
         );
         await interaction.reply({ content: 'Human! Select from the drop down what you\'d like to play!', components: [row]});

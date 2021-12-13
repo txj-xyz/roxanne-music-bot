@@ -37,6 +37,9 @@ class ComponentHandler extends EventEmitter {
                     case "dnb_playlist":
                         this.play.buttonYoutubePlaylist(interaction, "https://www.youtube.com/watch?v=RKSr5ovamds&list=PL9BCA60EEB1C8893D");
                         break;
+                    case "alda_playlist":
+                        this.play.buttonSpotifyPlaylist(interaction, "https://open.spotify.com/playlist/6CtQMssfXfWwUnAwZclC6b");
+                        break;
                 }
             }
         } catch (e) {return e;}
