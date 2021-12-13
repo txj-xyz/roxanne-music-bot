@@ -165,7 +165,7 @@ class Play extends RoxanneInteraction {
         }
     }
 
-    async buttonYoutubePlaylist(interaction, query) {
+    async buttonYoutubePlaylist(interaction, query, radio) {
         const node = await this.client.shoukaku.getNode();
         // YouTube Playlist integration for select menus
         if (Play.checkURL(query)) {
@@ -178,25 +178,19 @@ class Play extends RoxanneInteraction {
             const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
             if (playlist) {
                 for (const track of tracks) await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
-            }   
+            }
+            if(radio){
+                await interaction
+                .editReply({content: `Started Radio stream: **\`${track.info.title}\`**!`, components: []})
+                .catch(() => null);
+                return dispatcher?.play();
+            }
             await interaction
                 .editReply({content: playlist ? `Added the playlist \`${playlistName}\` in queue!` : `Added the track \`${track.info.title}\` in queue!`, components: []})
                 .catch(() => null);
-            dispatcher?.play();
+            
             return;
         }
-    }
-    
-    async buttonYoutubeSearched(interaction) {
-        const search = await node.rest.resolve(query, 'youtube');
-        if (!search?.tracks.length)
-            return interaction.editReply({content: 'I didn\'t find any song on the query you provided!', components: []});
-        const track = search.tracks.shift();
-        const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
-        await interaction
-            .editReply({content: `Added the track \`${track.info.title}\` in queue!`, components: []})
-            .catch(() => null);
-        dispatcher?.play();
     }
 }
 module.exports = Play;
