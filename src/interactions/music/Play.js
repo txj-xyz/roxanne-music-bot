@@ -188,6 +188,7 @@ class Play extends RoxanneInteraction {
             await interaction
                 .editReply({content: playlist ? `Added the playlist \`${playlistName}\` in queue!` : `Added the track \`${track.info.title}\` in queue!`, components: []})
                 .catch(() => null);
+            dispatcher?.play()
             
             return;
         }
