@@ -60,6 +60,7 @@ class Search extends RoxanneInteraction {
     async run({ interaction }) {
         await interaction.deferReply();
         const query = interaction.options.getString('query', true);
+        if(query.includes('http')) return await interaction.editReply('Sorry human, I can only search for words :)');
         const node = await this.client.shoukaku.getNode();
 
         // Single search request for the query
