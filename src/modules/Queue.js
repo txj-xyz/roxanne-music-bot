@@ -30,7 +30,6 @@ class Queue extends Map {
             return dispatcher;
         }
         first ? existing.queue.unshift(track) : existing.queue.push(track);
-        // existing.queue.push(track);
         return null;
     }
 }
