@@ -21,33 +21,13 @@ class Search extends RoxanneInteraction {
         }];
     }
 
-    static searchPageButtonList = [
-        {
-            back: new MessageButton()
-                .setEmoji('👈')
-                .setLabel('Back')
-                .setStyle('DANGER')
-        },
-        {
-            stop: new MessageButton()
-                .setLabel('Cancel')
-                .setStyle('SECONDARY')
-        },
-        {
-            next: new MessageButton()
-                .setEmoji('👉')
-                .setLabel('Next')
-                .setStyle('SUCCESS')
-        }
-    ];
-
     static chunkify(arr, len) {
         let chunks = [];
         let i = 0;
         let n = arr.length;
         
         while (i < n) {
-            chunks.push(arr.slice(i, (i += len)));
+            chunks.push(arr.slice(i, i += len));
         }
         
         return chunks;
@@ -58,6 +38,26 @@ class Search extends RoxanneInteraction {
     }
 
     async run({ interaction }) {
+        const searchPageButtonList = [
+            {
+                back: new MessageButton()
+                    .setEmoji('👈')
+                    .setLabel('Back')
+                    .setStyle('DANGER')
+            },
+            {
+                stop: new MessageButton()
+                    .setLabel('Cancel')
+                    .setStyle('SECONDARY')
+            },
+            {
+                next: new MessageButton()
+                    .setEmoji('👉')
+                    .setLabel('Next')
+                    .setStyle('SUCCESS')
+            }
+        ];
+
         await interaction.deferReply();
         const query = interaction.options.getString('query', true);
         if(query.includes('https://')) return await interaction.editReply('I can only search for words');
@@ -85,19 +85,19 @@ class Search extends RoxanneInteraction {
         for (const q of chunked) {
             pages.push(
                 new MessageEmbed()
-                .setDescription(`👉 **Search Results**\n\n${q.tracks.map(c => `**${c.search_id}.)** [${c.title}](${c.url})`).join('\n')}`)
-            )
+                    .setDescription(`👉 **Search Results**\n\n${q.tracks.map(c => `**${c.search_id}.)** [${c.title}](${c.url})`).join('\n')}`)
+            );
         }
         let pageBuild = new PagesBuilder(interaction)
-                .setColor(this.client.color)
-                .setPages(pages)
-                .setListenUsers(interaction.user.id)
-                .setListenTimeout(60 * 1000)
-                .setListenEndMethod('delete')
-                .setDefaultButtons(Search.searchPageButtonList);
+            .setColor(this.client.color)
+            .setPages(pages)
+            .setListenUsers(interaction.user.id)
+            .setListenTimeout(60 * 1000)
+            .setListenEndMethod('delete')
+            .setDefaultButtons(searchPageButtonList);
         
         pageBuild.build();
-        const searchMessage = await interaction.channel.send(`Please type a number from the search results!`);
+        const searchMessage = await interaction.channel.send('Please type a number from the search results!');
         
         interaction.channel.awaitMessages({filter: m => m.author.id == interaction.member.user.id, max: 1, time: 60 * 1000}).then(async collected => {
             const isResponseNumber = Number(collected.first().content) ? true : false;
