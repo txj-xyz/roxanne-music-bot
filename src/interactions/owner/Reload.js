@@ -1,7 +1,5 @@
 const { MessageEmbed } = require('discord.js');
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
-const { inspect } = require('util');
-
 
 class Reload extends RoxanneInteraction {
     get name() {
