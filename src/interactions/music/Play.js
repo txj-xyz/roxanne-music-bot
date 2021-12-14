@@ -36,6 +36,7 @@ class Play extends RoxanneInteraction {
     }
 
     static async spotifyRetry(lavasfyClient, query, interaction) {
+        // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             const node = await lavasfyClient.getNode();
             await node.load(query).then(async r => {

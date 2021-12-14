@@ -54,6 +54,7 @@ class PlayNext extends RoxanneInteraction {
     }
 
     static async spotifyRetry(lavasfyClient, query, interaction) {
+        // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             const node = await lavasfyClient.getNode();
             await node.load(query).then(async r => {
@@ -72,7 +73,7 @@ class PlayNext extends RoxanneInteraction {
     async run({ interaction, dispatcher }) {
         await interaction.deferReply();
         if(!interaction.options.data.length){
-            return await interaction.editReply('Sorry human, You must provide an option for me! **See: \`/help\`**.');
+            return await interaction.editReply('Sorry human, You must provide an option for me! **See: `/help`**.');
         }
 
         // Optional ID to play next from the queue

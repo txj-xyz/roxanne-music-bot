@@ -26,7 +26,7 @@ class Grab extends RoxanneInteraction {
             .setTitle(`**${dispatcher.current.info.title}**`)
             .addField('⌛ Duration: ', `\`${RoxanneDispatcher.humanizeTime(dispatcher.current.info.length)}\``, true)
             .addField('🎵 Author: ', `\`${dispatcher.current.info.author}\``, true)
-            .addField('▶ Play it:', `\`\/play query:${dispatcher.current.info.uri}\``)
+            .addField('▶ Play it:', `\`/play query:${dispatcher.current.info.uri}\``)
             .addField('🔎 Saved in:', `<#${interaction.channelId}>`)
             .setTimestamp();
 
