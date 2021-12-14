@@ -2,6 +2,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { readdirSync } = require('fs');
 const { token } = require('../config.json');
+const {test } = require('../config.json')
 const { dev, clientId, guildId } = require('../slash-reloader-config');
 console.log('• Loading the commands to refresh');
 // the current amount of commands to refresh
