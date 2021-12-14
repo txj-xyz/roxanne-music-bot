@@ -15,7 +15,8 @@ const customClientOptions = {
 
 const sharderOptions = {
     clientOptions: Util.mergeDefault(Constants.DefaultOptions, customClientOptions),
-    // clusterCount: 2,
+    // clusterCount: 4,
+    // shardCount: 4,
     // guildsPerShard: 4,
     client: RoxanneClient,
     timeout: 90000,
