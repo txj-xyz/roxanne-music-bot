@@ -14,10 +14,10 @@ class Seek extends RoxanneInteraction {
         return { voice: true, dispatcher: true, channel: true };
     }
 
-    static ParseHumanTime = (str) => {
+    static ParseHumanTime(str){
         let Parsed;
         try {
-            Parsed = require("../../modules/parseTimestring.js")(str);
+            Parsed = require('../../modules/parseTimestring.js')(str);
             return Parsed;
         } catch {
             Parsed = false;
@@ -28,26 +28,26 @@ class Seek extends RoxanneInteraction {
     static humanTime(millisec) {
         let seconds = (millisec / 1000).toFixed(0);
         let minutes = Math.floor(seconds / 60);
-        let hours = "";
+        let hours = '';
         if (minutes > 59) {
             hours = Math.floor(minutes / 60);
-            hours = (hours >= 10) ? hours : "0" + hours;
-            minutes = minutes - (hours * 60);
-            minutes = (minutes >= 10) ? minutes : "0" + minutes;
+            hours = hours >= 10 ? hours : '0' + hours;
+            minutes = minutes - hours * 60;
+            minutes = minutes >= 10 ? minutes : '0' + minutes;
         }
         seconds = Math.floor(seconds % 60);
-        seconds = (seconds >= 10) ? seconds : "0" + seconds;
-        if (hours != "") {
-            return hours + ":" + minutes + ":" + seconds;
+        seconds = seconds >= 10 ? seconds : '0' + seconds;
+        if (hours != '') {
+            return hours + ':' + minutes + ':' + seconds;
         }
-        return minutes + ":" + seconds;
+        return minutes + ':' + seconds;
     }
 
     get options() {
         return [{
             name: 'position',
             type: ApplicationCommandOptionType.String,
-            description: `<number s/m/h> \'e.g: 50m 20s\'`,
+            description: '<number s/m/h> \'e.g: 50m 20s\'',
             required: true
         }];
     }
