@@ -45,10 +45,9 @@ class Roxanne extends Client {
         this.commandsRun = 0;
         this.db = new DatabaseHandler(this);
         this.interactions = new InteractionHandler(this).build();
-        new ComponentHandler(this);
         this.events = new EventHandler(this).build();
-        this.servers = servers;
-
+        this.components = new ComponentHandler(this);
+        
         // Spotify Support
         this.lavasfy = new LavasfyClient({
             clientID: spotifyClientID,
@@ -56,7 +55,7 @@ class Roxanne extends Client {
             filterAudioOnlyResult: true,
             autoResolve: true,
             useSpotifyMetadata: true,
-        }, this.servers);
+        }, servers);
 
         ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map(event => process.once(event, this.exit.bind(this)));
     }
