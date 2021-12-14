@@ -93,9 +93,9 @@ class Search extends RoxanneInteraction {
             .setPages(pages)
             .setListenUsers(interaction.user.id)
             .setListenTimeout(60 * 1000)
-            .setListenEndMethod('delete')
+            .setListenEndMethod('edit')
             .setDefaultButtons(searchPageButtonList);
-        
+
         pageBuild.build();
         const searchMessage = await interaction.channel.send('Please type a number from the search results!');
         
@@ -123,7 +123,7 @@ class Search extends RoxanneInteraction {
                     await collected.first().delete(); //Needs MANAGE_MESSAGES permission to not error
                 } catch (error) { return null; }
             } else {
-                // await searchMessage.delete();
+                await searchMessage.delete();
                 pageBuild.stopListen();
             }
         }).catch(() => null);
