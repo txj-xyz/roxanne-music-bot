@@ -30,13 +30,13 @@ class Say extends RoxanneInteraction {
 
         // Webhook logging for say command
         const logEmbed = new MessageEmbed()
-        .setColor(0xff99CC)
-        .setTitle('/say Command used!')
-        .setDescription(`\`\`\`\n${message}\`\`\``)
-        .addField(`Guild Name`, interaction.guild.name, true)
-        .addField(`User Triggered`, interaction.user.username , true)
-        .setTimestamp()
-        .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
+            .setColor(0xff99CC)
+            .setTitle('/say Command used!')
+            .setDescription(`\`\`\`\n${message}\`\`\``)
+            .addField('Guild Name', interaction.guild.name, true)
+            .addField('User Triggered', interaction.user.username , true)
+            .setTimestamp()
+            .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
 
         await interaction.channel.send(message);
         await interaction.editReply(`Sent Message: \`\`\`\n${message}\n\`\`\``);

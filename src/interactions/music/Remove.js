@@ -16,14 +16,14 @@ class Remove extends RoxanneInteraction {
     }
 
     static removeIndex (array, queueIndexID) {
-        return array.filter((_,index)=>index!=queueIndexID-1)
+        return array.filter((_,index)=>index!=queueIndexID-1);
     }
 
     get options() {
         return [{
             name: 'id',
             type: ApplicationCommandOptionType.Integer,
-            description: `Queue number to remove.`,
+            description: 'Queue number to remove.',
             required: true
         }];
     }

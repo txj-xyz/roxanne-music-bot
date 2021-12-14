@@ -41,7 +41,7 @@ class Reload extends RoxanneInteraction {
             embed = new MessageEmbed()
                 .setColor(0xff99CC)
                 .setTitle('Something went wrong!')
-                .setDescription(`Live reload failed, I will attempt to continue with the previous state.`)
+                .setDescription('Live reload failed, I will attempt to continue with the previous state.')
                 .addField('Error output', `\`\`\`${error}\`\`\``)
                 .setTimestamp()
                 .setFooter(this.client.user.username, this.client.user.displayAvatarURL());

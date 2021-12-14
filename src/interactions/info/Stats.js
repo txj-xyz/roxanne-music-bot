@@ -26,19 +26,19 @@ class Stats extends RoxanneInteraction {
         let days = (millisec / (1000 * 60 * 60 * 24)).toFixed(1);
 
         if (seconds < 60) {
-            return seconds + " Sec";
+            return seconds + ' Sec';
         } else if (minutes < 60) {
-            return minutes + " Min";
+            return minutes + ' Min';
         } else if (hours < 24) {
-            return hours + " Hrs";
+            return hours + ' Hrs';
         } else {
-            return days + " Days"
+            return days + ' Days';
         }
     }
 
     static updateDBStats(interaction, client, message, guilds, channels, memory, players) {
         let obj = {
-            servers: Array.from(client.shoukaku.nodes.keys()).join(", "),
+            servers: Array.from(client.shoukaku.nodes.keys()).join(', '),
             commandsRun: client.commandsRun,
             uptime: Stats.humanizeTime(client.uptime),
             ping: Math.round(message.createdTimestamp - interaction.createdTimestamp),
@@ -47,7 +47,7 @@ class Stats extends RoxanneInteraction {
             channels: channels.reduce((sum, count) => sum + count),
             userCount: client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c),
             guilds: guilds.reduce((sum, count) => sum + count)
-        }
+        };
         // client.db.redis.set('stats', JSON.stringify(obj)).catch(_ => null);
         // const dbResult = this.client.db.redis.get('stats')
         return obj;

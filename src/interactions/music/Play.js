@@ -39,15 +39,15 @@ class Play extends RoxanneInteraction {
         return new Promise(async (resolve, reject) => {
             const node = await lavasfyClient.getNode();
             await node.load(query).then(async r => {
-                if(r.loadType === "LOAD_FAILED") {
-                    await interaction.editReply({content: `Please wait while I grab songs from Spotify`, components: []});
-                    reject('LOAD_FAILED')
-                } else if(r.loadType.includes("LOADED")) {
-                    resolve(r)
-                } else if(r.loadType === "NO_MATCHES") {
-                    resolve(r)
+                if(r.loadType === 'LOAD_FAILED') {
+                    await interaction.editReply({content: 'Please wait while I grab songs from Spotify', components: []});
+                    reject('LOAD_FAILED');
+                } else if(r.loadType.includes('LOADED')) {
+                    resolve(r);
+                } else if(r.loadType === 'NO_MATCHES') {
+                    resolve(r);
                 }
-            })
+            });
         });
     }
 
@@ -55,7 +55,7 @@ class Play extends RoxanneInteraction {
         await interaction.deferReply();
         const query = interaction.options.getString('query', true);
         //Check for apple music
-        if(query.includes('apple.com')) return await interaction.editReply('Sorry human, Apple Music is not available at the moment. <:sad:585678099069403148>')
+        if(query.includes('apple.com')) return await interaction.editReply('Sorry human, Apple Music is not available at the moment. <:sad:585678099069403148>');
 
         const node = await this.client.shoukaku.getNode();
         
@@ -66,12 +66,12 @@ class Play extends RoxanneInteraction {
             let fullResolvedList = [];
 
             try {
-                playlist = await retry(Play.spotifyRetry, [this.client.lavasfy, query, interaction], {retriesMax: 10, interval: 1000, exponential: true, factor: 2})
+                playlist = await retry(Play.spotifyRetry, [this.client.lavasfy, query, interaction], {retriesMax: 10, interval: 1000, exponential: true, factor: 2});
             } catch (err) {
-                return await interaction.editReply(`Sorry human, I was not able to load the playlist after 10 tries.`)
+                return await interaction.editReply('Sorry human, I was not able to load the playlist after 10 tries.');
             }
 
-            if(playlist.loadType === "NO_MATCHES") {
+            if(playlist.loadType === 'NO_MATCHES') {
                 return await interaction.editReply(`Sorry human, I was not able to find anything from your search.\n\`Message: ${playlist.exception.message}\``);
             }
 
@@ -80,9 +80,9 @@ class Play extends RoxanneInteraction {
                 fullResolvedList.push(resTrack);
             }
             const firstTrack = fullResolvedList.shift();
-            const startDispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack)
+            const startDispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack);
             
-            if(playlist.loadType === "TRACK_LOADED"){
+            if(playlist.loadType === 'TRACK_LOADED'){
                 await interaction.editReply(`\`${firstTrack.info.author} - ${firstTrack.info.title}\` added to the Queue!`).catch(() => null);
             } else {
                 await interaction.editReply(`Queueing \`${String(playlist.tracks.length)}\` tracks from \`${playlist.playlistInfo?.name || playlist.title}\`!`).catch(() => null);
@@ -135,11 +135,11 @@ class Play extends RoxanneInteraction {
             let playlist;
             let fullResolvedList = [];
             try {
-                playlist = await retry(Play.spotifyRetry, [this.client.lavasfy, query, interaction], {retriesMax: 10, interval: 1000, exponential: true, factor: 2})
+                playlist = await retry(Play.spotifyRetry, [this.client.lavasfy, query, interaction], {retriesMax: 10, interval: 1000, exponential: true, factor: 2});
             } catch (err) {
-                return await interaction.editReply({content: `Sorry human, I was not able to load the playlist after 10 tries.`, components: []})
+                return await interaction.editReply({content: 'Sorry human, I was not able to load the playlist after 10 tries.', components: []});
             }
-            if(playlist.loadType === "NO_MATCHES") {
+            if(playlist.loadType === 'NO_MATCHES') {
                 return await interaction.editReply({content: `Sorry human, I was not able to find anything from your search.\n\`Message: ${playlist.exception.message}\``, components: []});
             }
             for(const res of playlist.tracks) {
@@ -147,9 +147,9 @@ class Play extends RoxanneInteraction {
                 fullResolvedList.push(resTrack);
             }
             const firstTrack = fullResolvedList.shift();
-            const startDispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack)
+            const startDispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack);
             
-            if(playlist.loadType === "TRACK_LOADED"){
+            if(playlist.loadType === 'TRACK_LOADED'){
                 await interaction.editReply({content: `\`${firstTrack.info.author} - ${firstTrack.info.title}\` added to the Queue!`, components: []}).catch(() => null);
             } else {
                 await interaction.editReply({content: `Queueing \`${String(playlist.tracks.length)}\` tracks from \`${playlist.playlistInfo?.name || playlist.title}\`!`, components: []}).catch(() => null);
@@ -181,14 +181,14 @@ class Play extends RoxanneInteraction {
             }
             if(radio){
                 await interaction
-                .editReply({content: `Started Radio stream: **\`${track.info.title}\`**!`, components: []})
-                .catch(() => null);
+                    .editReply({content: `Started Radio stream: **\`${track.info.title}\`**!`, components: []})
+                    .catch(() => null);
                 return dispatcher?.play();
             }
             await interaction
                 .editReply({content: playlist ? `Added the playlist \`${playlistName}\` in queue!` : `Added the track \`${track.info.title}\` in queue!`, components: []})
                 .catch(() => null);
-            dispatcher?.play()
+            dispatcher?.play();
             
             return;
         }

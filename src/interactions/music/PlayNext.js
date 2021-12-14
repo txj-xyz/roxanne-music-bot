@@ -34,7 +34,7 @@ class PlayNext extends RoxanneInteraction {
             {
                 name: 'id',
                 type: ApplicationCommandOptionType.Integer,
-                description: `Queue number to play next.`,
+                description: 'Queue number to play next.',
                 required: false
             }
         ];
@@ -57,15 +57,15 @@ class PlayNext extends RoxanneInteraction {
         return new Promise(async (resolve, reject) => {
             const node = await lavasfyClient.getNode();
             await node.load(query).then(async r => {
-                if(r.loadType === "LOAD_FAILED") {
-                    await interaction.editReply({content: `<a:embed_loading:695358635110301726> Please wait while I grab songs from Spotify <a:embed_loading:695358635110301726>`, components: []});
-                    reject('LOAD_FAILED')
-                } else if(r.loadType.includes("LOADED")) {
-                    resolve(r)
-                } else if(r.loadType === "NO_MATCHES") {
-                    resolve(r)
+                if(r.loadType === 'LOAD_FAILED') {
+                    await interaction.editReply({content: '<a:embed_loading:695358635110301726> Please wait while I grab songs from Spotify <a:embed_loading:695358635110301726>', components: []});
+                    reject('LOAD_FAILED');
+                } else if(r.loadType.includes('LOADED')) {
+                    resolve(r);
+                } else if(r.loadType === 'NO_MATCHES') {
+                    resolve(r);
                 }
-            })
+            });
         });
     }
 
@@ -83,13 +83,13 @@ class PlayNext extends RoxanneInteraction {
             // return console.log(PlayNext.moveToFront(queueBumpID - 1, tempBumpArray)[0])
             dispatcher.queue = PlayNext.moveToFront(queueBumpID - 1, tempBumpArray);
             let songInfo = dispatcher.queue[0].info;
-            return await interaction.editReply(`Moved \`${songInfo.author} - ${songInfo.title}\` to the top of the Queue!`)
+            return await interaction.editReply(`Moved \`${songInfo.author} - ${songInfo.title}\` to the top of the Queue!`);
         }
 
         const query = interaction.options.getString('query', false);
         if(!query) return await interaction.editReply('Sorry human, You must provide an option.');
         //Check for apple music
-        if(query.includes('apple.com')) return await interaction.editReply('Sorry human, Apple Music is not available at the moment. <:sad:585678099069403148>')
+        if(query.includes('apple.com')) return await interaction.editReply('Sorry human, Apple Music is not available at the moment. <:sad:585678099069403148>');
 
         const node = await this.client.shoukaku.getNode();
         
@@ -100,12 +100,12 @@ class PlayNext extends RoxanneInteraction {
             let fullResolvedList = [];
 
             try {
-                playlist = await retry(PlayNext.spotifyRetry, [this.client.lavasfy, query, interaction], {retriesMax: 10, interval: 1000, exponential: true, factor: 2})
+                playlist = await retry(PlayNext.spotifyRetry, [this.client.lavasfy, query, interaction], {retriesMax: 10, interval: 1000, exponential: true, factor: 2});
             } catch (err) {
-                return await interaction.editReply(`Sorry human, I was not able to load the playlist after 10 tries.`)
+                return await interaction.editReply('Sorry human, I was not able to load the playlist after 10 tries.');
             }
 
-            if(playlist.loadType === "NO_MATCHES") {
+            if(playlist.loadType === 'NO_MATCHES') {
                 return await interaction.editReply(`Sorry human, I was not able to find anything from your search.\n\`Message: ${playlist.exception.message}\``);
             }
 
@@ -114,9 +114,9 @@ class PlayNext extends RoxanneInteraction {
                 fullResolvedList.push(resTrack);
             }
             const firstTrack = fullResolvedList.shift();
-            const startDispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack, true)
+            const startDispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack, true);
             
-            if(playlist.loadType === "TRACK_LOADED"){
+            if(playlist.loadType === 'TRACK_LOADED'){
                 await interaction.editReply(`\`${firstTrack.info.author} - ${firstTrack.info.title}\` added to the top of the queue!`).catch(() => null);
             } else {
                 await interaction.editReply(`Queueing \`${String(playlist.tracks.length)}\` tracks from \`${playlist.playlistInfo?.name || playlist.title}\` to play next in the queue!`).catch(() => null);

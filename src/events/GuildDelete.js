@@ -12,7 +12,7 @@ class GuildDelete extends RoxanneEvent {
 
     async run(guild) {
         if (!guild.available) return;
-        this.client.webhook.send(`${this.constructor.name} Removed guild => ${guild.name} with ${guild.memberCount} members`)
+        this.client.webhook.send(`${this.constructor.name} Removed guild => ${guild.name} with ${guild.memberCount} members`);
         this.client.logger.log(this.constructor.name, `Removed guild => ${guild.name} with ${guild.memberCount} members`);
     }
 }

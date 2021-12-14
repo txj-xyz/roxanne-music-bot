@@ -1,4 +1,4 @@
-const { Client, LimitedCollection, MessageEmbed, WebhookClient } = require('discord.js');
+const { Client, LimitedCollection, WebhookClient } = require('discord.js');
 const { LavasfyClient } = require('lavasfy');
 const servers = require('../lavasfy-servers.json');
 const { Cheshire } = require('cheshire');

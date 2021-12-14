@@ -19,7 +19,7 @@ class EventHandler {
             event.once ? this.client.once(event.name,  event.exec.bind(event)) : this.client.on(event.name, exec);
             index++;
         }
-        this.client.webhook.send(`${this.constructor.name} Loaded ${index} client event(s)`)
+        this.client.webhook.send(`${this.constructor.name} Loaded ${index} client event(s)`);
         this.client.logger.debug(this.constructor.name, `Loaded ${index} client event(s)`);
         this.built = true;
         return this;

@@ -13,7 +13,7 @@ for (const directory of readdirSync(`${__dirname}/interactions`, { withFileTypes
         if (!command.isFile()) continue;
         const Interaction = require(`${__dirname}/interactions/${directory.name}/${command.name}`);
         commands.push(new Interaction({}).interactionData);
-        console.log(command)
+        console.log(command);
     }
 }
 // stuffs are loaded, now lets log how many commands we have

@@ -16,19 +16,19 @@ class RoxanneDispatcher {
         this.player.on('start', () => {
             
             if (this.repeat === 'one' || this.queue.length < 1) {
-               if (_notifiedOnce) return;
-               else _notifiedOnce = true; 
+                if (_notifiedOnce) return;
+                else _notifiedOnce = true; 
             }
 
             const embed = new MessageEmbed()
                 .setColor(0xff0000)
-                .setAuthor(`Now Playing`, this.client.user.displayAvatarURL({ dynamic: true }))
+                .setAuthor('Now Playing', this.client.user.displayAvatarURL({ dynamic: true }))
                 .setThumbnail(`https://img.youtube.com/vi/${this.current.info.identifier}/default.jpg`)
                 .setURL(this.current.info.uri)
                 .setTitle(`**${this.current.info.title}**`)
-                .addField(`⌛ Duration: `, `\`${RoxanneDispatcher.humanizeTime(this.current.info.length)}\``, true)
-                .addField(`🎵 Author: `, `\`${this.current.info.author}\``, true)
-                .setFooter(`• Powered by Kubernetes!`)
+                .addField('⌛ Duration: ', `\`${RoxanneDispatcher.humanizeTime(this.current.info.length)}\``, true)
+                .addField('🎵 Author: ', `\`${this.current.info.author}\``, true)
+                .setFooter('• Powered by Kubernetes!')
                 .setTimestamp();
             this.channel
                 .send({ embeds: [ embed ] })
@@ -51,22 +51,22 @@ class RoxanneDispatcher {
     static humanizeTime(millisec) {
         let seconds = (millisec / 1000).toFixed(0);
         let minutes = Math.floor(seconds / 60);
-        let hours = "";
+        let hours = '';
         if (minutes > 59) {
             hours = Math.floor(minutes / 60);
-            hours = (hours >= 10) ? hours : "0" + hours;
-            minutes = minutes - (hours * 60);
-            minutes = (minutes >= 10) ? minutes : "0" + minutes;
+            hours = hours >= 10 ? hours : '0' + hours;
+            minutes = minutes - hours * 60;
+            minutes = minutes >= 10 ? minutes : '0' + minutes;
         }
         seconds = Math.floor(seconds % 60);
-        seconds = (seconds >= 10) ? seconds : "0" + seconds;
+        seconds = seconds >= 10 ? seconds : '0' + seconds;
         if (hours > 59) {
-            return "Live! 🔴"
+            return 'Live! 🔴';
         }
-        if (hours != "") {
-            return hours + ":" + minutes + ":" + seconds;
+        if (hours != '') {
+            return hours + ':' + minutes + ':' + seconds;
         }
-        return minutes + ":" + seconds;
+        return minutes + ':' + seconds;
     }
 
     get exists() {
@@ -86,7 +86,7 @@ class RoxanneDispatcher {
         this.player.connection.disconnect();
         this.client.queue.delete(this.guild.id);
         this.client.logger.debug(this.player.constructor.name, `Destroyed the player & connection @ guild "${this.guild.id}"\nReason: ${reason || 'No Reason Provided'}`);
-        this.client.webhook.send(`Destroyed the player & connection @ guild \`"${this.guild.id} | ${this.guild.name}"\` Reason: ${reason || 'No Reason Provided'}`)
+        this.client.webhook.send(`Destroyed the player & connection @ guild \`"${this.guild.id} | ${this.guild.name}"\` Reason: ${reason || 'No Reason Provided'}`);
         if (this.stopped) return;
         this.channel
             .send('No more songs in queue, feel free to queue more songs!')

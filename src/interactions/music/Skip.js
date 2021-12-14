@@ -19,7 +19,7 @@ class Skip extends RoxanneInteraction {
         return [{
             name: 'to',
             type: ApplicationCommandOptionType.Integer,
-            description: `Queue number to skip player ahead to.`,
+            description: 'Queue number to skip player ahead to.',
             required: false
         }];
     }

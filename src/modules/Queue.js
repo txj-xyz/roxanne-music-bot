@@ -15,7 +15,7 @@ class Queue extends Map {
                 channelId: member.voice.channelId,
                 deaf: true
             });
-            this.client.webhook.send(`${player.constructor.name} New connection @ guild \`"${guild.id} | ${guild.name}"\``)
+            this.client.webhook.send(`${player.constructor.name} New connection @ guild \`"${guild.id} | ${guild.name}"\``);
             this.client.logger.debug(player.constructor.name, `New connection @ guild "${guild.id}"`);
             const dispatcher = new RoxanneDispatcher({
                 client: this.client,
@@ -25,7 +25,7 @@ class Queue extends Map {
             });
             dispatcher.queue.push(track);
             this.set(guild.id, dispatcher);
-            this.client.webhook.send(`${dispatcher.constructor.name} New player dispatcher @ guild \`"${guild.id} | ${guild.name}"\``)
+            this.client.webhook.send(`${dispatcher.constructor.name} New player dispatcher @ guild \`"${guild.id} | ${guild.name}"\``);
             this.client.logger.debug(dispatcher.constructor.name, `New player dispatcher @ guild "${guild.id}"`);
             return dispatcher;
         }
