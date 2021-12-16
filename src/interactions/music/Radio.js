@@ -37,6 +37,12 @@ class RadioMenu extends RoxanneInteraction {
                             description: 'House, Chillout, Study, Gym, Happy Music',
                             value: 'good_life_radio'
                         },
+                        {
+                            label: 'Drum & Bass Liquid / Chill',
+                            description: 'Non-Stop Liquid - To Chill / Relax Too',
+                            value: 'dnb_radio'
+                        },
+                        
                     ]),
             );
         const currentGuildQueue = this.client.queue.get(interaction.guild.id);

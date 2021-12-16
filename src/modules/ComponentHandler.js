@@ -40,7 +40,6 @@ class ComponentHandler extends EventEmitter {
                 }
             } else if(interaction.customId === 'radio_menu'){
                 await interaction.editReply({content: 'Please wait, I am loading the radio station. :)', components: []});
-                
                 switch (interaction.values[0]) {
                     case 'lofi_radio':
                         this.client.interactions.commands.get('play').buttonYoutubePlaylist(interaction, 'https://www.youtube.com/watch?v=5qap5aO4i9A', true);
@@ -51,6 +50,10 @@ class ComponentHandler extends EventEmitter {
                     case 'good_life_radio':
                         this.client.interactions.commands.get('play').buttonYoutubePlaylist(interaction, 'https://www.youtube.com/watch?v=36YnV9STBqc', true);
                         break;
+                    case 'dnb_radio':
+                        this.client.interactions.commands.get('play').buttonYoutubePlaylist(interaction, 'https://youtu.be/Rf4jJzziJko', true);
+                        break;
+                        
                 }
             }
         } catch (e) {return e;}
