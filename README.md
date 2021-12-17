@@ -4,17 +4,17 @@
 
 Install dependencies
 ```
-#/~ npm install
+# npm install
 ```
 
 Register and Update Slash commands
 ```
-#/~ npm run slash
+# npm run slash
 ```
 
 Run the bot instance
 ```
-#/~ npm run start
+# npm run start
 ```
 
 
