@@ -130,8 +130,8 @@ class Search extends RoxanneInteraction {
                     url: track.info.uri,
                     length: track.info.length,
                     identifier: track.info.identifier,
-                    view_count: _meta.statistics.viewCount || null,
-                    likes_count: _meta.statistics.likeCount || null,
+                    view_count: _meta.statistics.viewCount?.replace(/\B(?=(\d{3})+(?!\d))/g, ",") || null,
+                    likes_count: _meta.statistics.likeCount?.replace(/\B(?=(\d{3})+(?!\d))/g, ",") || null,
                     upload_date: Search.convertZDate(_meta.snippet.publishedAt) || null
                 }
             )
@@ -152,9 +152,9 @@ class Search extends RoxanneInteraction {
                         .addField('⌛ Duration: ', `**\`${Search.humanizeTime(r.length)}\`**`, true)
                         .addField('🎵 Author: ', `**\`${r.author}\`**`, true)
                         .addField('🖥️ Video ID', `**\`${r.identifier}\`**`, true)
-                        .addField('👍 Likes', `**\`${r.likes_count.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}\`**`, true)
+                        .addField('👍 Likes', `**\`${r.likes_count}\`**`, true)
                         .addField('🛰️ Upload Date', `**\`${r.upload_date}\`**`, true)
-                        .addField('👀 Views', `**\`${r.view_count.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}\`**`, true)
+                        .addField('👀 Views', `**\`${r.view_count?.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}\`**`, true)
                         .setTimestamp()
                 );
             }).join('\n')
@@ -187,7 +187,10 @@ class Search extends RoxanneInteraction {
                         const shoukakuTrack = search.tracks[pageBuild.currentPage - 1];
                         const trackInformation = mappedSearch[pageBuild.currentPage - 1];
                         const dispatcher = await c.queue.handle(interaction.guild, interaction.member, interaction.channel, node, shoukakuTrack);
-                            dispatcher?.play();
+                        // if(!c.queue.get(interaction.guild.id)) {
+                        //     dispatcher?.play();
+                        // }
+                        c.queue.get(interaction.guild.id) ? dispatcher?.play() : null;
                         stopPageBuilder();
                         return await interaction.channel.send(`Adding **${trackInformation.full_title}** to the queue!`)
                         // return stopPageBuilder();
