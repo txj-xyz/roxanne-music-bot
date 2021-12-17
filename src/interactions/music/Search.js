@@ -188,8 +188,9 @@ class Search extends RoxanneInteraction {
                         const trackInformation = mappedSearch[pageBuild.currentPage - 1];
                         const dispatcher = await c.queue.handle(interaction.guild, interaction.member, interaction.channel, node, shoukakuTrack);
                             dispatcher?.play();
-                        // await interaction.editReply({content: `Adding **${trackInformation.full_title}** to the queue!`})
-                        return stopPageBuilder();
+                        stopPageBuilder();
+                        return await interaction.channel.send(`Adding **${trackInformation.full_title}** to the queue!`)
+                        // return stopPageBuilder();
                     }
                 }
             ]);
