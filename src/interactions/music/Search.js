@@ -2,7 +2,7 @@ const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const { MessageEmbed, MessageButton } = require('discord.js');
 const { PagesBuilder } = require('discord.js-pages');
-
+const axios = require('axios');
 class Search extends RoxanneInteraction {
     get name() {
         return 'search';
@@ -20,6 +20,8 @@ class Search extends RoxanneInteraction {
             required: true,
         }];
     }
+
+    static pageLimit = 10;
 
     static chunkify(arr, len) {
         let chunks = [];
@@ -58,94 +60,139 @@ class Search extends RoxanneInteraction {
         return minutes + ':' + seconds;
     }
 
+    static async ytMeta(id, youtube_key) {
+        try{
+            const videoStats = await axios({
+                method: 'get',
+                url: `https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${id}&key=${youtube_key}`,
+                responseType: 'json'
+            });
+            return videoStats.data.items.slice(0).some(e => e) ? videoStats.data.items.slice(0)[0] : null;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    static convertZDate(dateString){
+        if(!dateString) return;
+        const options = { year: "numeric", month: "long", day: "numeric" }
+        return new Date(dateString).toLocaleDateString(undefined, options)
+    }
+
     async run({ interaction }) {
+        const mappedSearch = [];
+
         const searchPageButtonList = [
             {
+                stop: new MessageButton()
+                    .setEmoji('❌')
+                    .setLabel('Cancel')
+                    .setStyle('DANGER')
+            },
+            {
                 back: new MessageButton()
-                    .setEmoji('👈')
-                    .setLabel('Back')
+                    .setEmoji('⬅️')
+                    // .setLabel('Previous Result')
                     .setStyle('SECONDARY')
             },
             {
                 next: new MessageButton()
-                    .setEmoji('👉')
-                    .setLabel('Next')
+                    .setEmoji('➡️')
+                    // .setLabel('Next Result')
                     .setStyle('SECONDARY')
             }
         ];
 
+        // Reply before processing any other messages and check for link
         await interaction.deferReply();
         const query = interaction.options.getString('query', true);
-        if(query.includes('https://')) return await interaction.editReply('I can only search for words');
+        if(query.includes('https://')) return await interaction.editReply('I can only search for words, try searching a term instead.');
+        
+        
         const node = await this.client.shoukaku.getNode();
+        // await interaction.editReply('Searching my music servers for results..');
         const search = await node.rest.resolve(query, 'youtube');
         
         if (!search?.tracks.length)
             return interaction.editReply('I didn\'t find any search results on the query you provided!');
 
-        const mappedSearch = search.tracks.map((track, index) => (
-            {
-                search_id: index+1,
-                full_title: `${track.info.author} - ${track.info.title}`,
-                author: track.info.author,
-                title: track.info.title,
-                url: track.info.uri,
-                length: track.info.length,
-                identifier: track.info.identifier
-            }
-        ));
-        const chunkedSearch = Search.chunkify(mappedSearch, 1); // Split search into 10 results per page
-        const chunked = chunkedSearch.map((t, i) => ({ page: i, tracks: t }));
+        const _search = search.tracks.slice(0, Search.pageLimit ? Search.pageLimit : search.tracks.length)
+
+        // await interaction.editReply('Querying for the video information....')
+        for await (const track of _search){
+            const _meta = await Search.ytMeta(track.info.identifier, "AIzaSyC55sHa-dnHfaSUV5dfWm3iMaZMe5cLuyQ")
+
+            mappedSearch.push(
+                {
+                    full_title: `${track.info.author} - ${track.info.title}`,
+                    author: track.info.author,
+                    title: track.info.title,
+                    url: track.info.uri,
+                    length: track.info.length,
+                    identifier: track.info.identifier,
+                    view_count: _meta.statistics.viewCount || null,
+                    likes_count: _meta.statistics.likeCount || null,
+                    upload_date: Search.convertZDate(_meta.snippet.publishedAt) || null
+                }
+            )
+        }
+        const _chunkSearch = Search.chunkify(mappedSearch, 1);
+        const _chunkedPages = _chunkSearch.map((t, i) => ({ page: i, tracks: t }));
         const pages = [];
         const c = this.client;
 
-        for (const q of chunked) {
-            q.tracks.map(c => {
+        for (const q of _chunkedPages) {
+            q.tracks.map(r => {
                 pages.push(
                     new MessageEmbed()
                         // .setThumbnail(`https://img.youtube.com/vi/${c.identifier}/default.jpg`)
-                        .setImage(`https://img.youtube.com/vi/${c.identifier}/hqdefault.jpg`)
-                        .setURL(c.url)
-                        .setTitle(`**${c.title}**`)
-                        .addField('⌛ Duration: ', `\`${Search.humanizeTime(c.length)}\``, true)
-                        .addField('🎵 Author: ', `\`${c.author}\``, true)
+                        .setImage(`https://img.youtube.com/vi/${r.identifier}/hqdefault.jpg`)
+                        .setURL(r.url)
+                        .setTitle(`**${r.title}**`)
+                        .addField('⌛ Duration: ', `**\`${Search.humanizeTime(r.length)}\`**`, true)
+                        .addField('🎵 Author: ', `**\`${r.author}\`**`, true)
+                        .addField('🖥️ Video ID', `**\`${r.identifier}\`**`, true)
+                        .addField('👍 Likes', `**\`${r.likes_count.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}\`**`, true)
+                        .addField('🛰️ Upload Date', `**\`${r.upload_date}\`**`, true)
+                        .addField('👀 Views', `**\`${r.view_count.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}\`**`, true)
                         .setTimestamp()
                 );
             }).join('\n')
         }
 
-        let pageBuild = new PagesBuilder(interaction)
-            .setColor(this.client.color)
+        function stopPageBuilder() {
+            setTimeout(() => { pageBuild.stopListen(); }, 500);
+        }
+
+        const pageBuild = new PagesBuilder(interaction)
+            .setColor(c.color)
             .setPages(pages)
             .setListenUsers(interaction.user.id)
-            .setListenTimeout(15 * 1000)
-            .setListenEndMethod('edit')
+            .setListenTimeout(30000)
+            .setListenEndMethod('delete')
             .setDefaultButtons(searchPageButtonList)
-            .addComponents(
-                [
-                    new MessageButton()
-                    .setCustomId('custom')
-                    .setEmoji('✅')
-                    .setLabel('Confirm')
-                    .setStyle('SUCCESS')
-                ]
-                
-            )
+            .addComponents([
+                new MessageButton()
+                .setCustomId('custom')
+                .setEmoji('✅')
+                .setLabel('Confirm')
+                .setStyle('SUCCESS')
+            ])
             .setTriggers([
                 {
                     name: 'custom',
-                    async callback(interactionCallback, button) {
+                    async callback(buttonInteraction, button) {
                         button.setDisabled(true)
                         .setLabel('Added to Queue');
                         const shoukakuTrack = search.tracks[pageBuild.currentPage - 1];
                         const trackInformation = mappedSearch[pageBuild.currentPage - 1];
                         const dispatcher = await c.queue.handle(interaction.guild, interaction.member, interaction.channel, node, shoukakuTrack);
                             dispatcher?.play();
-                        return await interaction.followUp({content: `Adding **${trackInformation.full_title}** to the queue!`});
+                        await interaction.reply({content: `Adding **${trackInformation.full_title}** to the queue!`})
+                        return stopPageBuilder();
                     }
                 }
             ]);
-
         pageBuild.build();
     }
 }
