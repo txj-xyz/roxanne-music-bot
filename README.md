@@ -7,7 +7,7 @@ Install dependencies
 #/~ npm install
 ```
 
-Update slash commands
+Register and Update Slash commands
 ```
 #/~ npm run slash
 ```
