@@ -51,7 +51,7 @@ class MessageCreate extends RoxanneEvent {
                         .setLabel('Invite me!')
                 ],
             );
-        if(!['808515445266841642', '714232432672505928'].includes(message.guild.id)) return;
+        if(!['918662128632733696', '714232432672505928'].includes(message.guild.id)) return;
         if(message.content.startsWith('/')){
             const findCommand = message.content.slice(1).split(' ')[0];
             if(this.client.interactions.commands.get(findCommand)){
