@@ -39,14 +39,14 @@ class RoxanneDispatcher {
             if (this.repeat === 'all') this.queue.push(this.current);
             this.play();
         });
-for (const event of ['closed', 'error']) {
-    this.player.on(event, data => {
-        if (data instanceof Error || data instanceof Object) this.client.logger.error(data);
-        this.player.connection.reconnect();
-        // this.queue.length = 0;
-        // this.destroy();
-    });
-}
+        for (const event of ['closed', 'error']) {
+            this.player.on(event, data => {
+                if (data instanceof Error || data instanceof Object) this.client.logger.error(data);
+                this.player.connection.reconnect();
+                // this.queue.length = 0;
+                // this.destroy();
+            });
+        }
     }
 
     static humanizeTime(millisec) {
