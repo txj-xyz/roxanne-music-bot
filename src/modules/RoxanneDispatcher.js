@@ -53,8 +53,9 @@ class RoxanneDispatcher {
         });
         for (const event of ['closed', 'error']) {
             this.player.on(event, (data) => {
-                if (data instanceof Error || data instanceof Object)
+                if (data instanceof Error || data instanceof Object) {
                     this.client.logger.error(data);
+                }
                 this.player.connection.reconnect();
                 // this.queue.length = 0;
                 // this.destroy();
