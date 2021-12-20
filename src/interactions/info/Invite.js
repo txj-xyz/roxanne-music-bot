@@ -21,14 +21,13 @@ class Invite extends RoxanneInteraction {
     async run({ interaction }) {
         await interaction.deferReply({ ephemeral: true });
 
-        const buttons = new MessageActionRow()
-            .addComponents(
-                [
-                    new MessageButton()
-                        .setStyle('LINK')
-                        .setURL(Invite.link(this.client.user.id))
-                        .setLabel('Invite me here!')
-                ],
+        const buttons = new MessageActionRow().addComponents(
+            [
+                new MessageButton()
+                    .setStyle('LINK')
+                    .setURL(Invite.link(this.client.user.id))
+                    .setLabel('Invite me here!'),
+            ]
             // [
             //     new MessageButton()
             //         .setEmoji('❓')
@@ -36,8 +35,11 @@ class Invite extends RoxanneInteraction {
             //         .setURL(Invite.support())
             //         .setLabel('Support Server')
             // ],
-            );
-        await interaction.editReply({ content: 'Invite me to your server with this fancy button!', components: [buttons] });
+        );
+        await interaction.editReply({
+            content: 'Invite me to your server with this fancy button!',
+            components: [buttons],
+        });
     }
 }
 module.exports = Invite;

@@ -1,4 +1,3 @@
-
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 
 class Pause extends RoxanneInteraction {

@@ -11,12 +11,13 @@ class Ratelimit extends RoxanneEvent {
 
     async run(info) {
         this.client.logger.log(
-            this.constructor.name, '\n' +
-            `  Route                    : ${info.route}\n` + 
-            `  Hash                     : ${info.hash}\n` +
-            `  Max Requests             : ${info.limit}\n` + 
-            `  Timeout                  : ${info.timeout}ms\n` + 
-            `  Global Ratelimit         : ${info.global}`
+            this.constructor.name,
+            '\n' +
+                `  Route                    : ${info.route}\n` +
+                `  Hash                     : ${info.hash}\n` +
+                `  Max Requests             : ${info.limit}\n` +
+                `  Timeout                  : ${info.timeout}ms\n` +
+                `  Global Ratelimit         : ${info.global}`
         );
     }
 }

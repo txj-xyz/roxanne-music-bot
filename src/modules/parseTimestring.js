@@ -30,7 +30,9 @@ function parseTimestring(string, returnUnit, opts) {
         .match(/[-+]?[0-9.]+[a-z]+/g);
 
     if (groups === null) {
-        throw new Error(`The string [${string}] could not be parsed by timestring`);
+        throw new Error(
+            `The string [${string}] could not be parsed by timestring`
+        );
     }
 
     groups.forEach((group) => {
@@ -57,7 +59,7 @@ function getUnitValues(opts) {
 
     unitValues.d = opts.hoursPerDay * unitValues.h;
     unitValues.w = opts.daysPerWeek * unitValues.d;
-    unitValues.mth = opts.daysPerYear / opts.monthsPerYear * unitValues.d;
+    unitValues.mth = (opts.daysPerYear / opts.monthsPerYear) * unitValues.d;
     unitValues.y = opts.daysPerYear * unitValues.d;
 
     return unitValues;

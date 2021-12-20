@@ -13,20 +13,30 @@ class Queue extends Map {
                 guildId: guild.id,
                 shardId: guild.shardId,
                 channelId: member.voice.channelId,
-                deaf: true
+                deaf: true,
             });
-            this.client.webhook.send(`${player.constructor.name} New connection @ guild \`"${guild.id} | ${guild.name}"\``);
-            this.client.logger.debug(player.constructor.name, `New connection @ guild "${guild.id}"`);
+            this.client.webhook.send(
+                `${player.constructor.name} New connection @ guild \`"${guild.id} | ${guild.name}"\``
+            );
+            this.client.logger.debug(
+                player.constructor.name,
+                `New connection @ guild "${guild.id}"`
+            );
             const dispatcher = new RoxanneDispatcher({
                 client: this.client,
                 guild,
                 channel,
-                player
+                player,
             });
             dispatcher.queue.push(track);
             this.set(guild.id, dispatcher);
-            this.client.webhook.send(`${dispatcher.constructor.name} New player dispatcher @ guild \`"${guild.id} | ${guild.name}"\``);
-            this.client.logger.debug(dispatcher.constructor.name, `New player dispatcher @ guild "${guild.id}"`);
+            this.client.webhook.send(
+                `${dispatcher.constructor.name} New player dispatcher @ guild \`"${guild.id} | ${guild.name}"\``
+            );
+            this.client.logger.debug(
+                dispatcher.constructor.name,
+                `New player dispatcher @ guild "${guild.id}"`
+            );
             return dispatcher;
         }
         first ? existing.queue.unshift(track) : existing.queue.push(track);

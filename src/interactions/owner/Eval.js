@@ -17,12 +17,14 @@ class Eval extends RoxanneInteraction {
     }
 
     get options() {
-        return [{
-            name: 'code',
-            type: ApplicationCommandOptionType.String,
-            description: 'The code you want me to evaluate',
-            required: true,
-        }];
+        return [
+            {
+                name: 'code',
+                type: ApplicationCommandOptionType.String,
+                description: 'The code you want me to evaluate',
+                required: true,
+            },
+        ];
     }
 
     static trim(string, max) {
@@ -30,7 +32,7 @@ class Eval extends RoxanneInteraction {
     }
 
     async run({ interaction }) {
-        await interaction.deferReply( {ephemeral: true} );
+        await interaction.deferReply({ ephemeral: true });
         const code = interaction.options.getString('code', true);
         let res;
         try {
@@ -44,8 +46,11 @@ class Eval extends RoxanneInteraction {
             .setTitle('Eval Results')
             .setDescription(`\`\`\`js\n${Eval.trim(res, 4000)}\`\`\``)
             .setTimestamp()
-            .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
-        await interaction.editReply({ embeds: [ embed ] });
+            .setFooter(
+                this.client.user.username,
+                this.client.user.displayAvatarURL()
+            );
+        await interaction.editReply({ embeds: [embed] });
     }
 }
 module.exports = Eval;

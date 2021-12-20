@@ -4,5 +4,5 @@ module.exports = {
     resumableTimeout: 45,
     reconnectInterval: 2000,
     reconnectTries: 5,
-    restTimeout: 10000
+    restTimeout: 10000,
 };

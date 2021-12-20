@@ -11,19 +11,23 @@ class Repeat extends RoxanneInteraction {
     }
 
     get options() {
-        return [{
-            name: 'one',
-            type: ApplicationCommandOptionType.Subcommand,
-            description: 'Repeats the currently playing track',
-        }, {
-            name: 'all',
-            type: ApplicationCommandOptionType.Subcommand,
-            description: 'Repeats the whole queue',
-        }, {
-            name: 'off',
-            type: ApplicationCommandOptionType.Subcommand,
-            description: 'Disables the repeat playback mode',
-        }];
+        return [
+            {
+                name: 'one',
+                type: ApplicationCommandOptionType.Subcommand,
+                description: 'Repeats the currently playing track',
+            },
+            {
+                name: 'all',
+                type: ApplicationCommandOptionType.Subcommand,
+                description: 'Repeats the whole queue',
+            },
+            {
+                name: 'off',
+                type: ApplicationCommandOptionType.Subcommand,
+                description: 'Disables the repeat playback mode',
+            },
+        ];
     }
 
     get playerCheck() {
@@ -32,7 +36,9 @@ class Repeat extends RoxanneInteraction {
 
     async run({ interaction, dispatcher }) {
         dispatcher.repeat = interaction.options.getSubcommand(true);
-        await interaction.reply(`the repeat playback mode is now set to \`${dispatcher.repeat}\`!`);
+        await interaction.reply(
+            `the repeat playback mode is now set to \`${dispatcher.repeat}\`!`
+        );
     }
 }
 module.exports = Repeat;

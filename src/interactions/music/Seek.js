@@ -14,7 +14,7 @@ class Seek extends RoxanneInteraction {
         return { voice: true, dispatcher: true, channel: true };
     }
 
-    static ParseHumanTime(str){
+    static ParseHumanTime(str) {
         let Parsed;
         try {
             Parsed = require('../../modules/parseTimestring.js')(str);
@@ -44,30 +44,41 @@ class Seek extends RoxanneInteraction {
     }
 
     get options() {
-        return [{
-            name: 'position',
-            type: ApplicationCommandOptionType.String,
-            description: '<number s/m/h> \'e.g: 50m 20s\'',
-            required: true
-        }];
+        return [
+            {
+                name: 'position',
+                type: ApplicationCommandOptionType.String,
+                description: "<number s/m/h> 'e.g: 50m 20s'",
+                required: true,
+            },
+        ];
     }
 
     async run({ interaction, dispatcher }) {
         await interaction.deferReply();
-        const seekPositonString = interaction.options.getString('position', true);
-        const seekResolvedString = Seek.ParseHumanTime(seekPositonString) * 1000;
+        const seekPositonString = interaction.options.getString(
+            'position',
+            true
+        );
+        const seekResolvedString =
+            Seek.ParseHumanTime(seekPositonString) * 1000;
 
-        if(dispatcher.current.info.isSeekable) {
-            if(seekResolvedString > dispatcher.current.info.length) {
-                return await interaction.editReply('The seek requested is longer than the song! I cannot do that!');
+        if (dispatcher.current.info.isSeekable) {
+            if (seekResolvedString > dispatcher.current.info.length) {
+                return await interaction.editReply(
+                    'The seek requested is longer than the song! I cannot do that!'
+                );
             } else {
                 await dispatcher.player.seekTo(seekResolvedString);
-                await interaction.editReply(`Seeked to \`${Seek.humanTime(seekResolvedString)}\`!`);
+                await interaction.editReply(
+                    `Seeked to \`${Seek.humanTime(seekResolvedString)}\`!`
+                );
             }
         } else {
-            return await interaction.editReply('Sorry human this song is not seekable!');
+            return await interaction.editReply(
+                'Sorry human this song is not seekable!'
+            );
         }
-            
     }
 }
 module.exports = Seek;

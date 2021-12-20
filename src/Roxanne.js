@@ -3,7 +3,12 @@ const { LavasfyClient } = require('lavasfy');
 const servers = require('../lavasfy-servers.json');
 const { Cheshire } = require('cheshire');
 const { Collection } = require('@discordjs/collection');
-const { token, webhookUrl, spotifyClientID, spotifySecret } = require('../config.json');
+const {
+    token,
+    webhookUrl,
+    spotifyClientID,
+    spotifySecret,
+} = require('../config.json');
 const RoxanneLogger = require('./modules/RoxanneLogger.js');
 const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
 const Queue = require('./modules/Queue.js');
@@ -12,32 +17,34 @@ const ComponentHandler = require('./modules/ComponentHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
 const DatabaseHandler = require('./modules/DatabaseHandler.js');
 
-
 class Roxanne extends Client {
     constructor(options) {
         // create cache
-        options.makeCache = manager => {
-            switch(manager.name) {
+        options.makeCache = (manager) => {
+            switch (manager.name) {
                 // Disable Cache
-                case 'GuildEmojiManager': 
-                case 'GuildBanManager': 
+                case 'GuildEmojiManager':
+                case 'GuildBanManager':
                 case 'GuildInviteManager':
                 case 'GuildStickerManager':
                 case 'StageInstanceManager':
                 case 'PresenceManager':
-                case 'ThreadManager': return new LimitedCollection({ maxSize: 0 });
+                case 'ThreadManager':
+                    return new LimitedCollection({ maxSize: 0 });
                 // TLRU cache, Lifetime 30 minutes
-                case 'MessageManager': return new Cheshire({ lifetime: 1e+6, lru: false });
+                case 'MessageManager':
+                    return new Cheshire({ lifetime: 1e6, lru: false });
                 // Default cache
-                default: return new Collection();
+                default:
+                    return new Collection();
             }
         };
         // pass options
         super(options);
-        this.color = 0x7E686C;
+        this.color = 0x7e686c;
         this.quitting = false;
         this.location = process.cwd();
-        
+
         this.logger = new RoxanneLogger();
         this.shoukaku = new ShoukakuHandler(this);
         this.queue = new Queue(this);
@@ -47,17 +54,22 @@ class Roxanne extends Client {
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
         this.components = new ComponentHandler(this);
-        
-        // Spotify Support
-        this.lavasfy = new LavasfyClient({
-            clientID: spotifyClientID,
-            clientSecret: spotifySecret,
-            filterAudioOnlyResult: true,
-            autoResolve: true,
-            useSpotifyMetadata: true,
-        }, servers);
 
-        ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map(event => process.once(event, this.exit.bind(this)));
+        // Spotify Support
+        this.lavasfy = new LavasfyClient(
+            {
+                clientID: spotifyClientID,
+                clientSecret: spotifySecret,
+                filterAudioOnlyResult: true,
+                autoResolve: true,
+                useSpotifyMetadata: true,
+            },
+            servers
+        );
+
+        ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event) =>
+            process.once(event, this.exit.bind(this))
+        );
     }
 
     async login() {

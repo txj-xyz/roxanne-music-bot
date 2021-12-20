@@ -21,7 +21,9 @@ class Stop extends RoxanneInteraction {
         dispatcher.stopped = true;
         dispatcher.player.stopTrack();
         Wait(500);
-        await interaction.editReply('I stopped and destroyed the player in this guild!');
+        await interaction.editReply(
+            'I stopped and destroyed the player in this guild!'
+        );
     }
 }
 module.exports = Stop;
