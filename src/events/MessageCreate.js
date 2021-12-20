@@ -82,6 +82,11 @@ class MessageCreate extends RoxanneEvent {
             )
         )
             return;
+
+        if (message.content === `<@!${this.client.user.id}> good bot`) {
+            return message.reply(':3');
+        }
+
         if (message.content.startsWith('/')) {
             const findCommand = message.content.slice(1).split(' ')[0];
             if (this.client.interactions.commands.get(findCommand)) {
