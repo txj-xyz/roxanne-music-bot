@@ -36,7 +36,7 @@ const sharderOptions = {
     // clusterCount: 4,
     // shardCount: 4,
     // guildsPerShard: 4,
-    ipcSocket: 9998,
+    // ipcSocket: 9998,
     client: RoxanneClient,
     timeout: 90000,
     token,
