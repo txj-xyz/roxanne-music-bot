@@ -1,14 +1,7 @@
 const { Client, LimitedCollection, WebhookClient } = require('discord.js');
-const { LavasfyClient } = require('lavasfy');
-const servers = require('../lavasfy-servers.json');
 const { Cheshire } = require('cheshire');
 const { Collection } = require('@discordjs/collection');
-const {
-    token,
-    webhookUrl,
-    spotifyClientID,
-    spotifySecret,
-} = require('../config.json');
+const { token, webhookUrl } = require('../config.json');
 const RoxanneLogger = require('./modules/RoxanneLogger.js');
 const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
 const Queue = require('./modules/Queue.js');
@@ -16,6 +9,7 @@ const InteractionHandler = require('./modules/InteractionHandler.js');
 const ComponentHandler = require('./modules/ComponentHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
 const DatabaseHandler = require('./modules/DatabaseHandler.js');
+const UtilityFunctions = require('./modules/UtilityFunctions');
 
 class Roxanne extends Client {
     constructor(options) {
@@ -53,19 +47,9 @@ class Roxanne extends Client {
         this.db = new DatabaseHandler(this);
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
-        this.components = new ComponentHandler(this);
 
-        // Spotify Support
-        this.lavasfy = new LavasfyClient(
-            {
-                clientID: spotifyClientID,
-                clientSecret: spotifySecret,
-                filterAudioOnlyResult: true,
-                autoResolve: true,
-                useSpotifyMetadata: true,
-            },
-            servers
-        );
+        new ComponentHandler(this);
+        this.util = new UtilityFunctions(this);
 
         ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event) =>
             process.once(event, this.exit.bind(this))
