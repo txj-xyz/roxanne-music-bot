@@ -71,7 +71,7 @@ class Play extends RoxanneInteraction {
         // Spotify Integration Tracks / Playlists
         if (
             Play.checkURL(query) &&
-            query.match(this.client.lavasfy.spotifyPattern)
+            query.match(this.client.util.lava.spotifyPattern)
         ) {
             let playlist;
             let fullResolvedList = [];
@@ -79,7 +79,7 @@ class Play extends RoxanneInteraction {
             try {
                 playlist = await retry(
                     Play.spotifyRetry,
-                    [this.client.lavasfy, query, interaction],
+                    [this.client.util.lava, query, interaction],
                     {
                         retriesMax: 10,
                         interval: 1000,
@@ -213,14 +213,14 @@ class Play extends RoxanneInteraction {
         // Spotify Integration Tracks / Playlists select menus
         if (
             Play.checkURL(query) &&
-            query.match(this.client.lavasfy.spotifyPattern)
+            query.match(this.client.util.lava.spotifyPattern)
         ) {
             let playlist;
             let fullResolvedList = [];
             try {
                 playlist = await retry(
                     Play.spotifyRetry,
-                    [this.client.lavasfy, query, interaction],
+                    [this.client.util.lava, query, interaction],
                     {
                         retriesMax: 10,
                         interval: 1000,

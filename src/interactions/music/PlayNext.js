@@ -114,7 +114,7 @@ class PlayNext extends RoxanneInteraction {
         // Spotify Integration Tracks / Playlists
         if (
             PlayNext.checkURL(query) &&
-            query.match(this.client.lavasfy.spotifyPattern)
+            query.match(this.client.util.lava.spotifyPattern)
         ) {
             let playlist;
             let fullResolvedList = [];
@@ -122,7 +122,7 @@ class PlayNext extends RoxanneInteraction {
             try {
                 playlist = await retry(
                     PlayNext.spotifyRetry,
-                    [this.client.lavasfy, query, interaction],
+                    [this.client.util.lava, query, interaction],
                     {
                         retriesMax: 10,
                         interval: 1000,
