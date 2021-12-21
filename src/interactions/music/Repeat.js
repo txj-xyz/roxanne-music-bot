@@ -37,7 +37,7 @@ class Repeat extends RoxanneInteraction {
     async run({ interaction, dispatcher }) {
         dispatcher.repeat = interaction.options.getSubcommand(true);
         await interaction.reply(
-            `the repeat playback mode is now set to \`${dispatcher.repeat}\`!`
+            `The repeat playback mode is now set to \`${dispatcher.repeat}\`!`
         );
     }
 }
