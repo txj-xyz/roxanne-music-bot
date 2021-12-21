@@ -77,9 +77,11 @@ class MessageCreate extends RoxanneEvent {
             ]
         );
         if (
-            !['918662128632733696', '714232432672505928'].includes(
-                message.guild.id
-            )
+            ![
+                '918662128632733696',
+                '714232432672505928',
+                '556316704838385665',
+            ].includes(message.guild.id)
         )
             return;
 
