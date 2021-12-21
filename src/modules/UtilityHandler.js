@@ -1,4 +1,5 @@
 const { LavasfyClient } = require('lavasfy');
+const DatabaseHandler = require('./DatabaseHandler.js');
 const {
     token,
     webhookUrl,
@@ -7,8 +8,9 @@ const {
     spotifySecret,
 } = require('../../config.json');
 const servers = require('../../lavasfy-servers.json');
-class UtilityFunctions {
-    constructor() {
+class UtilityHandler {
+    constructor(client) {
+        this.db = new DatabaseHandler(client);
         this.humanizeTime = this.humanizeTime;
         this.ytMeta = this.ytMeta;
         this.lavaConnect(spotifyClientID, spotifySecret, servers);
@@ -89,4 +91,4 @@ class UtilityFunctions {
     }
 }
 
-module.exports = UtilityFunctions;
+module.exports = UtilityHandler;

@@ -9,8 +9,7 @@ const InteractionHandler = require('./modules/InteractionHandler.js');
 const ComponentHandler = require('./modules/ComponentHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
 const DatabaseHandler = require('./modules/DatabaseHandler.js');
-const UtilityFunctions = require('./modules/UtilityFunctions');
-
+const UtilityHandler = require('./modules/UtilityHandler');
 class Roxanne extends Client {
     constructor(options) {
         // create cache
@@ -44,12 +43,11 @@ class Roxanne extends Client {
         this.queue = new Queue(this);
         this.webhook = new WebhookClient({ url: webhookUrl });
         this.commandsRun = 0;
-        this.db = new DatabaseHandler(this);
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
+        this.util = new UtilityHandler(this);
 
         new ComponentHandler(this);
-        this.util = new UtilityFunctions(this);
 
         ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event) =>
             process.once(event, this.exit.bind(this))

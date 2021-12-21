@@ -2,6 +2,7 @@ const { Constants, Intents, Util } = require('discord.js');
 const { Azuma } = require('azuma');
 const { join } = require('path');
 const { token } = require('./config.json');
+
 const {
     GUILDS,
     GUILD_MEMBERS,
