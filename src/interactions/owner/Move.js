@@ -6,11 +6,7 @@ class Move extends RoxanneInteraction {
     }
 
     get description() {
-        return 'Changes voice channels!';
-    }
-
-    get permissions() {
-        return 'OWNER';
+        return "Join the current voice channel you're in!";
     }
 
     get playerCheck() {
@@ -22,6 +18,7 @@ class Move extends RoxanneInteraction {
     }
 
     async run({ interaction }) {
+        await interaction.deferReply();
         const botVoice =
             (await interaction.guild.voiceStates.cache.get(
                 this.client.user.id
@@ -32,7 +29,6 @@ class Move extends RoxanneInteraction {
             )) || null;
         const botVoiceID = botVoice?.channelId;
         const userVoiceID = userVoice?.channelId;
-        await interaction.deferReply({ ephemeral: true });
         await interaction.editReply('Moving channels!');
 
         botVoice.setChannel(userVoiceID).catch(async () => {
