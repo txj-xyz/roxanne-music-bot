@@ -121,7 +121,7 @@ class PlayNext extends RoxanneInteraction {
 
             try {
                 playlist = await retry(
-                    PlayNext.spotifyRetry,
+                    this.client.util.spotifyRetry,
                     [this.client.util.lava, query, interaction],
                     {
                         retriesMax: 10,

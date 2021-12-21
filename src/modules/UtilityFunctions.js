@@ -29,6 +29,25 @@ class UtilityFunctions {
             this.lava = null;
         }
     }
+
+    async spotifyRetry(lavasfyClient, query, interaction) {
+        return new Promise(async (resolve, reject) => {
+            const node = await lavasfyClient.getNode();
+            await node.load(query).then(async (r) => {
+                if (r.loadType === 'LOAD_FAILED') {
+                    await interaction.editReply({
+                        content: 'Please wait while I grab songs from Spotify',
+                        components: [],
+                    });
+                    reject('LOAD_FAILED');
+                } else if (r.loadType.includes('LOADED')) {
+                    resolve(r);
+                } else if (r.loadType === 'NO_MATCHES') {
+                    resolve(r);
+                }
+            });
+        });
+    }
 }
 
 module.exports = UtilityFunctions;
