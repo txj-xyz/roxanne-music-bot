@@ -17,23 +17,6 @@ class Stats extends RoxanneInteraction {
         else return `${Math.round(MB)} MB`;
     }
 
-    static humanizeTime(millisec) {
-        let seconds = (millisec / 1000).toFixed(1);
-        let minutes = (millisec / (1000 * 60)).toFixed(1);
-        let hours = (millisec / (1000 * 60 * 60)).toFixed(1);
-        let days = (millisec / (1000 * 60 * 60 * 24)).toFixed(1);
-
-        if (seconds < 60) {
-            return seconds + ' Sec';
-        } else if (minutes < 60) {
-            return minutes + ' Min';
-        } else if (hours < 24) {
-            return hours + ' Hrs';
-        } else {
-            return days + ' Days';
-        }
-    }
-
     static updateDBStats(
         interaction,
         client,
@@ -46,7 +29,7 @@ class Stats extends RoxanneInteraction {
         let obj = {
             servers: Array.from(client.shoukaku.nodes.keys()).join(', '),
             commandsRun: client.commandsRun,
-            uptime: Stats.humanizeTime(client.uptime),
+            uptime: this.client.util.humanizeTime(client.uptime),
             ping: Math.round(
                 message.createdTimestamp - interaction.createdTimestamp
             ),

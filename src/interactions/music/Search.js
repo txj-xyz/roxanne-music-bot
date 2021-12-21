@@ -41,42 +41,6 @@ class Search extends RoxanneInteraction {
         return { voice: true, dispatcher: false, channel: false };
     }
 
-    static humanizeTime(millisec) {
-        let seconds = (millisec / 1000).toFixed(0);
-        let minutes = Math.floor(seconds / 60);
-        let hours = '';
-        if (minutes > 59) {
-            hours = Math.floor(minutes / 60);
-            hours = hours >= 10 ? hours : '0' + hours;
-            minutes = minutes - hours * 60;
-            minutes = minutes >= 10 ? minutes : '0' + minutes;
-        }
-        seconds = Math.floor(seconds % 60);
-        seconds = seconds >= 10 ? seconds : '0' + seconds;
-        if (hours > 59) {
-            return 'Live! 🔴';
-        }
-        if (hours != '') {
-            return hours + ':' + minutes + ':' + seconds;
-        }
-        return minutes + ':' + seconds;
-    }
-
-    static async ytMeta(id, youtube_key) {
-        try {
-            const videoStats = await axios({
-                method: 'get',
-                url: `https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${id}&key=${youtube_key}`,
-                responseType: 'json',
-            });
-            return videoStats.data.items.slice(0).some((e) => e)
-                ? videoStats.data.items.slice(0)[0]
-                : null;
-        } catch (err) {
-            return err;
-        }
-    }
-
     static convertZDate(dateString) {
         if (!dateString) return;
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -131,10 +95,7 @@ class Search extends RoxanneInteraction {
 
         // await interaction.editReply('Querying for the video information....')
         for await (const track of _search) {
-            const _meta = await Search.ytMeta(
-                track.info.identifier,
-                'AIzaSyC55sHa-dnHfaSUV5dfWm3iMaZMe5cLuyQ'
-            );
+            const _meta = await this.client.util.ytMeta(track.info.identifier);
 
             mappedSearch.push({
                 full_title: `${track.info.author} - ${track.info.title}`,
@@ -178,7 +139,9 @@ class Search extends RoxanneInteraction {
                             .setTitle(`**${r.title}**`)
                             .addField(
                                 '⌛ Duration: ',
-                                `**\`${Search.humanizeTime(r.length)}\`**`,
+                                `**\`${this.client.util.humanizeTime(
+                                    r.length
+                                )}\`**`,
                                 true
                             )
                             .addField(
