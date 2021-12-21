@@ -110,7 +110,7 @@ class Queue extends RoxanneInteraction {
                 .setTitle(`**${dispatcher.current.info.title}**`)
                 .addField(
                     '⌛ Duration: ',
-                    `\`${RoxanneDispatcher.humanizeTime(
+                    `\`${this.client.util.humanizeTime(
                         dispatcher.current.info.length
                     )}\``,
                     true
