@@ -113,7 +113,7 @@ class PlayNext extends RoxanneInteraction {
 
         // Spotify Integration Tracks / Playlists
         if (
-            PlayNext.checkURL(query) &&
+            this.client.util.checkURL(query) &&
             query.match(this.client.util.lava.spotifyPattern)
         ) {
             let playlist;
@@ -190,7 +190,7 @@ class PlayNext extends RoxanneInteraction {
         }
 
         // Check Youtube URL / Playlist
-        if (PlayNext.checkURL(query)) {
+        if (this.client.util.checkURL(query)) {
             const result = await node.rest.resolve(query);
             if (!result)
                 return interaction.editReply(

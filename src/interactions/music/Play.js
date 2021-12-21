@@ -28,15 +28,6 @@ class Play extends RoxanneInteraction {
         return { voice: true, dispatcher: false, channel: false };
     }
 
-    static checkURL(string) {
-        try {
-            new URL(string);
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
-
     async run({ interaction }) {
         await interaction.deferReply();
         const query = interaction.options.getString('query', true);
@@ -50,7 +41,7 @@ class Play extends RoxanneInteraction {
 
         // Spotify Integration Tracks / Playlists
         if (
-            Play.checkURL(query) &&
+            this.client.util.checkURL(query) &&
             query.match(this.client.util.lava.spotifyPattern)
         ) {
             let playlist;
@@ -126,7 +117,7 @@ class Play extends RoxanneInteraction {
         }
 
         // Check Youtube URL / Playlist
-        if (Play.checkURL(query)) {
+        if (this.client.util.checkURL(query)) {
             const result = await node.rest.resolve(query);
             if (!result)
                 return await interaction.editReply(
@@ -192,7 +183,7 @@ class Play extends RoxanneInteraction {
         const node = await this.client.shoukaku.getNode();
         // Spotify Integration Tracks / Playlists select menus
         if (
-            Play.checkURL(query) &&
+            this.client.util.checkURL(query) &&
             query.match(this.client.util.lava.spotifyPattern)
         ) {
             let playlist;
@@ -273,7 +264,7 @@ class Play extends RoxanneInteraction {
     async buttonYoutubePlaylist(interaction, query, radio) {
         const node = await this.client.shoukaku.getNode();
         // YouTube Playlist integration for select menus
-        if (Play.checkURL(query)) {
+        if (this.client.util.checkURL(query)) {
             const result = await node.rest.resolve(query);
             if (!result)
                 return interaction.editReply({

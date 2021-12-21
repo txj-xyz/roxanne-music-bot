@@ -18,6 +18,15 @@ class UtilityFunctions {
         return array.filter((_, index) => index != indexID - 1);
     }
 
+    checkURL(string) {
+        try {
+            new URL(string);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
     async lavaConnect(clientID, clientSecret, servers) {
         try {
             let c = new LavasfyClient(
