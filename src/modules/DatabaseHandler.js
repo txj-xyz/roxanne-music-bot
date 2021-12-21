@@ -1,9 +1,10 @@
 const { createClient } = require('redis');
+const { dbUrl } = require('../../config.json');
 
 class DatabaseHandler {
     constructor(client) {
         this.redis = null;
-        this.redis = createClient({ url: 'redis://192.168.1.20:31181' });
+        this.redis = createClient({ url: dbUrl });
         this.redis
             .connect()
             .then(() => {

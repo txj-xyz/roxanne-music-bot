@@ -1,5 +1,9 @@
 {
     "owners": ["user_id"],
     "token": "token_string",
-    "webhookUrl": "https://discord.com/api/webhooks/id/token"
+    "webhookUrl": "https://discord.com/api/webhooks/id/token",
+    "spotifyClientID": "String",
+    "spotifySecret": "String",
+    "youtube_key": "API v3 KEY",
+    "dbUrl": "redis://IP:PORT"
 }
