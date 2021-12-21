@@ -29,7 +29,7 @@ class Stats extends RoxanneInteraction {
         let obj = {
             servers: Array.from(client.shoukaku.nodes.keys()).join(', '),
             commandsRun: client.commandsRun,
-            uptime: this.client.util.humanizeTime(client.uptime),
+            uptime: client.util.humanizeTime(client.uptime),
             ping: Math.round(
                 message.createdTimestamp - interaction.createdTimestamp
             ),
