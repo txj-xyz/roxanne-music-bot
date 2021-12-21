@@ -181,7 +181,7 @@ class Search extends RoxanneInteraction {
         function stopPageBuilder() {
             setTimeout(() => {
                 pageBuild.stopListen();
-            }, 500);
+            }, 1000);
         }
 
         const pageBuild = new PagesBuilder(interaction)
@@ -189,7 +189,7 @@ class Search extends RoxanneInteraction {
             .setPages(pages)
             .setListenUsers(interaction.user.id)
             .setListenTimeout(30000)
-            .setListenEndMethod('delete')
+            .setListenEndMethod('edit')
             .setDefaultButtons(searchPageButtonList)
             .addComponents([
                 new MessageButton()
