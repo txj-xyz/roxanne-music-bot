@@ -15,10 +15,6 @@ class Remove extends RoxanneInteraction {
         return { voice: true, dispatcher: true, channel: true };
     }
 
-    static removeIndex(array, queueIndexID) {
-        return array.filter((_, index) => index != queueIndexID - 1);
-    }
-
     get options() {
         return [
             {
@@ -34,7 +30,10 @@ class Remove extends RoxanneInteraction {
         await interaction.deferReply();
         const queueID = interaction.options.getInteger('id', false);
         tempArray = dispatcher.queue;
-        dispatcher.queue = Remove.removeIndex(tempArray, queueID);
+        dispatcher.queue = this.client.util.removeArrayIndex(
+            tempArray,
+            queueID
+        );
         await interaction.editReply(
             `Removed \`${tempArray[queueID - 1].info.author} - ${
                 tempArray[queueID - 1].info.title

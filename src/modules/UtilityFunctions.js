@@ -14,6 +14,10 @@ class UtilityFunctions {
         this.lavaConnect(spotifyClientID, spotifySecret, servers);
     }
 
+    removeArrayIndex(array, indexID) {
+        return array.filter((_, index) => index != indexID - 1);
+    }
+
     async lavaConnect(clientID, clientSecret, servers) {
         try {
             let c = new LavasfyClient(
