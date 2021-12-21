@@ -26,16 +26,18 @@ class Move extends RoxanneInteraction {
         const botVoiceID = botVoice?.channelId;
         const userVoiceID = userVoice?.channelId;
         await interaction.editReply('Moving channels!');
-
-        botVoice.setChannel(userVoiceID).catch(async () => {
-            return await interaction.editReply(
-                "I'm unable to join your voice channel, I am missing permissions!"
-            );
-        });
-
-        await interaction.editReply(
-            `Moving from <#${botVoiceID}> to <#${userVoiceID}>`
-        );
+        botVoice
+            .setChannel(userVoiceID)
+            .then(async () => {
+                await interaction.editReply(
+                    `Moving from <#${botVoiceID}> to <#${userVoiceID}>`
+                );
+            })
+            .catch(async (err) => {
+                return await interaction.editReply(
+                    'I am missing `MEMBER_MOVE` Permissions and or I cannot see the channel you are trying to move me to!'
+                );
+            });
     }
 }
 module.exports = Move;
