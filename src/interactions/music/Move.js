@@ -13,10 +13,6 @@ class Move extends RoxanneInteraction {
         return { voice: true, dispatcher: true, channel: false };
     }
 
-    get options() {
-        return [];
-    }
-
     async run({ interaction }) {
         await interaction.deferReply();
         const botVoice =
