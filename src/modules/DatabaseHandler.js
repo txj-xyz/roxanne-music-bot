@@ -3,7 +3,6 @@ const { dbUrl } = require('../../config.json');
 
 class DatabaseHandler {
     constructor(client) {
-        this.redis = null;
         this.redis = createClient({ url: dbUrl });
         this.redis
             .connect()
@@ -14,15 +13,12 @@ class DatabaseHandler {
                 );
             })
             .catch((err) => {
-                this.redis = 'Not Connected';
                 client.logger.debug(
                     this.constructor.name,
                     `Failed to Connect to Database: ${err}`
                 );
-                return this.redis;
+                this.redis = null;
             });
-
-        return this;
     }
 }
 
