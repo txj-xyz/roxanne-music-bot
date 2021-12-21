@@ -1,4 +1,5 @@
 const { LavasfyClient } = require('lavasfy');
+const axios = require('axios');
 const DatabaseHandler = require('./DatabaseHandler.js');
 const {
     token,

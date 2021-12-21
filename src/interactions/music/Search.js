@@ -2,7 +2,7 @@ const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const { MessageEmbed, MessageButton } = require('discord.js');
 const { PagesBuilder } = require('discord.js-pages');
-const axios = require('axios');
+
 class Search extends RoxanneInteraction {
     get name() {
         return 'search';
@@ -96,7 +96,6 @@ class Search extends RoxanneInteraction {
         // await interaction.editReply('Querying for the video information....')
         for await (const track of _search) {
             const _meta = await this.client.util.ytMeta(track.info.identifier);
-
             mappedSearch.push({
                 full_title: `${track.info.author} - ${track.info.title}`,
                 author: track.info.author,
