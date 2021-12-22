@@ -4,6 +4,7 @@ const DatabaseHandler = require('./DatabaseHandler.js');
 const {
     token,
     webhookUrl,
+    inviteURL,
     youtube_key,
     spotifyClientID,
     spotifySecret,
@@ -11,6 +12,7 @@ const {
 const servers = require('../../lavasfy-servers.json');
 class UtilityHandler {
     constructor(client) {
+        this.invite = inviteURL;
         this.db = new DatabaseHandler(client);
         this.humanizeTime = this.humanizeTime;
         this.ytMeta = this.ytMeta;
