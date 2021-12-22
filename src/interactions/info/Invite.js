@@ -10,10 +10,6 @@ class Invite extends RoxanneInteraction {
         return 'Invite me to your server';
     }
 
-    static link(id) {
-        return `https://discord.com/oauth2/authorize?client_id=${id}&permissions=414518209792&scope=applications.commands%20bot`;
-    }
-
     static support() {
         return 'https://discord.gg/2EE8a3dmxU';
     }
@@ -25,7 +21,7 @@ class Invite extends RoxanneInteraction {
             [
                 new MessageButton()
                     .setStyle('LINK')
-                    .setURL(Invite.link(this.client.user.id))
+                    .setURL(this.client.util.invite)
                     .setLabel('Invite me here!'),
             ]
             // [

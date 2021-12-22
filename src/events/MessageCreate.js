@@ -9,9 +9,7 @@ class MessageCreate extends RoxanneEvent {
     get once() {
         return false;
     }
-    static invite(id) {
-        return `https://discord.com/api/oauth2/authorize?client_id=${id}&permissions=414518209792&scope=bot%20applications.commands`;
-    }
+
     static supportServer() {
         return 'https://discord.gg/2EE8a3dmxU';
     }
@@ -72,7 +70,7 @@ class MessageCreate extends RoxanneEvent {
             [
                 new MessageButton()
                     .setStyle('LINK')
-                    .setURL(MessageCreate.invite(this.client.user.id))
+                    .setURL(this.client.util.invite)
                     .setLabel('Invite me!'),
             ]
         );
