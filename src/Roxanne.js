@@ -8,7 +8,7 @@ const Queue = require('./modules/Queue.js');
 const InteractionHandler = require('./modules/InteractionHandler.js');
 const ComponentHandler = require('./modules/ComponentHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
-const DatabaseHandler = require('./modules/DatabaseHandler.js');
+// const DatabaseHandler = require('./modules/DatabaseHandler.js');
 const UtilityHandler = require('./modules/UtilityHandler');
 class Roxanne extends Client {
     constructor(options) {
