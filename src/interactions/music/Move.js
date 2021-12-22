@@ -35,7 +35,7 @@ class Move extends RoxanneInteraction {
             })
             .catch(async (err) => {
                 return await interaction.editReply(
-                    'I am missing `MEMBER_MOVE` Permissions and or I cannot see the channel you are trying to move me to!'
+                    'I am missing `MOVE_MEMBER` Permissions and or I cannot see the channel you are trying to move me to!'
                 );
             });
     }
