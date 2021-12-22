@@ -11,7 +11,7 @@ class Invite extends RoxanneInteraction {
     }
 
     static link(id) {
-        return `https://discord.com/oauth2/authorize?client_id=${id}&permissions=139623484672&scope=applications.commands%20bot`;
+        return `https://discord.com/oauth2/authorize?client_id=${id}&permissions=414518209792&scope=applications.commands%20bot`;
     }
 
     static support() {

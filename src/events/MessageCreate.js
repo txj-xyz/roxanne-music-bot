@@ -10,7 +10,7 @@ class MessageCreate extends RoxanneEvent {
         return false;
     }
     static invite(id) {
-        return `https://discord.com/api/oauth2/authorize?client_id=${id}&permissions=139623484672&scope=bot%20applications.commands`;
+        return `https://discord.com/api/oauth2/authorize?client_id=${id}&permissions=414518209792&scope=bot%20applications.commands`;
     }
     static supportServer() {
         return 'https://discord.gg/2EE8a3dmxU';
