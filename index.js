@@ -16,9 +16,6 @@ const customClientOptions = {
 
 const sharderOptions = {
     clientOptions: Util.mergeDefault(Constants.DefaultOptions, customClientOptions),
-    // clusterCount: 4,
-    // shardCount: 2,
-    // guildsPerShard: 2,
     development: true,
     ipcSocket: ipcSocket || 9999,
     client: RoxanneClient,
