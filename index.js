@@ -1,7 +1,7 @@
 const { Constants, Intents, Util } = require('discord.js');
 const { Azuma } = require('azuma');
 const { join } = require('path');
-const { token } = require('./config.json');
+const { token, ipcSocket } = require('./config.json');
 
 const { GUILDS, GUILD_MEMBERS, GUILD_BANS, GUILD_VOICE_STATES, GUILD_MESSAGES, GUILD_MESSAGE_REACTIONS } = Intents.FLAGS;
 
@@ -20,7 +20,7 @@ const sharderOptions = {
     // shardCount: 2,
     // guildsPerShard: 2,
     development: true,
-    ipcSocket: 9998,
+    ipcSocket: ipcSocket,
     client: RoxanneClient,
     timeout: 90000,
     token,
