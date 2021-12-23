@@ -9,12 +9,21 @@ class Queue extends Map {
     async handle(guild, member, channel, node, track, first) {
         const existing = this.get(guild.id);
         if (!existing) {
-            const player = await node.joinChannel({
-                guildId: guild.id,
-                shardId: guild.shardId,
-                channelId: member.voice.channelId,
-                deaf: true,
-            });
+            let player;
+            try {
+                player = await node.joinChannel({
+                    guildId: guild.id,
+                    shardId: guild.shardId,
+                    channelId: member.voice.channelId,
+                    deaf: true,
+                });
+            } catch (error) {
+                this.client.webhook.send(
+                    `QueueHandler \`"${guild.id} | ${guild.name}"\`: \`\`\`js\n${error}\n\`\`\``
+                );
+                this.client.logger.debug(`QueueHandler`, error);
+                return null;
+            }
             this.client.webhook.send(
                 `${player.constructor.name} New connection @ guild \`"${guild.id} | ${guild.name}"\``
             );
