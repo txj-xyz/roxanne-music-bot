@@ -7,16 +7,10 @@ class DatabaseHandler {
         this.redis
             .connect()
             .then(() => {
-                client.logger.debug(
-                    this.constructor.name,
-                    'Loaded Database Handler without Error.'
-                );
+                client.logger.debug(this.constructor.name, 'Loaded Database Handler without Error.');
             })
             .catch((err) => {
-                client.logger.debug(
-                    this.constructor.name,
-                    `Failed to Connect to Database: ${err}`
-                );
+                client.logger.debug(this.constructor.name, `Failed to Connect to Database: ${err}`);
                 this.redis = null;
             });
     }

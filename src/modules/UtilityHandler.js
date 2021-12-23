@@ -1,14 +1,7 @@
 const { LavasfyClient } = require('lavasfy');
 const axios = require('axios');
 const DatabaseHandler = require('./DatabaseHandler.js');
-const {
-    token,
-    webhookUrl,
-    inviteURL,
-    youtube_key,
-    spotifyClientID,
-    spotifySecret,
-} = require('../../config.json');
+const { token, webhookUrl, inviteURL, youtube_key, spotifyClientID, spotifySecret } = require('../../config.json');
 const servers = require('../../lavasfy-servers.json');
 class UtilityHandler {
     constructor(client) {
@@ -85,9 +78,7 @@ class UtilityHandler {
                 url: `https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${id}&key=${youtube_key}`,
                 responseType: 'json',
             });
-            return videoStats.data.items.slice(0).some((e) => e)
-                ? videoStats.data.items.slice(0)[0]
-                : null;
+            return videoStats.data.items.slice(0).some((e) => e) ? videoStats.data.items.slice(0)[0] : null;
         } catch (err) {
             return err;
         }

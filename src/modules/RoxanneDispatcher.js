@@ -21,27 +21,12 @@ class RoxanneDispatcher {
 
             const embed = new MessageEmbed()
                 .setColor(0xff0000)
-                .setAuthor(
-                    'Now Playing',
-                    this.client.user.displayAvatarURL({ dynamic: true })
-                )
-                .setThumbnail(
-                    `https://img.youtube.com/vi/${this.current.info.identifier}/default.jpg`
-                )
+                .setAuthor('Now Playing', this.client.user.displayAvatarURL({ dynamic: true }))
+                .setThumbnail(`https://img.youtube.com/vi/${this.current.info.identifier}/default.jpg`)
                 .setURL(this.current.info.uri)
                 .setTitle(`**${this.current.info.title}**`)
-                .addField(
-                    '⌛ Duration: ',
-                    `\`${this.client.util.humanizeTime(
-                        this.current.info.length
-                    )}\``,
-                    true
-                )
-                .addField(
-                    '🎵 Author: ',
-                    `\`${this.current.info.author}\``,
-                    true
-                )
+                .addField('⌛ Duration: ', `\`${this.client.util.humanizeTime(this.current.info.length)}\``, true)
+                .addField('🎵 Author: ', `\`${this.current.info.author}\``, true)
                 .setFooter('• Powered by Kubernetes!')
                 .setTimestamp();
             this.channel.send({ embeds: [embed] }).catch(() => null);
@@ -80,21 +65,10 @@ class RoxanneDispatcher {
         this.queue.length = 0;
         this.player.connection.disconnect();
         this.client.queue.delete(this.guild.id);
-        this.client.logger.debug(
-            this.player.constructor.name,
-            `Destroyed the player & connection @ guild "${
-                this.guild.id
-            }"\nReason: ${reason || 'No Reason Provided'}`
-        );
-        this.client.webhook.send(
-            `Destroyed the player & connection @ guild \`"${this.guild.id} | ${
-                this.guild.name
-            }"\` Reason: ${reason || 'No Reason Provided'}`
-        );
+        this.client.logger.debug(this.player.constructor.name, `Destroyed the player & connection @ guild "${this.guild.id}"\nReason: ${reason || 'No Reason Provided'}`);
+        this.client.webhook.send(`Destroyed the player & connection @ guild \`"${this.guild.id} | ${this.guild.name}"\` Reason: ${reason || 'No Reason Provided'}`);
         if (this.stopped) return;
-        this.channel
-            .send('No more songs in queue, feel free to queue more songs!')
-            .catch(() => null);
+        this.channel.send('No more songs in queue, feel free to queue more songs!').catch(() => null);
     }
 }
 module.exports = RoxanneDispatcher;

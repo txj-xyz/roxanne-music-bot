@@ -30,9 +30,7 @@ function parseTimestring(string, returnUnit, opts) {
         .match(/[-+]?[0-9.]+[a-z]+/g);
 
     if (groups === null) {
-        throw new Error(
-            `The string [${string}] could not be parsed by timestring`
-        );
+        throw new Error(`The string [${string}] could not be parsed by timestring`);
     }
 
     groups.forEach((group) => {

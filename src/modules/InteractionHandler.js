@@ -11,51 +11,31 @@ class InteractionHandler extends EventEmitter {
         this.commands = new Collection();
         this.built = false;
         this.on('error', (error) => client.logger.error(error));
-        this.client.on('interactionCreate', (interaction) =>
-            this.exec(interaction)
-        );
+        this.client.on('interactionCreate', (interaction) => this.exec(interaction));
     }
 
     static checkPermission(permissions, interaction) {
-        if (permissions.includes('OWNER'))
-            return config.owners.includes(interaction.user.id);
-        else
-            return interaction.channel
-                .permissionsFor(interaction.member)
-                .has(permissions);
+        if (permissions.includes('OWNER')) return config.owners.includes(interaction.user.id);
+        else return interaction.channel.permissionsFor(interaction.member).has(permissions);
     }
 
     build() {
         if (this.built) return this;
-        const directories = readdirSync(
-            `${this.client.location}/src/interactions`,
-            { withFileTypes: true }
-        );
+        const directories = readdirSync(`${this.client.location}/src/interactions`, { withFileTypes: true });
         for (const directory of directories) {
             if (!directory.isDirectory()) continue;
-            const commands = readdirSync(
-                `${this.client.location}/src/interactions/${directory.name}`,
-                { withFileTypes: true }
-            );
+            const commands = readdirSync(`${this.client.location}/src/interactions/${directory.name}`, { withFileTypes: true });
             for (const command of commands) {
                 if (!command.isFile()) continue;
                 const Interaction = require(`${this.client.location}/src/interactions/${directory.name}/${command.name}`);
                 const Command = new Interaction(this.client);
-                Command.category =
-                    directory.name.charAt(0).toUpperCase() +
-                    directory.name.substring(1);
+                Command.category = directory.name.charAt(0).toUpperCase() + directory.name.substring(1);
                 this.commands.set(Command.name, Command);
                 // this.client.webhook.send(`${this.constructor.name} \tCommand '${Command.name}' loaded (@${Command.uid})`)
-                this.client.logger.debug(
-                    this.constructor.name,
-                    `\tCommand '${Command.name}' loaded (@${Command.uid})`
-                );
+                this.client.logger.debug(this.constructor.name, `\tCommand '${Command.name}' loaded (@${Command.uid})`);
             }
         }
-        this.client.logger.log(
-            this.constructor.name,
-            `Loaded ${this.commands.size} interaction client command(s)`
-        );
+        this.client.logger.log(this.constructor.name, `Loaded ${this.commands.size} interaction client command(s)`);
         this.built = true;
         return this;
     }
@@ -67,13 +47,8 @@ class InteractionHandler extends EventEmitter {
      * development tool and not be available to actual users, even admins.
      */
     rebuild() {
-        this.client.logger.log(
-            this.constructor.name,
-            '---- Live reload triggered ----'
-        );
-        this.client.webhook.send(
-            `${this.constructor.name} ---- Live reload triggered ----`
-        );
+        this.client.logger.log(this.constructor.name, '---- Live reload triggered ----');
+        this.client.webhook.send(`${this.constructor.name} ---- Live reload triggered ----`);
 
         // let stashed = this.commands;
         try {
@@ -92,43 +67,26 @@ class InteractionHandler extends EventEmitter {
             const ReloadInteraction = require(`${this.client.location}/src/interactions/info/Reload.js`);
             const ReloadCommand = new ReloadInteraction(this.client);
             this.commands.set(ReloadCommand.name, ReloadCommand);
-            this.client.logger.error(
-                this.constructor.name,
-                `Failed to reload commands ! '/reload' was still loaded, fix the issue and reload!\nError : ${error}`
-            );
+            this.client.logger.error(this.constructor.name, `Failed to reload commands ! '/reload' was still loaded, fix the issue and reload!\nError : ${error}`);
             throw error;
         }
 
-        this.client.logger.log(
-            this.constructor.name,
-            '---- Live reload completed ----'
-        );
-        this.client.webhook.send(
-            `${this.constructor.name} ---- Live reload completed ----`
-        );
+        this.client.logger.log(this.constructor.name, '---- Live reload completed ----');
+        this.client.webhook.send(`${this.constructor.name} ---- Live reload completed ----`);
         return this; // For the sake of transparency, this behaves just as build()
     }
 
     async update(guildId) {
-        if (!this.client.application?.owner)
-            await this.client.application?.fetch();
-        const commands = this.commands.map(
-            (command) => command.interactionData
-        );
+        if (!this.client.application?.owner) await this.client.application?.fetch();
+        const commands = this.commands.map((command) => command.interactionData);
         if (!guildId) {
             // global command
             await this.client.application?.commands.set(commands);
-            this.client.logger.debug(
-                this.constructor.name,
-                `Updated ${commands.size} interaction command(s) [Discord Side]`
-            );
+            this.client.logger.debug(this.constructor.name, `Updated ${commands.size} interaction command(s) [Discord Side]`);
         } else {
             // guild specific command for testing
             await this.client.guilds.cache.get(guildId)?.commands.set(commands);
-            this.client.logger.debug(
-                this.constructor.name,
-                `Updated ${this.commands.size} interaction command(s) [Discord Side]`
-            );
+            this.client.logger.debug(this.constructor.name, `Updated ${this.commands.size} interaction command(s) [Discord Side]`);
         }
     }
 
@@ -137,23 +95,13 @@ class InteractionHandler extends EventEmitter {
             if (interaction.isCommand() || interaction.isContextMenu()) {
                 const command = this.commands.get(interaction.commandName);
                 if (!command) return;
-                if (
-                    command.permissions &&
-                    !InteractionHandler.checkPermission(
-                        command.permissions,
-                        interaction
-                    )
-                )
+                if (command.permissions && !InteractionHandler.checkPermission(command.permissions, interaction))
                     return interaction.reply({
-                        content:
-                            "You don't have the required permissions to use this command!",
+                        content: "You don't have the required permissions to use this command!",
                         ephemeral: true,
                     });
                 // player related stuff
-                if (
-                    command.playerCheck?.voice &&
-                    !interaction.member.voice.channelId
-                )
+                if (command.playerCheck?.voice && !interaction.member.voice.channelId)
                     return interaction.reply({
                         content: 'You are not in a voice channel!',
                         ephemeral: true,
@@ -164,28 +112,14 @@ class InteractionHandler extends EventEmitter {
                         content: 'Nothing is playing in this server!',
                         ephemeral: true,
                     });
-                if (
-                    command.playerCheck?.channel &&
-                    dispatcher.player.connection.channelId !==
-                        interaction.member.voice.channelId
-                )
+                if (command.playerCheck?.channel && dispatcher.player.connection.channelId !== interaction.member.voice.channelId)
                     return interaction.reply({
-                        content:
-                            "You are not in the same voice channel I'm currently connected to!",
+                        content: "You are not in the same voice channel I'm currently connected to!",
                         ephemeral: true,
                     });
                 // execute le commandz
-                this.client.logger.log(
-                    this.constructor.name,
-                    `Executing ${command.type ? 'context' : 'command'} ${
-                        command.name
-                    } (@${command.uid})`
-                );
-                this.client.webhook.send(
-                    `${this.constructor.name} Executing ${
-                        command.type ? 'context' : 'command'
-                    } ${command.name} (@${command.uid})`
-                );
+                this.client.logger.log(this.constructor.name, `Executing ${command.type ? 'context' : 'command'} ${command.name} (@${command.uid})`);
+                this.client.webhook.send(`${this.constructor.name} Executing ${command.type ? 'context' : 'command'} ${command.name} (@${command.uid})`);
                 await command.run({ interaction, dispatcher });
                 this.client.commandsRun++;
             }
@@ -195,20 +129,11 @@ class InteractionHandler extends EventEmitter {
                 .setTitle('Something errored!')
                 .setDescription(`\`\`\`js\n ${error.toString()}\`\`\``)
                 .setTimestamp()
-                .setFooter(
-                    this.client.user.username,
-                    this.client.user.displayAvatarURL()
-                );
+                .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
             this.client.webhook.send({ embeds: [embed] });
 
-            if (interaction.replied || interaction.deferred)
-                await interaction
-                    .editReply({ embeds: [embed] })
-                    .catch((error) => this.emit('error', error));
-            else
-                await interaction
-                    .reply({ embeds: [embed] })
-                    .catch((error) => this.emit('error', error));
+            if (interaction.replied || interaction.deferred) await interaction.editReply({ embeds: [embed] }).catch((error) => this.emit('error', error));
+            else await interaction.reply({ embeds: [embed] }).catch((error) => this.emit('error', error));
             this.emit('error', error);
         }
     }
