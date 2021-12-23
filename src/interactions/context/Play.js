@@ -55,7 +55,6 @@ class PlayContext extends RoxanneContext {
 
         if (messageFind.every((element) => element !== null)) {
             messageFind = messageFind[1];
-            console.log('match all', messageFind);
 
             PlayContext.regexArray.forEach(async (v, i) => {
                 const match = messageFind.match(v);
@@ -81,7 +80,6 @@ class PlayContext extends RoxanneContext {
             });
         } else {
             for (const msg of messageFind) {
-                console.log(msg);
                 if (msg !== null) {
                     PlayContext.regexArray.forEach(async (v, i) => {
                         const match = msg.match(v);
