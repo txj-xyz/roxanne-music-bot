@@ -28,8 +28,20 @@ class PlayContext extends RoxanneContext {
         let linkFound = null;
         const fetchMessage = await interaction.channel.messages.fetch(interaction.targetId);
 
+        let embedMatchString;
+        embedMatchString = null;
+        if (fetchMessage.embeds?.[0]) {
+            Object.values(fetchMessage.embeds?.[0]).forEach((k) => {
+                if (typeof k === 'string' && k?.match(PlayContext.regexArray[0])) {
+                    embedMatchString = k?.match(PlayContext.regexArray[0])?.[0].replace(/[()\ \s-]+/g, '');
+                } else if (typeof k === 'string' && k?.match(PlayContext.regexArray[1])) {
+                    embedMatchString = k?.match(PlayContext.regexArray[1])?.[0].replace(/[()\ \s-]+/g, '');
+                }
+            });
+        }
+        //prettier-ignore
         const messageFind = [
-            fetchMessage.embeds[0]?.url?.match(PlayContext.regexArray[0])?.[0] || fetchMessage.embeds[0]?.url?.match(PlayContext.regexArray[1])?.[0] || null,
+            embedMatchString,
             fetchMessage.content.match(PlayContext.regexArray[0])?.[0] || fetchMessage.content.match(PlayContext.regexArray[1])?.[0] || null,
         ];
         if (messageFind.every((element) => element === null)) {
