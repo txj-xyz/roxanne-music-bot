@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const Wait = require('util').promisify(setTimeout);
 
 class RoxanneDispatcher {
     constructor({ client, guild, channel, player }) {
@@ -31,24 +32,37 @@ class RoxanneDispatcher {
                 .setTimestamp();
             this.channel.send({ embeds: [embed] }).catch(() => null);
         });
-        this.player.on('end', () => {
+        this.player.on('end', async () => {
+            console.log('end');
             if (this.repeat === 'one') this.queue.unshift(this.current);
             if (this.repeat === 'all') this.queue.push(this.current);
+            if (![0, 1].includes(player.connection.state)) return;
             this.play();
         });
-        for (const event of ['closed', 'error']) {
-            this.player.on(event, (data) => {
-                if (data instanceof Error || data instanceof Object) {
-                    this.client.logger.error(data);
-                    if (data.code === 4014) {
-                        console.log('reconnect fired?');
-                        setTimeout(() => {
-                            this.player?.connection?.reconnect();
-                        }, 200);
-                    }
-                }
-            });
-        }
+
+        // for (const event of ['closed', 'error']) {
+        //     this.player.on(event, (data) => {
+        //         if (data instanceof Error || data instanceof Object) {
+        //             this.client.logger.error(data);
+        //             if (data.code === 4014) {
+        //                 console.log('reconnect fired?');
+        //                 setTimeout(() => {
+        //                     this.player?.connection?.reconnect();
+        //                 }, 200);
+        //             }
+        //         }
+        //     });
+        // }
+        this.player.on('closed', async (payload) => {
+            await Wait(5000);
+            if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
+                await this.player.connection.reconnect();
+                await Wait(100);
+                await this.player.resume();
+                await this.player.connection.setDeaf(true);
+                if (![0, 1].includes(player.connection.state)) this.destroy();
+            }
+        });
     }
 
     get exists() {
