@@ -41,12 +41,12 @@ class RoxanneDispatcher {
                 if (data instanceof Error || data instanceof Object) {
                     this.client.logger.error(data);
                 }
-                // if (data.code === 4014) {
-                //     this.queue.length = 0;
-                //     this.destroy();
-                // } else {
-                this.player.connection.reconnect();
-                // }
+                if (data.code === 4014) {
+                    this.queue.length = 0;
+                    this.destroy();
+                } else {
+                    this.player.connection.reconnect();
+                }
             });
         }
     }
