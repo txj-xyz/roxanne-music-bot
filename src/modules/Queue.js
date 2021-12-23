@@ -19,10 +19,9 @@ class Queue extends Map {
                 });
             } catch (error) {
                 this.client.webhook.send(
-                    `QueueHandler \`"${guild.id} | ${guild.name}"\`: \`\`\`js\n${error}\n\`\`\``
+                    `QueueHandlerError \`"${guild.id} | ${guild.name}"\`: \`\`\`js\n${error}\n\`\`\``
                 );
-                this.client.logger.debug(`QueueHandler`, error);
-                return null;
+                return this.client.logger.debug(`QueueHandlerError`, error);
             }
             this.client.webhook.send(
                 `${player.constructor.name} New connection @ guild \`"${guild.id} | ${guild.name}"\``
