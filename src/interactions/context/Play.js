@@ -33,14 +33,16 @@ class PlayContext extends RoxanneContext {
         if (fetchMessage.embeds?.[0]) {
             Object.values(fetchMessage.embeds?.[0]).forEach((k) => {
                 if (typeof k === 'string' && k?.match(PlayContext.regexArray[0])) {
-                    embedMatchString = k?.match(PlayContext.regexArray[0])?.[0].replace(/[()\ \s-]+/g, '');
+                    embedMatchString = k?.match(PlayContext.regexArray[0])?.[0].replace(/[()\ \s]+/g, '');
                 } else if (typeof k === 'string' && k?.match(PlayContext.regexArray[1])) {
-                    embedMatchString = k?.match(PlayContext.regexArray[1])?.[0].replace(/[()\ \s-]+/g, '');
+                    embedMatchString = k?.match(PlayContext.regexArray[1])?.[0].replace(/[()\ \s]+/g, '');
                 }
             });
         }
+
+        let messageFind;
         //prettier-ignore
-        const messageFind = [
+        messageFind = [
             embedMatchString,
             fetchMessage.content.match(PlayContext.regexArray[0])?.[0] || fetchMessage.content.match(PlayContext.regexArray[1])?.[0] || null,
         ];
@@ -51,30 +53,59 @@ class PlayContext extends RoxanneContext {
             });
         }
 
-        for (const msg of messageFind) {
-            if (msg !== null) {
-                PlayContext.regexArray.forEach(async (v, i) => {
-                    const match = msg.match(v);
-                    if (match) {
-                        linkFound = match[0];
-                        switch (i) {
-                            case 0: {
-                                await interaction.deferReply({
-                                    ephemeral: false,
-                                });
-                                this.client.interactions.commands.get('play').buttonSpotifyPlaylist(interaction, linkFound);
-                                break;
-                            }
-                            case 1: {
-                                await interaction.deferReply({
-                                    ephemeral: false,
-                                });
-                                this.client.interactions.commands.get('play').buttonYoutubePlaylist(interaction, linkFound, false);
-                                break;
-                            }
+        if (messageFind.every((element) => element !== null)) {
+            messageFind = messageFind[1];
+            console.log('match all', messageFind);
+
+            PlayContext.regexArray.forEach(async (v, i) => {
+                const match = messageFind.match(v);
+                if (match) {
+                    linkFound = match[0];
+                    switch (i) {
+                        case 0: {
+                            await interaction.deferReply({
+                                ephemeral: false,
+                            });
+                            this.client.interactions.commands.get('play').buttonSpotifyPlaylist(interaction, linkFound);
+                            break;
+                        }
+                        case 1: {
+                            await interaction.deferReply({
+                                ephemeral: false,
+                            });
+                            this.client.interactions.commands.get('play').buttonYoutubePlaylist(interaction, linkFound, false);
+                            break;
                         }
                     }
-                });
+                }
+            });
+        } else {
+            for (const msg of messageFind) {
+                console.log(msg);
+                if (msg !== null) {
+                    PlayContext.regexArray.forEach(async (v, i) => {
+                        const match = msg.match(v);
+                        if (match) {
+                            linkFound = match[0];
+                            switch (i) {
+                                case 0: {
+                                    await interaction.deferReply({
+                                        ephemeral: false,
+                                    });
+                                    this.client.interactions.commands.get('play').buttonSpotifyPlaylist(interaction, linkFound);
+                                    break;
+                                }
+                                case 1: {
+                                    await interaction.deferReply({
+                                        ephemeral: false,
+                                    });
+                                    this.client.interactions.commands.get('play').buttonYoutubePlaylist(interaction, linkFound, false);
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                }
             }
         }
     }
