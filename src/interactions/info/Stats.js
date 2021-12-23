@@ -17,30 +17,16 @@ class Stats extends RoxanneInteraction {
         else return `${Math.round(MB)} MB`;
     }
 
-    static updateDBStats(
-        interaction,
-        client,
-        message,
-        guilds,
-        channels,
-        memory,
-        players
-    ) {
+    static updateDBStats(interaction, client, message, guilds, channels, memory, players) {
         let obj = {
             servers: Array.from(client.shoukaku.nodes.keys()).join(', '),
             commandsRun: client.commandsRun,
             uptime: client.util.humanizeTime(client.uptime),
-            ping: Math.round(
-                message.createdTimestamp - interaction.createdTimestamp
-            ),
-            memory: Stats.convertBytes(
-                memory.reduce((sum, memory) => sum + memory.rss, 0)
-            ),
+            ping: Math.round(message.createdTimestamp - interaction.createdTimestamp),
+            memory: Stats.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0)),
             players: players.reduce((sum, count) => sum + count),
             channels: channels.reduce((sum, count) => sum + count),
-            userCount: client.guilds.cache
-                .map((g) => g.memberCount)
-                .reduce((a, c) => a + c),
+            userCount: client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c),
             guilds: guilds.reduce((sum, count) => sum + count),
         };
         // client.db.redis.set('stats', JSON.stringify(obj)).catch(_ => null);
@@ -56,15 +42,7 @@ class Stats extends RoxanneInteraction {
             this.client.shard.broadcastEval('process.memoryUsage()'),
             this.client.shard.broadcastEval('this.queue.size'),
         ]);
-        const dbQuery = Stats.updateDBStats(
-            interaction,
-            this.client,
-            message,
-            guilds,
-            channels,
-            memory,
-            players
-        );
+        const dbQuery = Stats.updateDBStats(interaction, this.client, message, guilds, channels, memory, players);
 
         const embed = new MessageEmbed()
             .setColor(this.client.color)
@@ -83,10 +61,7 @@ Music Nodes :: ${dbQuery.servers}
 \`\`\``
             )
             .setTimestamp()
-            .setFooter(
-                this.client.user.username,
-                this.client.user.displayAvatarURL()
-            );
+            .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
         await interaction.editReply({ embeds: [embed] });
     }
 }

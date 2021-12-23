@@ -14,11 +14,7 @@ class Ping extends RoxanneInteraction {
             fetchReply: true,
             ephemeral: true,
         });
-        await interaction.editReply(
-            `Took \`${Math.round(
-                message.createdTimestamp - interaction.createdTimestamp
-            )}ms\``
-        );
+        await interaction.editReply(`Took \`${Math.round(message.createdTimestamp - interaction.createdTimestamp)}ms\``);
     }
 }
 module.exports = Ping;

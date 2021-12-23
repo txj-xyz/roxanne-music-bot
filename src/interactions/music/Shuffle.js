@@ -15,9 +15,7 @@ class Shuffle extends RoxanneInteraction {
 
     async run({ interaction, dispatcher }) {
         dispatcher.queue = dispatcher.queue.sort(() => Math.random() - 0.5);
-        await interaction.reply(
-            'I succesfully shuffled the queue in this guild!'
-        );
+        await interaction.reply('I succesfully shuffled the queue in this guild!');
     }
 }
 module.exports = Shuffle;

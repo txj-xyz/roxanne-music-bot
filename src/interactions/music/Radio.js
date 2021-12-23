@@ -45,9 +45,7 @@ class RadioMenu extends RoxanneInteraction {
         );
         const currentGuildQueue = this.client.queue.get(interaction.guild.id);
         if (currentGuildQueue) {
-            return await interaction.editReply(
-                '**Human, Please stop the player or wait for the queue to finish before using this command.**'
-            );
+            return await interaction.editReply('**Human, Please stop the player or wait for the queue to finish before using this command.**');
         }
         await interaction.editReply({
             content: 'Human! Select a radio station from the drop down!',

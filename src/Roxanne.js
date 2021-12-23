@@ -49,9 +49,7 @@ class Roxanne extends Client {
 
         new ComponentHandler(this);
 
-        ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event) =>
-            process.once(event, this.exit.bind(this))
-        );
+        ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event) => process.once(event, this.exit.bind(this)));
     }
 
     async login() {

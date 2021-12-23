@@ -3,14 +3,7 @@ const { Azuma } = require('azuma');
 const { join } = require('path');
 const { token } = require('./config.json');
 
-const {
-    GUILDS,
-    GUILD_MEMBERS,
-    GUILD_BANS,
-    GUILD_VOICE_STATES,
-    GUILD_MESSAGES,
-    GUILD_MESSAGE_REACTIONS,
-} = Intents.FLAGS;
+const { GUILDS, GUILD_MEMBERS, GUILD_BANS, GUILD_VOICE_STATES, GUILD_MESSAGES, GUILD_MESSAGE_REACTIONS } = Intents.FLAGS;
 
 const RoxanneClient = require('./src/Roxanne.js');
 
@@ -18,25 +11,16 @@ const RoxanneClient = require('./src/Roxanne.js');
 const customClientOptions = {
     disableMentions: 'everyone',
     restRequestTimeout: 30000,
-    intents: [
-        GUILDS,
-        GUILD_MEMBERS,
-        GUILD_BANS,
-        GUILD_VOICE_STATES,
-        GUILD_MESSAGES,
-        GUILD_MESSAGE_REACTIONS,
-    ],
+    intents: [GUILDS, GUILD_MEMBERS, GUILD_BANS, GUILD_VOICE_STATES, GUILD_MESSAGES, GUILD_MESSAGE_REACTIONS],
 };
 
 const sharderOptions = {
-    clientOptions: Util.mergeDefault(
-        Constants.DefaultOptions,
-        customClientOptions
-    ),
+    clientOptions: Util.mergeDefault(Constants.DefaultOptions, customClientOptions),
     // clusterCount: 4,
-    // shardCount: 4,
-    // guildsPerShard: 4,
-    // ipcSocket: 9998,
+    // shardCount: 2,
+    // guildsPerShard: 2,
+    development: true,
+    ipcSocket: 9998,
     client: RoxanneClient,
     timeout: 90000,
     token,
@@ -48,10 +32,6 @@ const ratelimitOptions = {
     requestOffset: 500,
 };
 
-const azuma = new Azuma(
-    join(__dirname, '/src/RoxanneBaseCluster.js'),
-    sharderOptions,
-    ratelimitOptions
-);
+const azuma = new Azuma(join(__dirname, '/src/RoxanneBaseCluster.js'), sharderOptions, ratelimitOptions);
 
 azuma.spawn().catch(console.error);

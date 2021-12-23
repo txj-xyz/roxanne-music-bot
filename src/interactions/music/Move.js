@@ -15,28 +15,18 @@ class Move extends RoxanneInteraction {
 
     async run({ interaction }) {
         await interaction.deferReply();
-        const botVoice =
-            (await interaction.guild.voiceStates.cache.get(
-                this.client.user.id
-            )) || null;
-        const userVoice =
-            (await interaction.guild.voiceStates.cache.get(
-                interaction.user.id
-            )) || null;
+        const botVoice = (await interaction.guild.voiceStates.cache.get(this.client.user.id)) || null;
+        const userVoice = (await interaction.guild.voiceStates.cache.get(interaction.user.id)) || null;
         const botVoiceID = botVoice?.channelId;
         const userVoiceID = userVoice?.channelId;
         await interaction.editReply('Moving channels!');
         botVoice
             .setChannel(userVoiceID)
             .then(async () => {
-                await interaction.editReply(
-                    `Moving from <#${botVoiceID}> to <#${userVoiceID}>`
-                );
+                await interaction.editReply(`Moving from <#${botVoiceID}> to <#${userVoiceID}>`);
             })
             .catch(async (err) => {
-                return await interaction.editReply(
-                    'I am missing `MOVE_MEMBER` Permissions and or I cannot see the channel you are trying to move me to!'
-                );
+                return await interaction.editReply('I am missing `MOVE_MEMBER` Permissions and or I cannot see the channel you are trying to move me to!');
             });
     }
 }

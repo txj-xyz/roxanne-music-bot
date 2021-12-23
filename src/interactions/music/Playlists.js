@@ -43,8 +43,7 @@ class PlaylistMenu extends RoxanneInteraction {
                 ])
         );
         await interaction.reply({
-            content:
-                "Human! Select from the drop down what you'd like to play!",
+            content: "Human! Select from the drop down what you'd like to play!",
             components: [row],
         });
     }

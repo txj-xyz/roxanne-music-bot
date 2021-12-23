@@ -16,15 +16,10 @@ class MessageCreate extends RoxanneEvent {
 
     async run(message) {
         const helpEmbed = new MessageEmbed()
-            .setAuthor(
-                this.client.user.username,
-                this.client.user.displayAvatarURL()
-            )
+            .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
             .setTitle('• Help Menu')
             .setColor(this.client.color)
-            .setDescription(
-                'Do `/help [command]` for a detailed help about that command'
-            )
+            .setDescription('Do `/help [command]` for a detailed help about that command')
             .addField(
                 '❓ Info',
                 `${this.client.interactions.commands
@@ -39,49 +34,16 @@ class MessageCreate extends RoxanneEvent {
                     .map((cmd) => `\`/${cmd.name}`)
                     .join('`, ')}\``
             )
-            .addField(
-                '🔗 GIF Tutorial',
-                '[Full Size Link](https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif)'
-            )
-            .setImage(
-                'https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif'
-            )
-            .setFooter(
-                `The Music Project • ${this.client.interactions.commands.size} commands loaded`
-            );
+            .addField('🔗 GIF Tutorial', '[Full Size Link](https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif)')
+            .setImage('https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif')
+            .setFooter(`The Music Project • ${this.client.interactions.commands.size} commands loaded`);
 
         const supportButton = new MessageActionRow().addComponents(
-            [
-                new MessageButton()
-                    .setEmoji('❓')
-                    .setStyle('LINK')
-                    .setURL(MessageCreate.supportServer())
-                    .setLabel('Support Server'),
-            ],
-            [
-                new MessageButton()
-                    .setEmoji('🎵')
-                    .setStyle('LINK')
-                    .setURL(
-                        'https://statuspage.freshping.io/58439-RoxanneMusicBot'
-                    )
-                    .setLabel('Music Status Page'),
-            ],
-            [
-                new MessageButton()
-                    .setStyle('LINK')
-                    .setURL(this.client.util.invite)
-                    .setLabel('Invite me!'),
-            ]
+            [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(MessageCreate.supportServer()).setLabel('Support Server')],
+            [new MessageButton().setEmoji('🎵').setStyle('LINK').setURL('https://statuspage.freshping.io/58439-RoxanneMusicBot').setLabel('Music Status Page')],
+            [new MessageButton().setStyle('LINK').setURL(this.client.util.invite).setLabel('Invite me!')]
         );
-        if (
-            ![
-                '918662128632733696',
-                '714232432672505928',
-                '556316704838385665',
-            ].includes(message.guild.id)
-        )
-            return;
+        if (!['918662128632733696', '714232432672505928', '556316704838385665'].includes(message.guild.id)) return;
 
         if (message.content === `<@!${this.client.user.id}> good bot`) {
             return message.reply(':3');
@@ -91,8 +53,7 @@ class MessageCreate extends RoxanneEvent {
             const findCommand = message.content.slice(1).split(' ')[0];
             if (this.client.interactions.commands.get(findCommand)) {
                 await message.reply({
-                    content:
-                        'I see you are looking for some help! Check this message for more information!',
+                    content: 'I see you are looking for some help! Check this message for more information!',
                     embeds: [helpEmbed],
                     components: [supportButton],
                 });

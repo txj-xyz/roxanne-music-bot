@@ -31,21 +31,13 @@ class Queue extends RoxanneInteraction {
     async run({ interaction, dispatcher }) {
         const pageButtonList = [
             {
-                back: new MessageButton()
-                    .setEmoji('👈')
-                    .setLabel('Back')
-                    .setStyle('DANGER'),
+                back: new MessageButton().setEmoji('👈').setLabel('Back').setStyle('DANGER'),
             },
             {
-                stop: new MessageButton()
-                    .setLabel('Cancel')
-                    .setStyle('SECONDARY'),
+                stop: new MessageButton().setLabel('Cancel').setStyle('SECONDARY'),
             },
             {
-                next: new MessageButton()
-                    .setEmoji('👉')
-                    .setLabel('Next')
-                    .setStyle('SUCCESS'),
+                next: new MessageButton().setEmoji('👉').setLabel('Next').setStyle('SUCCESS'),
             },
         ];
 
@@ -68,23 +60,11 @@ class Queue extends RoxanneInteraction {
             for (const q of chunked) {
                 pages.push(
                     new MessageEmbed()
-                        .setAuthor(
-                            'Now Playing',
-                            this.client.user.displayAvatarURL({ dynamic: true })
-                        )
+                        .setAuthor('Now Playing', this.client.user.displayAvatarURL({ dynamic: true }))
                         .setURL(dispatcher.current.info.uri)
                         .setTitle(`**${dispatcher.current.info.title}**`)
-                        .setThumbnail(
-                            `https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`
-                        )
-                        .setDescription(
-                            `👉 **Queue List**\n\n${q.tracks
-                                .map(
-                                    (c) =>
-                                        `**${c.queue_id}.)** [${c.title}](${c.url})`
-                                )
-                                .join('\n')}`
-                        )
+                        .setThumbnail(`https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`)
+                        .setDescription(`👉 **Queue List**\n\n${q.tracks.map((c) => `**${c.queue_id}.)** [${c.title}](${c.url})`).join('\n')}`)
                 );
             }
             new PagesBuilder(interaction)
@@ -98,28 +78,13 @@ class Queue extends RoxanneInteraction {
         } else {
             await interaction.deferReply();
             const embed = new MessageEmbed()
-                .setAuthor(
-                    'Now Playing',
-                    this.client.user.displayAvatarURL({ dynamic: true })
-                )
-                .setThumbnail(
-                    `https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`
-                )
+                .setAuthor('Now Playing', this.client.user.displayAvatarURL({ dynamic: true }))
+                .setThumbnail(`https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`)
                 .setURL(dispatcher.current.info.uri)
                 .setColor(this.client.color)
                 .setTitle(`**${dispatcher.current.info.title}**`)
-                .addField(
-                    '⌛ Duration: ',
-                    `\`${this.client.util.humanizeTime(
-                        dispatcher.current.info.length
-                    )}\``,
-                    true
-                )
-                .addField(
-                    '🎵 Author: ',
-                    `\`${dispatcher.current.info.author}\``,
-                    true
-                )
+                .addField('⌛ Duration: ', `\`${this.client.util.humanizeTime(dispatcher.current.info.length)}\``, true)
+                .addField('🎵 Author: ', `\`${dispatcher.current.info.author}\``, true)
                 .setFooter(`• ${dispatcher.queue.length} total songs in queue`)
                 .setTimestamp();
             await interaction.editReply({ embeds: [embed] });

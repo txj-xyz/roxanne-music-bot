@@ -32,19 +32,12 @@ class Skip extends RoxanneInteraction {
         const skipVariable = interaction.options.getInteger('to', false);
 
         if (skipVariable) {
-            dispatcher.queue = dispatcher.queue.splice(
-                Number(skipVariable) - 1,
-                tempQueue.length
-            );
+            dispatcher.queue = dispatcher.queue.splice(Number(skipVariable) - 1, tempQueue.length);
             tempQueue = null;
-            await interaction.editReply(
-                `Skipping ${skipVariable} songs in the queue!`
-            );
+            await interaction.editReply(`Skipping ${skipVariable} songs in the queue!`);
             return dispatcher.player.stopTrack();
         } else {
-            await interaction.editReply(
-                'Skipping the currently playing track!'
-            );
+            await interaction.editReply('Skipping the currently playing track!');
             dispatcher.player.stopTrack();
         }
     }

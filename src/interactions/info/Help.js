@@ -34,40 +34,16 @@ class Help extends RoxanneInteraction {
 
         if (!command) {
             const supportButton = new MessageActionRow().addComponents(
-                [
-                    new MessageButton()
-                        .setEmoji('❓')
-                        .setStyle('LINK')
-                        .setURL(Help.supportServer())
-                        .setLabel('Support Server'),
-                ],
-                [
-                    new MessageButton()
-                        .setEmoji('🎵')
-                        .setStyle('LINK')
-                        .setURL(
-                            'https://statuspage.freshping.io/58439-RoxanneMusicBot'
-                        )
-                        .setLabel('Music Status Page'),
-                ],
-                [
-                    new MessageButton()
-                        .setStyle('LINK')
-                        .setURL(Help.invite(this.client.user.id))
-                        .setLabel('Invite me!'),
-                ]
+                [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(Help.supportServer()).setLabel('Support Server')],
+                [new MessageButton().setEmoji('🎵').setStyle('LINK').setURL('https://statuspage.freshping.io/58439-RoxanneMusicBot').setLabel('Music Status Page')],
+                [new MessageButton().setStyle('LINK').setURL(Help.invite(this.client.user.id)).setLabel('Invite me!')]
             );
 
             const embed = new MessageEmbed()
-                .setAuthor(
-                    this.client.user.username,
-                    this.client.user.displayAvatarURL()
-                )
+                .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
                 .setTitle('• Help Menu')
                 .setColor(this.client.color)
-                .setDescription(
-                    'Do `/help [command]` for a detailed help about that command'
-                )
+                .setDescription('Do `/help [command]` for a detailed help about that command')
                 .addField(
                     '❓ Info',
                     `${this.client.interactions.commands
@@ -83,16 +59,9 @@ class Help extends RoxanneInteraction {
                         .map((cmd) => `\`/${cmd.name}`)
                         .join('`, ')}\``
                 )
-                .addField(
-                    '🔗 GIF Tutorial',
-                    '[Full Size Link](https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif)'
-                )
-                .setImage(
-                    'https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif'
-                )
-                .setFooter(
-                    `The Music Project • ${this.client.interactions.commands.size} commands loaded`
-                );
+                .addField('🔗 GIF Tutorial', '[Full Size Link](https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif)')
+                .setImage('https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif')
+                .setFooter(`The Music Project • ${this.client.interactions.commands.size} commands loaded`);
             return interaction.reply({
                 embeds: [embed],
                 components: [supportButton],
@@ -107,13 +76,8 @@ class Help extends RoxanneInteraction {
                 .setTitle('❗ Command Not Found')
                 // .setDescription('**❗ Command Not Found**, please see below on how to look for help.')
                 .addField('Help Usage', '`/help command:grab` or `/help`')
-                .addField(
-                    '🔗 GIF Tutorial',
-                    '[Full Size Link](https://cdn.discordapp.com/attachments/849007348945256458/918235109319122944/GNuAN6Ds1HxKRgCX1ykM.gif)'
-                )
-                .setImage(
-                    'https://cdn.discordapp.com/attachments/849007348945256458/918235109319122944/GNuAN6Ds1HxKRgCX1ykM.gif'
-                )
+                .addField('🔗 GIF Tutorial', '[Full Size Link](https://cdn.discordapp.com/attachments/849007348945256458/918235109319122944/GNuAN6Ds1HxKRgCX1ykM.gif)')
+                .setImage('https://cdn.discordapp.com/attachments/849007348945256458/918235109319122944/GNuAN6Ds1HxKRgCX1ykM.gif')
                 .setFooter('The Music Project • Powered by Kubernetes!');
             return interaction.reply({
                 embeds: [commandNotFound],
@@ -121,22 +85,13 @@ class Help extends RoxanneInteraction {
             });
         }
         const embed = new MessageEmbed()
-            .setAuthor(
-                this.client.user.username,
-                this.client.user.displayAvatarURL()
-            )
+            .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
             .setTitle(`/${command.name}`)
             .setColor(this.client.color)
             .setDescription(command.description)
-            .setFooter(
-                `The Music Project • ${this.client.interactions.commands.size} commands loaded`
-            );
+            .setFooter(`The Music Project • ${this.client.interactions.commands.size} commands loaded`);
         if (command.options?.length) {
-            for (const option of command.options)
-                embed.addField(
-                    `/${command.name} ${option.name}`,
-                    option.description
-                );
+            for (const option of command.options) embed.addField(`/${command.name} ${option.name}`, option.description);
         }
         return interaction.reply({ embeds: [embed] });
     }

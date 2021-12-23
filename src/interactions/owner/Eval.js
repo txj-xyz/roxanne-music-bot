@@ -46,10 +46,7 @@ class Eval extends RoxanneInteraction {
             .setTitle('Eval Results')
             .setDescription(`\`\`\`js\n${Eval.trim(res, 4000)}\`\`\``)
             .setTimestamp()
-            .setFooter(
-                this.client.user.username,
-                this.client.user.displayAvatarURL()
-            );
+            .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
         await interaction.editReply({ embeds: [embed] });
     }
 }

@@ -19,13 +19,9 @@ class Clear extends RoxanneInteraction {
             dispatcher.queue.length = 0;
             dispatcher.repeat = 'off';
             dispatcher.stopped = false;
-            return await interaction.editReply(
-                "Human, There is nothing to clear, you're good to go!"
-            );
+            return await interaction.editReply("Human, There is nothing to clear, you're good to go!");
         }
-        return await interaction.editReply(
-            "I've cleared the queue in this guild."
-        );
+        return await interaction.editReply("I've cleared the queue in this guild.");
     }
 }
 module.exports = Clear;

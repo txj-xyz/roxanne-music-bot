@@ -30,15 +30,8 @@ class Remove extends RoxanneInteraction {
         await interaction.deferReply();
         const queueID = interaction.options.getInteger('id', false);
         tempArray = dispatcher.queue;
-        dispatcher.queue = this.client.util.removeArrayIndex(
-            tempArray,
-            queueID
-        );
-        await interaction.editReply(
-            `Removed \`${tempArray[queueID - 1].info.author} - ${
-                tempArray[queueID - 1].info.title
-            }\` from the queue.`
-        );
+        dispatcher.queue = this.client.util.removeArrayIndex(tempArray, queueID);
+        await interaction.editReply(`Removed \`${tempArray[queueID - 1].info.author} - ${tempArray[queueID - 1].info.title}\` from the queue.`);
         tempArray = null;
         return;
     }

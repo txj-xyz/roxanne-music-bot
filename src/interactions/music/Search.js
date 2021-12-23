@@ -52,10 +52,7 @@ class Search extends RoxanneInteraction {
 
         const searchPageButtonList = [
             {
-                stop: new MessageButton()
-                    .setEmoji('❌')
-                    .setLabel('Cancel')
-                    .setStyle('DANGER'),
+                stop: new MessageButton().setEmoji('❌').setLabel('Cancel').setStyle('DANGER'),
             },
             {
                 back: new MessageButton()
@@ -74,24 +71,15 @@ class Search extends RoxanneInteraction {
         // Reply before processing any other messages and check for link
         await interaction.deferReply();
         const query = interaction.options.getString('query', true);
-        if (query.includes('https://'))
-            return await interaction.editReply(
-                'I can only search for words, try searching a term instead.'
-            );
+        if (query.includes('https://')) return await interaction.editReply('I can only search for words, try searching a term instead.');
 
         const node = await this.client.shoukaku.getNode();
         // await interaction.editReply('Searching my music servers for results..');
         const search = await node.rest.resolve(query, 'youtube');
 
-        if (!search?.tracks.length)
-            return interaction.editReply(
-                "I didn't find any search results on the query you provided!"
-            );
+        if (!search?.tracks.length) return interaction.editReply("I didn't find any search results on the query you provided!");
 
-        const _search = search.tracks.slice(
-            0,
-            Search.pageLimit ? Search.pageLimit : search.tracks.length
-        );
+        const _search = search.tracks.slice(0, Search.pageLimit ? Search.pageLimit : search.tracks.length);
 
         // await interaction.editReply('Querying for the video information....')
         for await (const track of _search) {
@@ -103,18 +91,9 @@ class Search extends RoxanneInteraction {
                 url: track.info.uri,
                 length: track.info.length,
                 identifier: track.info.identifier,
-                view_count:
-                    _meta.statistics.viewCount?.replace(
-                        /\B(?=(\d{3})+(?!\d))/g,
-                        ','
-                    ) || null,
-                likes_count:
-                    _meta.statistics.likeCount?.replace(
-                        /\B(?=(\d{3})+(?!\d))/g,
-                        ','
-                    ) || null,
-                upload_date:
-                    Search.convertZDate(_meta.snippet.publishedAt) || null,
+                view_count: _meta.statistics.viewCount?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') || null,
+                likes_count: _meta.statistics.likeCount?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') || null,
+                upload_date: Search.convertZDate(_meta.snippet.publishedAt) || null,
             });
         }
         const _chunkSearch = Search.chunkify(mappedSearch, 1);
@@ -131,46 +110,15 @@ class Search extends RoxanneInteraction {
                     pages.push(
                         new MessageEmbed()
                             // .setThumbnail(`https://img.youtube.com/vi/${c.identifier}/default.jpg`)
-                            .setImage(
-                                `https://img.youtube.com/vi/${r.identifier}/hqdefault.jpg`
-                            )
+                            .setImage(`https://img.youtube.com/vi/${r.identifier}/hqdefault.jpg`)
                             .setURL(r.url)
                             .setTitle(`**${r.title}**`)
-                            .addField(
-                                '⌛ Duration: ',
-                                `**\`${this.client.util.humanizeTime(
-                                    r.length
-                                )}\`**`,
-                                true
-                            )
-                            .addField(
-                                '🎵 Author: ',
-                                `**\`${r.author}\`**`,
-                                true
-                            )
-                            .addField(
-                                '🖥️ Video ID',
-                                `**\`${r.identifier}\`**`,
-                                true
-                            )
-                            .addField(
-                                '👍 Likes',
-                                `**\`${r.likes_count}\`**`,
-                                true
-                            )
-                            .addField(
-                                '🛰️ Upload Date',
-                                `**\`${r.upload_date}\`**`,
-                                true
-                            )
-                            .addField(
-                                '👀 Views',
-                                `**\`${r.view_count?.replace(
-                                    /\B(?=(\d{3})+(?!\d))/g,
-                                    ','
-                                )}\`**`,
-                                true
-                            )
+                            .addField('⌛ Duration: ', `**\`${this.client.util.humanizeTime(r.length)}\`**`, true)
+                            .addField('🎵 Author: ', `**\`${r.author}\`**`, true)
+                            .addField('🖥️ Video ID', `**\`${r.identifier}\`**`, true)
+                            .addField('👍 Likes', `**\`${r.likes_count}\`**`, true)
+                            .addField('🛰️ Upload Date', `**\`${r.upload_date}\`**`, true)
+                            .addField('👀 Views', `**\`${r.view_count?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\`**`, true)
                             .setTimestamp()
                     );
                 })
@@ -190,39 +138,21 @@ class Search extends RoxanneInteraction {
             .setListenTimeout(30000)
             .setListenEndMethod('edit')
             .setDefaultButtons(searchPageButtonList)
-            .addComponents([
-                new MessageButton()
-                    .setCustomId('custom')
-                    .setEmoji('✅')
-                    .setLabel('Confirm')
-                    .setStyle('SUCCESS'),
-            ])
+            .addComponents([new MessageButton().setCustomId('custom').setEmoji('✅').setLabel('Confirm').setStyle('SUCCESS')])
             .setTriggers([
                 {
                     name: 'custom',
                     async callback(buttonInteraction, button) {
                         button.setDisabled(true).setLabel('Added to Queue');
-                        const shoukakuTrack =
-                            search.tracks[pageBuild.currentPage - 1];
-                        const trackInformation =
-                            mappedSearch[pageBuild.currentPage - 1];
-                        const dispatcher = await c.queue.handle(
-                            interaction.guild,
-                            interaction.member,
-                            interaction.channel,
-                            node,
-                            shoukakuTrack
-                        );
+                        const shoukakuTrack = search.tracks[pageBuild.currentPage - 1];
+                        const trackInformation = mappedSearch[pageBuild.currentPage - 1];
+                        const dispatcher = await c.queue.handle(interaction.guild, interaction.member, interaction.channel, node, shoukakuTrack);
                         // if(!c.queue.get(interaction.guild.id)) {
                         //     dispatcher?.play();
                         // }
-                        c.queue.get(interaction.guild.id)
-                            ? dispatcher?.play()
-                            : null;
+                        c.queue.get(interaction.guild.id) ? dispatcher?.play() : null;
                         stopPageBuilder();
-                        return await interaction.channel.send(
-                            `Adding **${trackInformation.full_title}** to the queue!`
-                        );
+                        return await interaction.channel.send(`Adding **${trackInformation.full_title}** to the queue!`);
                         // return stopPageBuilder();
                     },
                 },

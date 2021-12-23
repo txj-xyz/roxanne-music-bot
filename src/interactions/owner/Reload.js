@@ -29,14 +29,9 @@ class Reload extends RoxanneInteraction {
             embed = new MessageEmbed()
                 .setColor(this.client.color)
                 .setTitle('Reload complete !')
-                .setDescription(
-                    `Successfully live reloaded ${this.client.interactions.commands.size} commands!`
-                )
+                .setDescription(`Successfully live reloaded ${this.client.interactions.commands.size} commands!`)
                 .setTimestamp()
-                .setFooter(
-                    this.client.user.username,
-                    this.client.user.displayAvatarURL()
-                );
+                .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
         } catch (error) {
             this.client.logger.error(error);
             this.client.interactions = stashed;
@@ -44,15 +39,10 @@ class Reload extends RoxanneInteraction {
             embed = new MessageEmbed()
                 .setColor(0xff99cc)
                 .setTitle('Something went wrong!')
-                .setDescription(
-                    'Live reload failed, I will attempt to continue with the previous state.'
-                )
+                .setDescription('Live reload failed, I will attempt to continue with the previous state.')
                 .addField('Error output', `\`\`\`${error}\`\`\``)
                 .setTimestamp()
-                .setFooter(
-                    this.client.user.username,
-                    this.client.user.displayAvatarURL()
-                );
+                .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
         } finally {
             await interaction.editReply({ embeds: [embed] });
         }

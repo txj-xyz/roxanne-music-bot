@@ -38,30 +38,18 @@ class Seek extends RoxanneInteraction {
 
     async run({ interaction, dispatcher }) {
         await interaction.deferReply();
-        const seekPositonString = interaction.options.getString(
-            'position',
-            true
-        );
-        const seekResolvedString =
-            Seek.ParseHumanTime(seekPositonString) * 1000;
+        const seekPositonString = interaction.options.getString('position', true);
+        const seekResolvedString = Seek.ParseHumanTime(seekPositonString) * 1000;
 
         if (dispatcher.current.info.isSeekable) {
             if (seekResolvedString > dispatcher.current.info.length) {
-                return await interaction.editReply(
-                    'The seek requested is longer than the song! I cannot do that!'
-                );
+                return await interaction.editReply('The seek requested is longer than the song! I cannot do that!');
             } else {
                 await dispatcher.player.seekTo(seekResolvedString);
-                await interaction.editReply(
-                    `Seeked to \`${this.client.util.humanizeTime(
-                        seekResolvedString
-                    )}\`!`
-                );
+                await interaction.editReply(`Seeked to \`${this.client.util.humanizeTime(seekResolvedString)}\`!`);
             }
         } else {
-            return await interaction.editReply(
-                'Sorry human this song is not seekable!'
-            );
+            return await interaction.editReply('Sorry human this song is not seekable!');
         }
     }
 }

@@ -38,10 +38,7 @@ class Say extends RoxanneInteraction {
             .addField('Guild Name', interaction.guild.name, true)
             .addField('User Triggered', interaction.user.username, true)
             .setTimestamp()
-            .setFooter(
-                this.client.user.username,
-                this.client.user.displayAvatarURL()
-            );
+            .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
 
         await interaction.channel.send(message);
         await interaction.editReply(`Sent Message: \`\`\`\n${message}\n\`\`\``);
