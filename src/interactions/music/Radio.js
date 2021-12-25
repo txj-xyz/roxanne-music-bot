@@ -73,7 +73,7 @@ class RadioMenu extends RoxanneInteraction {
             .setColor(this.client.color)
             .setListenUsers(interaction.user.id)
             .setListenTimeout(10000)
-            .setListenEndMethod('none')
+            .setListenEndMethod('components_remove')
             .setDefaultButtons([])
             .setPaginationFormat('')
             .setPages(page)
