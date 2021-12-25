@@ -6,7 +6,6 @@ const RoxanneLogger = require('./modules/RoxanneLogger.js');
 const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
 const Queue = require('./modules/Queue.js');
 const InteractionHandler = require('./modules/InteractionHandler.js');
-const ComponentHandler = require('./modules/ComponentHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
 // const DatabaseHandler = require('./modules/DatabaseHandler.js');
 const UtilityHandler = require('./modules/UtilityHandler');
@@ -46,8 +45,6 @@ class Roxanne extends Client {
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
         this.util = new UtilityHandler(this);
-
-        new ComponentHandler(this);
 
         ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event) => process.once(event, this.exit.bind(this)));
     }
