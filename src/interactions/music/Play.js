@@ -123,12 +123,14 @@ class Play extends RoxanneInteraction {
                 return await interaction.editReply({
                     content: 'Sorry human, I was not able to load the playlist after 10 tries.',
                     components: [],
+                    embeds: [],
                 });
             }
             if (playlist.loadType === 'NO_MATCHES') {
                 return await interaction.editReply({
                     content: `Sorry human, I was not able to find anything from your search.\n\`Message: ${playlist.exception.message}\``,
                     components: [],
+                    embeds: [],
                 });
             }
             for (const res of playlist.tracks) {
@@ -143,6 +145,7 @@ class Play extends RoxanneInteraction {
                     .editReply({
                         content: `\`${firstTrack.info.author} - ${firstTrack.info.title}\` added to the Queue!`,
                         components: [],
+                        embeds: [],
                     })
                     .catch(() => null);
             } else {
@@ -150,6 +153,7 @@ class Play extends RoxanneInteraction {
                     .editReply({
                         content: `Queueing \`${String(playlist.tracks.length)}\` tracks from \`${playlist.playlistInfo?.name || playlist.title}\`!`,
                         components: [],
+                        embeds: [],
                     })
                     .catch(() => null);
             }
@@ -164,7 +168,7 @@ class Play extends RoxanneInteraction {
         }
     }
 
-    async buttonYoutubePlaylist(interaction, query, radio) {
+    async buttonYoutubePlaylist(interaction, query, radio = false) {
         const node = await this.client.shoukaku.getNode();
         // YouTube Playlist integration for select menus
         if (this.client.util.checkURL(query)) {
@@ -173,6 +177,7 @@ class Play extends RoxanneInteraction {
                 return interaction.editReply({
                     content: "I didn't find any song on the query you provided!",
                     components: [],
+                    embeds: [],
                 });
             const { type, tracks, playlistName } = result;
             const track = tracks.shift();
@@ -186,6 +191,7 @@ class Play extends RoxanneInteraction {
                     .editReply({
                         content: `Started Radio stream: **\`${track.info.title}\`**!`,
                         components: [],
+                        embeds: [],
                     })
                     .catch(() => null);
                 return dispatcher?.play();
@@ -194,6 +200,7 @@ class Play extends RoxanneInteraction {
                 .editReply({
                     content: playlist ? `Added the playlist \`${playlistName}\` in queue!` : `Added the track \`${track.info.title}\` in queue!`,
                     components: [],
+                    embeds: [],
                 })
                 .catch(() => null);
             dispatcher?.play();
