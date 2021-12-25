@@ -83,7 +83,6 @@ class RadioMenu extends RoxanneInteraction {
                     name: 'custom',
                     async callback(menu) {
                         const selection = RadioMenu.menuOptions.filter((_label) => _label.value === menu.values[0])?.[0];
-                        console.log(selection);
                         await play(interaction, selection.type, selection.link, selection.radio);
                         pageBuild.stopListen();
                     },

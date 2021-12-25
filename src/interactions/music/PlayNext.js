@@ -84,7 +84,6 @@ class PlayNext extends RoxanneInteraction {
         if (queueBumpID) {
             //Move Queue ID to top of queue and rebuild array
             tempBumpArray = dispatcher.queue;
-            // return console.log(PlayNext.moveToFront(queueBumpID - 1, tempBumpArray)[0])
             dispatcher.queue = PlayNext.moveToFront(queueBumpID - 1, tempBumpArray);
             let songInfo = dispatcher.queue[0].info;
             return await interaction.editReply(`Moved \`${songInfo.author} - ${songInfo.title}\` to the top of the Queue!`);

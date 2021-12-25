@@ -1,6 +1,6 @@
 const RoxanneEvent = require('../abstract/RoxanneEvent.js');
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-
+const { MessageEmbed, MessageActionRow, MessageButton, MessageAttachment } = require('discord.js');
+const { getVideoMeta } = require('tiktok-scraper');
 class MessageCreate extends RoxanneEvent {
     get name() {
         return 'messageCreate';
@@ -57,6 +57,25 @@ class MessageCreate extends RoxanneEvent {
                     embeds: [helpEmbed],
                     components: [supportButton],
                 });
+            }
+        }
+
+        if (message.content.includes('https://') && (message.content.includes('tiktok.com/') || message.content.includes('m.tiktok.com/'))) {
+            const tiktokLink = message.content.match(/(https?:\/\/[^ ]*)/)[1].split(`?`)[0];
+            try {
+                const videoMeta = await getVideoMeta(tiktokLink, {});
+                const videoMetaEmbed = new MessageEmbed()
+                    .setColor(this.client.color)
+                    .setURL(tiktokLink)
+                    .setTitle(`"${videoMeta.collector[0]?.text}"`, null, tiktokLink)
+                    .addField('**Likes**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.diggCount)), true)
+                    .addField('**Views**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.playCount)), true)
+                    .addField('**Comments**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.commentCount)), true)
+                    .setFooter(`Uploaded: ${new Date(videoMeta.collector[0]?.createTime * 1000).toLocaleString()}`);
+
+                await message.channel.send({ embeds: [videoMetaEmbed], files: [new MessageAttachment(videoMeta.collector[0]?.videoUrl, `tiktok.mp4`)] });
+            } catch (error) {
+                this.client.logger.error(error);
             }
         }
     }

@@ -25,6 +25,7 @@
         "petitio": "^1.4.0",
         "redis": "^4.0.0",
         "shoukaku": "^2.1.0",
+        "tiktok-scraper": "^1.4.36",
         "utf-8-validate": "^5.0.5",
         "uuid": "^8.3.2"
     },
