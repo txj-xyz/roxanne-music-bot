@@ -1,5 +1,6 @@
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
-const { MessageActionRow, MessageSelectMenu } = require('discord.js');
+const { PagesBuilder } = require('discord.js-pages');
+const { Client, MessageActionRow, MessageEmbed, MessageSelectMenu } = require('discord.js');
 
 class RadioMenu extends RoxanneInteraction {
     get name() {
@@ -14,43 +15,81 @@ class RadioMenu extends RoxanneInteraction {
         return { voice: true, dispatcher: false, channel: false };
     }
 
+    static menuOptions = [
+        {
+            label: 'Lofi hip-hop',
+            description: 'Beats to relax/study to',
+            value: 'lofi_radio',
+            type: 'buttonYoutubePlaylist',
+            radio: true,
+            link: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
+        },
+        {
+            label: 'Coffee Shop lofi beats',
+            description: 'lofi hip-hop beats',
+            value: 'coffee_lofi_radio',
+            type: 'buttonYoutubePlaylist',
+            radio: true,
+            link: 'https://www.youtube.com/watch?v=-5KAN9_CzSA',
+        },
+        {
+            label: 'The Good Life Radio',
+            description: 'House, Chillout, Study, Gym, Happy Music',
+            value: 'good_life_radio',
+            type: 'buttonYoutubePlaylist',
+            radio: true,
+            link: 'https://www.youtube.com/watch?v=36YnV9STBqc',
+        },
+        {
+            label: 'Drum & Bass Liquid / Chill',
+            description: 'Non-Stop Liquid - To Chill / Relax Too',
+            value: 'dnb_radio',
+            type: 'buttonYoutubePlaylist',
+            radio: true,
+            link: 'https://youtu.be/Rf4jJzziJko',
+        },
+    ];
+
     async run({ interaction }) {
-        await interaction.deferReply();
+        const client = this.client;
+        async function play(interaction, playerType, link, radioMode) {
+            client.interactions.commands.get('play')[playerType](interaction, link, radioMode);
+        }
+
+        if (this.client.queue.get(interaction.guild.id)) {
+            return await interaction.reply({ content: '**Human, Please stop the player or wait for the queue to finish before using this command.**', ephemeral: true });
+        }
+
+        const page = new MessageEmbed().setAuthor('Live Radio Stations!').setDescription('Select a stream from the drop down!');
+        //prettier-ignore
         const row = new MessageActionRow().addComponents(
             new MessageSelectMenu()
-                .setCustomId('radio_menu')
+                .setCustomId('custom')
                 .setPlaceholder('Nothing selected')
-                .addOptions([
-                    {
-                        label: 'Lofi hip-hop',
-                        description: 'Beats to relax/study to',
-                        value: 'lofi_radio',
-                    },
-                    {
-                        label: 'Coffee Shop lofi beats',
-                        description: 'lofi hip-hop beats',
-                        value: 'coffee_lofi_radio',
-                    },
-                    {
-                        label: 'The Good Life Radio',
-                        description: 'House, Chillout, Study, Gym, Happy Music',
-                        value: 'good_life_radio',
-                    },
-                    {
-                        label: 'Drum & Bass Liquid / Chill',
-                        description: 'Non-Stop Liquid - To Chill / Relax Too',
-                        value: 'dnb_radio',
-                    },
-                ])
+                .addOptions(RadioMenu.menuOptions)
         );
-        const currentGuildQueue = this.client.queue.get(interaction.guild.id);
-        if (currentGuildQueue) {
-            return await interaction.editReply('**Human, Please stop the player or wait for the queue to finish before using this command.**');
-        }
-        await interaction.editReply({
-            content: 'Human! Select a radio station from the drop down!',
-            components: [row],
-        });
+
+        const pageBuild = new PagesBuilder(interaction)
+            .setColor(this.client.color)
+            .setListenUsers(interaction.user.id)
+            .setListenTimeout(10000)
+            .setListenEndMethod('none')
+            .setDefaultButtons([])
+            .setPaginationFormat('')
+            .setPages(page)
+            .addComponents([row])
+            .setTriggers([
+                {
+                    name: 'custom',
+                    async callback(menu) {
+                        const selection = RadioMenu.menuOptions.filter((_label) => _label.value === menu.values[0])?.[0];
+                        console.log(selection);
+                        await play(interaction, selection.type, selection.link, selection.radio);
+                        pageBuild.stopListen();
+                    },
+                },
+            ]);
+        pageBuild.build();
     }
 }
 module.exports = RadioMenu;
