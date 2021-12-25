@@ -3,14 +3,18 @@ const axios = require('axios');
 const DatabaseHandler = require('./DatabaseHandler.js');
 const { token, webhookUrl, inviteURL, youtube_key, spotifyClientID, spotifySecret } = require('../../config.json');
 const servers = require('../../lavasfy-servers.json');
+const { MessageEmbed } = require('discord.js');
 class UtilityHandler {
     constructor(client) {
+        this.client = client;
         this.invite = inviteURL;
         this.db = new DatabaseHandler(client);
         this.humanizeTime = this.humanizeTime;
         this.ytMeta = this.ytMeta;
         this.lavaConnect(spotifyClientID, spotifySecret, servers);
     }
+
+    loadingEmbed = new MessageEmbed().setAuthor('Loading.. Please wait :)');
 
     removeArrayIndex(array, indexID) {
         return array.filter((_, index) => index != indexID - 1);
@@ -23,6 +27,14 @@ class UtilityHandler {
         } catch (error) {
             return false;
         }
+    }
+
+    // prettier-ignore
+    humanizeTime(ms, sec = (ms / 1000).toFixed(0), min = Math.floor(sec / 60), hr = 0) {
+        if (min > 59) hr = ((hr = Math.floor(min / 60)) => hr >= 10 ? hr : `0${hr}`)()
+        min = ((m = min - hr * 60) => m >= 10 ? m : `0${m}`)()
+        sec = ((s = Math.floor(sec % 60)) => s >= 10 ? s : `0${s}`)()
+        return hr > 59 ? 'Live! 🔴' : (hr != '' ? `${hr}:${min}:${sec}` : `${min}:${sec}`)
     }
 
     async lavaConnect(clientID, clientSecret, servers) {
@@ -61,14 +73,6 @@ class UtilityHandler {
                 }
             });
         });
-    }
-
-    // prettier-ignore
-    humanizeTime(ms, sec = (ms / 1000).toFixed(0), min = Math.floor(sec / 60), hr = 0) {
-        if (min > 59) hr = ((hr = Math.floor(min / 60)) => hr >= 10 ? hr : `0${hr}`)()
-        min = ((m = min - hr * 60) => m >= 10 ? m : `0${m}`)()
-        sec = ((s = Math.floor(sec % 60)) => s >= 10 ? s : `0${s}`)()
-        return hr > 59 ? 'Live! 🔴' : (hr != '' ? `${hr}:${min}:${sec}` : `${min}:${sec}`)
     }
 
     async ytMeta(id) {
