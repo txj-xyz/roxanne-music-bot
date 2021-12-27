@@ -48,6 +48,22 @@ class RadioMenu extends RoxanneInteraction {
             radio: true,
             link: 'https://youtu.be/Rf4jJzziJko',
         },
+        {
+            label: 'Chill Radio 24/7',
+            description: 'by the bootleg boy 2',
+            value: 'chill_radio',
+            type: 'buttonYoutubePlaylist',
+            radio: true,
+            link: 'https://www.youtube.com/watch?v=21qNxnCS8WU',
+        },
+        {
+            label: 'Rap Live Radio 24/7',
+            description: 'Hip-Hop & Popular Rap Music tons of artists!',
+            value: 'rap_radio',
+            type: 'buttonYoutubePlaylist',
+            radio: true,
+            link: 'https://www.youtube.com/watch?v=05689ErDUdM',
+        },
     ];
 
     async run({ interaction }) {
