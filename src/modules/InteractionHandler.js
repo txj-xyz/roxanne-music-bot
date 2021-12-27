@@ -31,7 +31,6 @@ class InteractionHandler extends EventEmitter {
                 const Command = new Interaction(this.client);
                 Command.category = directory.name.charAt(0).toUpperCase() + directory.name.substring(1);
                 this.commands.set(Command.name, Command);
-                // this.client.webhook.send(`${this.constructor.name} \tCommand '${Command.name}' loaded (@${Command.uid})`)
                 this.client.logger.debug(this.constructor.name, `\tCommand '${Command.name}' loaded (@${Command.uid})`);
             }
         }
@@ -48,7 +47,6 @@ class InteractionHandler extends EventEmitter {
      */
     rebuild() {
         this.client.logger.log(this.constructor.name, '---- Live reload triggered ----');
-        this.client.webhook.send(`${this.constructor.name} ---- Live reload triggered ----`);
 
         // let stashed = this.commands;
         try {
@@ -72,7 +70,6 @@ class InteractionHandler extends EventEmitter {
         }
 
         this.client.logger.log(this.constructor.name, '---- Live reload completed ----');
-        this.client.webhook.send(`${this.constructor.name} ---- Live reload completed ----`);
         return this; // For the sake of transparency, this behaves just as build()
     }
 
@@ -119,7 +116,6 @@ class InteractionHandler extends EventEmitter {
                     });
                 // execute le commandz
                 this.client.logger.log(this.constructor.name, `Executing ${command.type ? 'context' : 'command'} ${command.name} (@${command.uid})`);
-                this.client.webhook.send(`${this.constructor.name} Executing ${command.type ? 'context' : 'command'} ${command.name} (@${command.uid})`);
                 await command.run({ interaction, dispatcher });
                 this.client.commandsRun++;
             }
@@ -130,7 +126,7 @@ class InteractionHandler extends EventEmitter {
                 .setDescription(`\`\`\`js\n ${error.toString()}\`\`\``)
                 .setTimestamp()
                 .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
-            this.client.webhook.send({ embeds: [embed] });
+            this.client.logger.log(this.constructor.name, `Something errored! \`${error.toString()}\``);
 
             if (interaction.replied || interaction.deferred) await interaction.editReply({ embeds: [embed] }).catch((error) => this.emit('error', error));
             else await interaction.reply({ embeds: [embed] }).catch((error) => this.emit('error', error));

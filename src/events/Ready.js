@@ -11,7 +11,6 @@ class Ready extends RoxanneEvent {
 
     async run() {
         this.client.logger.debug(`${this.client.user.username}`, `Ready! Serving ${this.client.guilds.cache.size} guild(s) with ${this.client.users.cache.size} user(s)`);
-        this.client.webhook.send(`[${this.client.user.username}] Ready! Serving ${this.client.guilds.cache.size} guild(s) with ${this.client.users.cache.size} user(s)`);
         // await this.client.util.lava.requestToken(); //Initialize Spotify Client
         if (!this.interval) {
             await this.client.user.setActivity("What's the worst that could happen?!");
