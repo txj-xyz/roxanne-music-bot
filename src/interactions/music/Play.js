@@ -72,7 +72,7 @@ class Play extends RoxanneInteraction {
                         const trackToQueue = search.tracks.shift();
                         await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, trackToQueue);
                     }
-                    await interaction.editReply(`Found ${result.tracks.length} results from playlist '${result.name}' from user '${result.author}'.`);
+                    await interaction.editReply(`Finsihed loading ${result.tracks.length} results from playlist '${result.name}' from user '${result.author}'.`);
                     return;
                 }
                 case 'album': {
