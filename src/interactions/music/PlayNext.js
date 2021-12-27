@@ -91,7 +91,7 @@ class PlayNext extends RoxanneInteraction {
 
         const query = interaction.options.getString('query', false);
         if (query) {
-            await interaction.editReply('Query is disabled at the moment.');
+            await interaction.editReply('PlayNext Query is disabled at the moment.');
         }
         // if (!query) return await interaction.editReply('Sorry human, You must provide an option for me! **See: `/help`**.');
         //Check for apple music
