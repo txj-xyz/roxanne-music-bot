@@ -76,22 +76,23 @@ class Play extends RoxanneInteraction {
                     return;
                 }
                 case 'album': {
-                    // const firstTrackInAlbum = result.tracks.shift();
-                    // const firstTrackName = `${decode(firstTrackInAlbum.artist)} - ${firstTrackInAlbum.title.replace(/-/g, ' ')}`;
-                    // const firstTrackSearch = await node.rest.resolve(firstTrackName, 'youtube');
-                    // const firstTrack = firstTrackSearch.tracks.shift();
-                    // const dispatcherApple = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack);
-                    // await interaction.editReply(`Found results, queueing \`${firstTrackName}\` while I process the rest of the playlist :)`);
-                    // dispatcherApple?.play();
+                    console.log(result);
+                    const firstTrackInAlbum = result.tracks.shift();
+                    const firstTrackName = `${decode(firstTrackInAlbum.artist)} - ${firstTrackInAlbum.title.replace(/-/g, ' ')}`;
+                    const firstTrackSearch = await node.rest.resolve(firstTrackName, 'youtube');
+                    const firstTrack = firstTrackSearch.tracks.shift();
+                    const dispatcherApple = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack);
+                    await interaction.editReply(`Found results, queueing \`${firstTrackName}\` while I process the rest of the playlist :)`);
+                    dispatcherApple?.play();
 
-                    // for await (const track of result.tracks.slice(1)) {
-                    //     const trackName = `${decode(track.artist)} - ${track.title.replace(/-/g, ' ')}`;
-                    //     const search = await node.rest.resolve(trackName, 'youtube');
-                    //     const trackToQueue = search.tracks.shift();
-                    //     await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, trackToQueue);
-                    // }
-                    // await interaction.editReply(`Found ${result.tracks.length} results from album '${result.name}' from author '${result.author}'.`);
-                    await interaction.editReply('Albums are disabled at the moment due to sorting issues.');
+                    for await (const track of result.tracks) {
+                        const trackName = `${decode(track.artist)} - ${track.title.replace(/-/g, ' ')}`;
+                        const search = await node.rest.resolve(trackName, 'youtube');
+                        const trackToQueue = search.tracks.shift();
+                        await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, trackToQueue);
+                    }
+                    await interaction.editReply(`Found ${result.tracks.length} results from album '${result.name}' from author '${result.author}'.`);
+                    // await interaction.editReply('Albums are disabled at the moment due to sorting issues.');
                     return;
                 }
                 default:
