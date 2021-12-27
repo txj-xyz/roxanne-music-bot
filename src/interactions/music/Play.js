@@ -2,7 +2,13 @@ const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { ShoukakuTrack } = require('shoukaku');
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const retry = require('async-await-retry');
-// const countInterval = require("count-interval");
+
+// Apple only
+const { decode } = require('html-entities');
+const { autoGetApple } = require('apple-music-metadata');
+// const playlistLink = 'https://music.apple.com/us/playlist/say-hello/pl.u-Ymb0EGMFDkRN6j';
+// const songLink = 'https://music.apple.com/us/album/tell-me-feat-hero-baldwin/1535914918?i=1535914921';
+// const albumLink = 'https://music.apple.com/us/album/say-hello-ep-feat-meliha/1552265558';
 
 class Play extends RoxanneInteraction {
     get name() {
@@ -32,9 +38,66 @@ class Play extends RoxanneInteraction {
         await interaction.deferReply();
         const query = interaction.options.getString('query', true);
         //Check for apple music
-        if (query.includes('apple.com')) return await interaction.editReply('Sorry human, Apple Music is not available at the moment. <:sad:585678099069403148>');
-
+        // if (query.includes('apple.com')) return await interaction.editReply('Sorry human, Apple Music is not available at the moment. <:sad:585678099069403148>');
         const node = await this.client.shoukaku.getNode();
+
+        // Apple music integration
+        if (this.client.util.checkURL(query) && query.includes('music.apple.com')) {
+            await interaction.editReply('[BETA] - Loading results, please wait, this may take a moment..');
+            const result = await autoGetApple(query);
+            if (!result) return await interaction.editReply('Failed to resolve the query, please try another URL.');
+
+            switch (result.type) {
+                case 'song': {
+                    const trackName = `${decode(result.artist)} - ${result.title.replace(/-/g, ' ')}`;
+                    const trackSearch = await node.rest.resolve(trackName, 'youtube');
+                    const firstTrack = trackSearch.tracks.shift();
+                    const dispatcherApple = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack);
+                    await interaction.editReply(`Queueing \`${trackName}\``);
+                    dispatcherApple?.play();
+                    return;
+                }
+                case 'playlist': {
+                    const firstTrackInPlaylist = result.tracks.shift();
+                    const firstTrackName = `${decode(firstTrackInPlaylist.artist)} - ${firstTrackInPlaylist.title.replace(/-/g, ' ')}`;
+                    const firstTrackSearch = await node.rest.resolve(firstTrackName, 'youtube');
+                    const firstTrack = firstTrackSearch.tracks.shift();
+                    const dispatcherApple = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack);
+                    await interaction.editReply(`Found results, queueing \`${firstTrackName}\` while I process the rest of the playlist :)`);
+                    dispatcherApple?.play();
+
+                    for await (const track of result.tracks) {
+                        const trackName = `${decode(track.artist)} - ${track.title.replace(/-/g, ' ')}`;
+                        const search = await node.rest.resolve(trackName, 'youtube');
+                        const trackToQueue = search.tracks.shift();
+                        await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, trackToQueue);
+                    }
+                    await interaction.editReply(`Finsihed loading ${result.tracks.length} results from playlist '${result.name}' from user '${result.author}'.`);
+                    return;
+                }
+                case 'album': {
+                    const firstTrackInAlbum = result.tracks.shift();
+                    const firstTrackName = `${decode(firstTrackInAlbum.artist)} - ${firstTrackInAlbum.title.replace(/-/g, ' ')}`;
+                    const firstTrackSearch = await node.rest.resolve(firstTrackName, 'youtube');
+                    const firstTrack = firstTrackSearch.tracks.shift();
+                    const dispatcherApple = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack);
+                    await interaction.editReply(`Found results, queueing \`${firstTrackName}\` while I process the rest of the playlist :)`);
+                    dispatcherApple?.play();
+
+                    for await (const track of result.tracks) {
+                        const trackName = `${decode(track.artist)} - ${track.title.replace(/-/g, ' ')}`;
+                        const search = await node.rest.resolve(trackName, 'youtube');
+                        const trackToQueue = search.tracks.shift();
+                        await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, trackToQueue);
+                    }
+                    await interaction.editReply(`Found ${result.tracks.length} results from album '${result.name}' from author '${result.author}'.`);
+                    // await interaction.editReply('Albums are disabled at the moment due to sorting issues.');
+                    return;
+                }
+                default:
+                    return;
+            }
+        }
 
         // Spotify Integration Tracks / Playlists
         if (this.client.util.checkURL(query) && query.match(this.client.util.lava.spotifyPattern)) {
@@ -81,7 +144,7 @@ class Play extends RoxanneInteraction {
         // Check Youtube URL / Playlist
         if (this.client.util.checkURL(query)) {
             const result = await node.rest.resolve(query);
-            if (!result) return await interaction.editReply("I didn't find any song on the query you provided!");
+            if (!result) return await interaction.editReply("I didn't find anything on the query you provided!");
             const { type, tracks, playlistName } = result;
             const track = tracks.shift();
             const playlist = type === 'PLAYLIST';
@@ -99,7 +162,7 @@ class Play extends RoxanneInteraction {
 
         // Single search request
         const search = await node.rest.resolve(query, 'youtube');
-        if (!search?.tracks.length) return interaction.editReply("I didn't find any song on the query you provided!");
+        if (!search?.tracks.length) return interaction.editReply("I didn't find anything on the query you provided!");
         const track = search.tracks.shift();
         const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
         await interaction.editReply(`Added the track \`${track.info.title}\` in queue!`).catch(() => null);
