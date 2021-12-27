@@ -60,8 +60,8 @@ class MessageCreate extends RoxanneEvent {
             }
         }
 
-        if (message.content.includes('https://') && (message.content.includes('tiktok.com/') || message.content.includes('m.tiktok.com/'))) {
-            const tiktokLink = message.content.match(/(https?:\/\/[^ ]*)/)[1].split(`?`)[0];
+        if (message.content.includes('tiktok.com')) {
+            const tiktokLink = message.content.match(this.client.util.urlRegex)[0];
             try {
                 const videoMeta = await getVideoMeta(tiktokLink, {});
                 const videoMetaEmbed = new MessageEmbed()
