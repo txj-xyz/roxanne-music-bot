@@ -24,7 +24,7 @@ class PlaylistMenu extends RoxanneInteraction {
             link: 'https://open.spotify.com/playlist/1Ac9XPXCQaTUjTNbnNwYhV',
         },
         {
-            label: "TXJ's Rap 2021 Playlist",
+            label: "TXJ's Rap Spotify Playlist",
             description: 'All heat bangers.',
             value: 'txj_playlist',
             type: 'buttonSpotifyPlaylist',
