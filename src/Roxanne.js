@@ -1,7 +1,7 @@
 const { Client, LimitedCollection, WebhookClient } = require('discord.js');
 const { Cheshire } = require('cheshire');
 const { Collection } = require('@discordjs/collection');
-const { token, webhookUrl } = require('../config.json');
+const { token } = require('../config.json');
 const RoxanneLogger = require('./modules/RoxanneLogger.js');
 const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
 const Queue = require('./modules/Queue.js');
