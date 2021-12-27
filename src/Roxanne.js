@@ -7,7 +7,6 @@ const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
 const Queue = require('./modules/Queue.js');
 const InteractionHandler = require('./modules/InteractionHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
-// const DatabaseHandler = require('./modules/DatabaseHandler.js');
 const UtilityHandler = require('./modules/UtilityHandler');
 class Roxanne extends Client {
     constructor(options) {
@@ -23,10 +22,8 @@ class Roxanne extends Client {
                 case 'PresenceManager':
                 case 'ThreadManager':
                     return new LimitedCollection({ maxSize: 0 });
-                // TLRU cache, Lifetime 30 minutes
                 case 'MessageManager':
                     return new Cheshire({ lifetime: 1e6, lru: false });
-                // Default cache
                 default:
                     return new Collection();
             }
@@ -40,7 +37,6 @@ class Roxanne extends Client {
         this.logger = new RoxanneLogger();
         this.shoukaku = new ShoukakuHandler(this);
         this.queue = new Queue(this);
-        this.webhook = new WebhookClient({ url: webhookUrl });
         this.commandsRun = 0;
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
