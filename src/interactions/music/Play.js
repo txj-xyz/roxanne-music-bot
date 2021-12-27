@@ -76,7 +76,6 @@ class Play extends RoxanneInteraction {
                     return;
                 }
                 case 'album': {
-                    console.log(result);
                     const firstTrackInAlbum = result.tracks.shift();
                     const firstTrackName = `${decode(firstTrackInAlbum.artist)} - ${firstTrackInAlbum.title.replace(/-/g, ' ')}`;
                     const firstTrackSearch = await node.rest.resolve(firstTrackName, 'youtube');
