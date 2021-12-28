@@ -8,7 +8,7 @@ class Stop extends RoxanneInteraction {
     }
 
     get description() {
-        return 'Stops the current playback!';
+        return 'Stops the current playback and leaves the voice channel!';
     }
 
     get playerCheck() {
