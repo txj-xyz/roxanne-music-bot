@@ -63,15 +63,6 @@ class RoxanneDispatcher {
         this.player.setVolume(0.5).playTrack(this.current.track);
     }
 
-    destroyWait(reason) {
-        this.queue.length = 0;
-        this.player.connection.disconnect();
-        this.client.queue.delete(this.guild.id);
-        this.client.logger.debug(this.player.constructor.name, `Destroyed the player & connection @ guild "${this.guild.id}"\nReason: ${reason || 'No Reason Provided'}`);
-        if (this.stopped) return;
-        this.channel.send('No more songs in queue, feel free to queue more songs!').catch(() => null);
-    }
-
     destroy(reason) {
         this.queue.length = 0;
         this.player.connection.disconnect();
