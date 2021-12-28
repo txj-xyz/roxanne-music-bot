@@ -16,7 +16,7 @@ class Queue extends Map {
             if (guild.voiceStates.cache.get(this.client.user.id)?.channelId && foreverMode) {
                 dispatcher.queue.push(track);
                 this.set(guild.id, dispatcher);
-                this.client.logger.debug(dispatcher.constructor.name, `Existing dispatcher @ guild "${guild.id}" started player`);
+                this.client.logger.log(dispatcher.constructor.name, `Existing dispatcher @ guild "${guild.id}" started player`);
                 return dispatcher;
             } else {
                 player = await node
