@@ -1,6 +1,6 @@
 const { ShoukakuPlayer } = require('shoukaku');
 const RoxanneDispatcher = require('./RoxanneDispatcher.js');
-const { foreverMode } = require('../config.json');
+const { foreverMode } = require('../../config.json');
 let player = null;
 let dispatcher = null;
 class Queue extends Map {

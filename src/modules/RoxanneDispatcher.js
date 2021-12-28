@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const Wait = require('util').promisify(setTimeout);
-const { foreverMode } = require('../config.json');
+const { foreverMode } = require('../../config.json');
 
 class RoxanneDispatcher {
     constructor({ client, guild, channel, player }) {
