@@ -44,6 +44,14 @@ class Stop extends RoxanneInteraction {
                 });
             }
         }
+        if (!dispatcher && !this.client.queue.has(interaction.guild.id) && foreverMode) {
+            const botVoice = (await interaction.guild.voiceStates.cache.get(this.client.user.id)) || null;
+            try {
+                botVoice.disconnect();
+            } catch (error) {
+                return this.client.logger.debug(this.constructor.name, 'Queue and Dispatcher missing, caught error on Disconnect, WebSocket code: 4014');
+            }
+        }
         // Handle stop normally.
         if (dispatcher) {
             await interaction.deferReply();
