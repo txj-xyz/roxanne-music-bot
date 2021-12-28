@@ -64,7 +64,7 @@ class Queue extends RoxanneInteraction {
                         .setURL(dispatcher.current.info.uri)
                         .setTitle(`**${dispatcher.current.info.title}**`)
                         .setThumbnail(`https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`)
-                        .setDescription(`👉 **Queue List**\n\n${q.tracks.map((c) => `**${c.queue_id}.)** [${c.title}](${c.url})`).join('\n')}`)
+                        .setDescription(`👉 **Queue List**\n\n${q.tracks.map((c) => `**${c.queue_id}.)** [(${this.client.util.humanizeTime(c.length)}) - ${c.title}](${c.url})`).join('\n')}`)
                 );
             }
             new PagesBuilder(interaction)
