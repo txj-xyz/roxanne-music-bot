@@ -58,10 +58,7 @@ class RoxanneDispatcher {
     }
 
     play() {
-        if (!this.exists || !this.queue.length) {
-            console.log(this.exists, this.queue);
-            return this.destroy();
-        }
+        if (!this.exists || !this.queue.length) return this.destroy();
         this.current = this.queue.shift();
         this.player.setVolume(0.5).playTrack(this.current.track);
     }
