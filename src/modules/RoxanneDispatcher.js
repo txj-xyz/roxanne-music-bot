@@ -31,9 +31,7 @@ class RoxanneDispatcher {
                 .addField('🎵 Author: ', `\`${this.current.info.author}\``, true)
                 .setFooter('• Powered by Kubernetes!')
                 .setTimestamp();
-            this.channel.send({ embeds: [embed] }).catch(() => {
-                console.log('catch start');
-            });
+            this.channel.send({ embeds: [embed] }).catch(() => null);
         });
         this.player.on('end', async () => {
             if (this.repeat === 'one') this.queue.unshift(this.current);
