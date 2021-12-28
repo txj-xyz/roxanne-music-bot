@@ -43,6 +43,7 @@ class RoxanneDispatcher {
         });
 
         this.player.on('closed', async (payload) => {
+            if (!this.exists) return; // Catch if the queue is empty, then return instead of reconnecting.
             await Wait(5000);
             if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
                 await this.player.connection.reconnect();
