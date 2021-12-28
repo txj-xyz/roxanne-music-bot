@@ -15,7 +15,7 @@ class RoxanneDispatcher {
         let _notifiedOnce = false;
 
         this.player.on('start', () => {
-            if (this.repeat === 'one' || this.queue.length < 1) {
+            if (this.repeat === 'one' && this.queue.length < 1) {
                 if (_notifiedOnce) return;
                 else _notifiedOnce = true;
             }
@@ -30,7 +30,9 @@ class RoxanneDispatcher {
                 .addField('🎵 Author: ', `\`${this.current.info.author}\``, true)
                 .setFooter('• Powered by Kubernetes!')
                 .setTimestamp();
-            this.channel.send({ embeds: [embed] }).catch(() => null);
+            this.channel.send({ embeds: [embed] }).catch(() => {
+                console.log('catch start');
+            });
         });
         this.player.on('end', async () => {
             if (this.repeat === 'one') this.queue.unshift(this.current);
@@ -56,9 +58,21 @@ class RoxanneDispatcher {
     }
 
     play() {
-        if (!this.exists || !this.queue.length) return this.destroy();
+        if (!this.exists || !this.queue.length) {
+            console.log(this.exists, this.queue);
+            return this.destroy();
+        }
         this.current = this.queue.shift();
         this.player.setVolume(0.5).playTrack(this.current.track);
+    }
+
+    destroyWait(reason) {
+        this.queue.length = 0;
+        this.player.connection.disconnect();
+        this.client.queue.delete(this.guild.id);
+        this.client.logger.debug(this.player.constructor.name, `Destroyed the player & connection @ guild "${this.guild.id}"\nReason: ${reason || 'No Reason Provided'}`);
+        if (this.stopped) return;
+        this.channel.send('No more songs in queue, feel free to queue more songs!').catch(() => null);
     }
 
     destroy(reason) {
