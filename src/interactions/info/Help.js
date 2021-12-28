@@ -24,9 +24,6 @@ class Help extends RoxanneInteraction {
     static invite(id) {
         return `https://discord.com/api/oauth2/authorize?client_id=${id}&permissions=414518209792&scope=bot%20applications.commands`;
     }
-    static supportServer() {
-        return 'https://discord.gg/GJanE63MGj';
-    }
 
     async run({ interaction }) {
         let command = interaction.options.getString('command');
@@ -34,7 +31,7 @@ class Help extends RoxanneInteraction {
 
         if (!command) {
             const supportButton = new MessageActionRow().addComponents(
-                [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(Help.supportServer()).setLabel('Support Server')],
+                [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(this.client.util.supportServer).setLabel('Support Server')],
                 [new MessageButton().setEmoji('🎵').setStyle('LINK').setURL('https://statuspage.freshping.io/58439-RoxanneMusicBot').setLabel('Music Status Page')],
                 [new MessageButton().setStyle('LINK').setURL(Help.invite(this.client.user.id)).setLabel('Invite me!')]
             );

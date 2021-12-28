@@ -10,16 +10,12 @@ class Invite extends RoxanneInteraction {
         return 'Invite me to your server';
     }
 
-    static support() {
-        return 'https://discord.gg/GJanE63MGj';
-    }
-
     async run({ interaction }) {
         await interaction.deferReply({ ephemeral: true });
 
         const buttons = new MessageActionRow().addComponents(
             [new MessageButton().setStyle('LINK').setURL(this.client.util.invite).setLabel('Invite me here!')],
-            [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(Invite.support()).setLabel('Support Server')]
+            [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(this.client.util.supportServer).setLabel('Support Server')]
         );
         await interaction.editReply({
             content: 'Invite me to your server with this fancy button!',
