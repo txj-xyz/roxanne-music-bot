@@ -45,10 +45,13 @@ class Stop extends RoxanneInteraction {
             }
         }
         if (!dispatcher && !this.client.queue.has(interaction.guild.id) && foreverMode) {
+            await interaction.deferReply();
             const botVoice = (await interaction.guild.voiceStates.cache.get(this.client.user.id)) || null;
             try {
-                botVoice.disconnect();
+                await interaction.editReply('I stopped and destroyed the player in this guild!');
+                return botVoice.disconnect();
             } catch (error) {
+                console.log(error);
                 return this.client.logger.debug(this.constructor.name, 'Caught error on Disconnect');
             }
         }
