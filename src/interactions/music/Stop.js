@@ -17,7 +17,7 @@ class Stop extends RoxanneInteraction {
 
     async run({ interaction, dispatcher }) {
         // Manually handle the dispatcher checking here
-        if (!dispatcher && this.client.queue.has(interaction.guild.id)) {
+        if (!dispatcher && this.client.queue.has(interaction.guild.id) && foreverMode) {
             await interaction.deferReply();
             const dispatcher2 = this.client.queue.get(interaction.guild.id);
             try {
@@ -43,7 +43,7 @@ class Stop extends RoxanneInteraction {
                 });
             }
         }
-
+        // Catch additional non queue issues and force stop
         if (!dispatcher) {
             try {
                 await interaction.guild.voiceStates.cache.get(this.client.user.id).disconnect();
@@ -52,22 +52,21 @@ class Stop extends RoxanneInteraction {
                     ephemeral: false,
                 });
             } catch (error) {
+                this.client.logger.error(error);
                 return await interaction.reply({
                     content: 'Nothing is playing in this server!',
                     ephemeral: true,
                 });
             }
         }
-
+        // Handle stop normally.
         if (dispatcher) {
             await interaction.deferReply();
             dispatcher.queue.length = 0;
             dispatcher.repeat = 'off';
             dispatcher.stopped = true;
-            if (foreverMode) {
-                this.client.queue.delete(interaction.guild.id);
-                dispatcher.player.connection.disconnect();
-            }
+            this.client.queue.delete(interaction.guild.id);
+            dispatcher.player.connection.disconnect();
             dispatcher.player.stopTrack();
             Wait(500);
             await interaction.editReply('I stopped and destroyed the player in this guild!');
