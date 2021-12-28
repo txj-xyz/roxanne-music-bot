@@ -7,7 +7,7 @@ const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
 const Queue = require('./modules/Queue.js');
 const InteractionHandler = require('./modules/InteractionHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
-const UtilityHandler = require('./modules/UtilityHandler');
+const UtilityHandler = require('./modules/UtilityHandler.js');
 class Roxanne extends Client {
     constructor(options) {
         // create cache
