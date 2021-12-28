@@ -11,6 +11,7 @@ class Stop extends RoxanneInteraction {
         return 'Stops the current playback and leaves the voice channel!';
     }
 
+    // dispatcher is custom here, we are manually handling the 24/7 mode ourselves
     get playerCheck() {
         return { voice: true, dispatcher: false, channel: true };
     }
@@ -19,36 +20,20 @@ class Stop extends RoxanneInteraction {
         // Manually handle the dispatcher checking here
         if (!dispatcher && this.client.queue.has(interaction.guild.id) && foreverMode) {
             await interaction.deferReply();
-            const dispatcher2 = this.client.queue.get(interaction.guild.id);
+            const dispatcherManual = this.client.queue.get(interaction.guild.id);
             try {
-                dispatcher2.queue.length = 0;
-                dispatcher2.repeat = 'off';
-                dispatcher2.stopped = true;
+                dispatcherManual.queue.length = 0;
+                dispatcherManual.repeat = 'off';
+                dispatcherManual.stopped = true;
                 if (foreverMode) {
-                    dispatcher2.player.stopTrack();
-                    dispatcher2.player.connection.disconnect();
+                    dispatcherManual.player.stopTrack();
+                    dispatcherManual.player.connection.disconnect();
                     this.client.queue.delete(interaction.guild.id);
                     this.client.logger.debug(this.name, `Destroyed the existing player & connection @ guild "${interaction.guild.id}"\nReason: No Reason Provided'`);
                 }
                 Wait(500);
                 return await interaction.editReply({
                     content: 'I stopped and destroyed the player in this guild!',
-                    ephemeral: false,
-                });
-            } catch (error) {
-                this.client.logger.error(error);
-                return await interaction.reply({
-                    content: 'Nothing is playing in this server!',
-                    ephemeral: true,
-                });
-            }
-        }
-        // Catch additional non queue issues and force stop
-        if (!dispatcher) {
-            try {
-                await interaction.guild.voiceStates.cache.get(this.client.user.id).disconnect();
-                return await interaction.reply({
-                    content: 'I have left the voice channel!',
                     ephemeral: false,
                 });
             } catch (error) {
