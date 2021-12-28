@@ -11,7 +11,7 @@ class MessageCreate extends RoxanneEvent {
     }
 
     static supportServer() {
-        return 'https://discord.gg/2EE8a3dmxU';
+        return 'https://discord.gg/GJanE63MGj';
     }
 
     async run(message) {

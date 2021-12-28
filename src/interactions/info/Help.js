@@ -25,7 +25,7 @@ class Help extends RoxanneInteraction {
         return `https://discord.com/api/oauth2/authorize?client_id=${id}&permissions=414518209792&scope=bot%20applications.commands`;
     }
     static supportServer() {
-        return 'https://discord.gg/2EE8a3dmxU';
+        return 'https://discord.gg/GJanE63MGj';
     }
 
     async run({ interaction }) {
