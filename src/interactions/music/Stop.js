@@ -49,7 +49,7 @@ class Stop extends RoxanneInteraction {
             try {
                 botVoice.disconnect();
             } catch (error) {
-                return this.client.logger.debug(this.constructor.name, 'Queue and Dispatcher missing, caught error on Disconnect, WebSocket code: 4014');
+                return this.client.logger.debug(this.constructor.name, 'Caught error on Disconnect');
             }
         }
         // Handle stop normally.
