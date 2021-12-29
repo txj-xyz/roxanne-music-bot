@@ -40,8 +40,13 @@ class Queue extends RoxanneInteraction {
                 next: new MessageButton().setEmoji('👉').setLabel('Next').setStyle('SUCCESS'),
             },
         ];
-
         if (dispatcher.queue.length > 0) {
+            if (!dispatcher?.current) {
+                return await interaction.reply({
+                    content: 'Nothing playing',
+                    ephemeral: true,
+                });
+            }
             const mapQueue = dispatcher.queue.map((track, index) => ({
                 queue_id: index + 1,
                 full_title: `${track.info.author} - ${track.info.title}`,
