@@ -43,7 +43,7 @@ class Play extends RoxanneInteraction {
 
         // Apple music integration
         if (this.client.util.checkURL(query) && query.includes('music.apple.com')) {
-            await interaction.editReply('[BETA] - Loading results, please wait, this may take a moment..');
+            await interaction.editReply('[APPLE BETA] - Loading results, please wait, this may take a moment..');
             const result = await autoGetApple(query);
             if (!result) return await interaction.editReply('Failed to resolve the query, please try another URL.');
 
@@ -59,47 +59,59 @@ class Play extends RoxanneInteraction {
                 }
                 case 'playlist': {
                     const firstTrackInPlaylist = result.tracks.shift();
-                    const firstTrackName = `${decode(firstTrackInPlaylist.artist)} - ${firstTrackInPlaylist.title.replace(/-/g, ' ')}`;
+                    const firstTrackName = `${firstTrackInPlaylist.artist} - ${firstTrackInPlaylist.title}`;
                     const firstTrackSearch = await node.rest.resolve(firstTrackName, 'youtube');
                     const firstTrack = firstTrackSearch.tracks.shift();
                     const dispatcherApple = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack);
+                    dispatcherApple?.play();
 
-                    await interaction.editReply('Searching playlist details.');
+                    await interaction.editReply('Gathering playlist songs.');
+                    let temp = [];
                     for (const track of result.tracks) {
-                        const trackName = `${decode(track.artist)} - ${track.title.replace(/-/g, ' ')}`;
-                        // Order issue due to resolving faster than others
-                        Promise.resolve(node.rest.resolve(trackName, 'youtube')).then((search) => {
-                            const trackToQueue = search.tracks.shift();
-                            if (trackToQueue !== undefined) {
+                        const trackName = `${track.artist} - ${track.title}`;
+                        temp.push(node.rest.resolve(trackName, 'youtube'));
+                    }
+                    // Handle all promises in order of search
+                    Promise.all(temp).then((results) => {
+                        for (const r of results) {
+                            if (r.type === 'SEARCH') {
+                                const trackToQueue = r.tracks.shift();
                                 this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, trackToQueue);
                             }
-                        });
-                    }
-                    dispatcherApple?.play();
-                    await interaction.editReply(`Found ${result.tracks.length} results from playlist '${result.name}' from user '${result.author}'.`);
-                    return;
+                        }
+                    });
+                    await interaction.editReply(
+                        `Found ${result.tracks.length + 1} results from playlist \`${result.name}\` from user \`${result.author}\`\n\n\nNOTE: THIS IS A BETA, SOME RESULTS MAY NOT BE FOUND PROPERLY`
+                    );
+                    return (temp = []);
                 }
                 case 'album': {
                     const firstTrackInAlbum = result.tracks.shift();
-                    const firstTrackName = `${decode(firstTrackInAlbum.artist)} - ${firstTrackInAlbum.title.replace(/-/g, ' ')}`;
+                    const firstTrackName = `${firstTrackInAlbum.artist} - ${firstTrackInAlbum.title}`;
                     const firstTrackSearch = await node.rest.resolve(firstTrackName, 'youtube');
                     const firstTrack = firstTrackSearch.tracks.shift();
                     const dispatcherApple = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack);
-                    await interaction.editReply('Searching playlist details.');
+                    dispatcherApple?.play();
 
+                    await interaction.editReply('Gathering album songs.');
+                    let temp = [];
                     for (const track of result.tracks) {
-                        const trackName = `${decode(track.artist)} - ${track.title.replace(/-/g, ' ')}`;
-                        // Order issue due to resolving faster than others
-                        Promise.resolve(node.rest.resolve(trackName, 'youtube')).then((search) => {
-                            const trackToQueue = search.tracks.shift();
-                            if (trackToQueue !== undefined) {
+                        const trackName = `${track.artist} - ${track.title}`;
+                        temp.push(node.rest.resolve(trackName, 'youtube'));
+                    }
+                    // Handle all promises in order of search
+                    Promise.all(temp).then((results) => {
+                        for (const r of results) {
+                            if (r.type === 'SEARCH') {
+                                const trackToQueue = r.tracks.shift();
                                 this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, trackToQueue);
                             }
-                        });
-                    }
-                    dispatcherApple?.play();
-                    await interaction.editReply(`Found ${result.tracks.length} results from album '${result.name}' from author '${result.author}'.`);
-                    return;
+                        }
+                    });
+                    await interaction.editReply(
+                        `Found ${result.tracks.length + 1} results from album \`${result.name}\` from author \`${result.author}\`\n\n\nNOTE: THIS IS A BETA, SOME RESULTS MAY BE NOT FOUND PROPERLY`
+                    );
+                    return (temp = []);
                 }
                 default:
                     return;
