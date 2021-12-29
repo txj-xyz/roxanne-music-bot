@@ -45,15 +45,25 @@ class Stop extends RoxanneInteraction {
             }
         }
         if (!dispatcher && !this.client.queue.has(interaction.guild.id) && foreverMode) {
-            try {
-                return await interaction.reply({
-                    content: 'Nothing is playing in this server!',
-                    ephemeral: true,
-                });
-            } catch (error) {
-                console.log(error);
-                return this.client.logger.debug(this.constructor.name, 'Caught error on Disconnect');
+            if ((await interaction.guild.voiceStates.cache.get(this.client.user.id)?.channelId) ? true : false) {
+                try {
+                    await interaction.guild.voiceStates.cache.get(this.client.user.id).disconnect();
+                    return await interaction.reply({
+                        content: 'Disconnecting!',
+                        ephemeral: true,
+                    });
+                } catch (error) {
+                    this.client.logger.debug(this.constructor.name, 'Caught error on Disconnect');
+                    return await interaction.reply({
+                        content: 'Nothing is playing in this server! (Try again)',
+                        ephemeral: true,
+                    });
+                }
             }
+            return await interaction.reply({
+                content: 'Nothing is playing in this server!',
+                ephemeral: true,
+            });
         }
         // Handle stop normally.
         if (dispatcher) {
