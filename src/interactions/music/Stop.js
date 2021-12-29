@@ -13,7 +13,7 @@ class Stop extends RoxanneInteraction {
 
     // dispatcher is custom here, we are manually handling the 24/7 mode ourselves
     get playerCheck() {
-        return { voice: true, dispatcher: false, channel: true };
+        return { voice: true, dispatcher: true, channel: true };
     }
 
     async run({ interaction, dispatcher }) {
