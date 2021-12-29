@@ -71,7 +71,6 @@ class Play extends RoxanneInteraction {
                         Promise.resolve(node.rest.resolve(trackName, 'youtube')).then((search) => {
                             const trackToQueue = search.tracks.shift();
                             if (trackToQueue !== undefined) {
-                                console.log('lavalink result:', trackToQueue.info.title);
                                 this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, trackToQueue);
                             }
                         });
@@ -94,7 +93,6 @@ class Play extends RoxanneInteraction {
                         Promise.resolve(node.rest.resolve(trackName, 'youtube')).then((search) => {
                             const trackToQueue = search.tracks.shift();
                             if (trackToQueue !== undefined) {
-                                console.log('lavalink result:', trackToQueue.info.title);
                                 this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, trackToQueue);
                             }
                         });
