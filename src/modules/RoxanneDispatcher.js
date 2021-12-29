@@ -41,7 +41,7 @@ class RoxanneDispatcher {
         });
 
         this.player.on('closed', async (payload) => {
-            if (!this.exists) return this.client.logger.debug(this.constructor.name, 'Closed event found exists, returning'); // Catch if the queue is empty, then return instead of reconnecting.
+            if (!this.exists) return this.client.logger.debug(this.constructor.name, `Closed event found no queue, disconnecting from voice channel with WS Code: ${payload.code}.`); // Catch if the queue is empty, then return instead of reconnecting.
             await Wait(5000);
             if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
                 await this.player.connection.reconnect();

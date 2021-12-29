@@ -13,7 +13,17 @@ class Queue extends Map {
         const existing = this.get(guild.id);
         if (!existing) {
             //24/7 mode checker
-            if (guild.voiceStates.cache.get(this.client.user.id)?.channelId && foreverMode) {
+            const botVoice = guild.voiceStates.cache.get(this.client.user.id);
+            if (botVoice?.channelId && foreverMode) {
+                const userVoice = await guild.voiceStates.cache.get(member.user.id);
+                if (botVoice?.channelId !== member.voice.channelId) {
+                    try {
+                        botVoice.setChannel(userVoice?.channelId);
+                        this.client.logger.log('Queue', `Existing dispatcher @ guild "${guild.id}" moving player`);
+                    } catch (error) {
+                        this.client.logger.log('Queue', 'Failed to move voice channels.');
+                    }
+                }
                 dispatcher.queue.push(track);
                 this.set(guild.id, dispatcher);
                 this.client.logger.log(dispatcher.constructor.name, `Existing dispatcher @ guild "${guild.id}" started player`);
