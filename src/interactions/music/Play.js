@@ -4,7 +4,6 @@ const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const retry = require('async-await-retry');
 
 // Apple only
-const { decode } = require('html-entities');
 const { autoGetApple } = require('apple-music-metadata');
 // const playlistLink = 'https://music.apple.com/us/playlist/say-hello/pl.u-Ymb0EGMFDkRN6j';
 // const songLink = 'https://music.apple.com/us/album/tell-me-feat-hero-baldwin/1535914918?i=1535914921';
@@ -49,7 +48,7 @@ class Play extends RoxanneInteraction {
 
             switch (result.type) {
                 case 'song': {
-                    const trackName = `${decode(result.artist)} - ${result.title.replace(/-/g, ' ')}`;
+                    const trackName = `${result.artist} - ${result.title}`;
                     const trackSearch = await node.rest.resolve(trackName, 'youtube');
                     const firstTrack = trackSearch.tracks.shift();
                     const dispatcherApple = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack);
