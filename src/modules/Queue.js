@@ -15,19 +15,23 @@ class Queue extends Map {
             //24/7 mode checker
             const botVoice = guild.voiceStates.cache.get(this.client.user.id);
             if (botVoice?.channelId && foreverMode) {
-                const userVoice = await guild.voiceStates.cache.get(member.user.id);
-                if (botVoice?.channelId !== member.voice.channelId) {
-                    try {
-                        botVoice.setChannel(userVoice?.channelId);
-                        this.client.logger.log('Queue', `Existing dispatcher @ guild "${guild.id}" moving player`);
-                    } catch (error) {
-                        this.client.logger.log('Queue', 'Failed to move voice channels.');
+                try {
+                    const userVoice = await guild.voiceStates.cache.get(member.user.id);
+                    if (botVoice?.channelId !== member.voice.channelId) {
+                        try {
+                            botVoice.setChannel(userVoice?.channelId);
+                            this.client.logger.log('Queue', `Existing dispatcher @ guild "${guild.id}" moving player`);
+                        } catch (error) {
+                            this.client.logger.log('Queue', 'Failed to move voice channels.');
+                        }
                     }
+                    dispatcher.queue.push(track);
+                    this.set(guild.id, dispatcher);
+                    this.client.logger.log(dispatcher.constructor.name, `Existing dispatcher @ guild "${guild.id}" started player`);
+                    return dispatcher;
+                } catch (error) {
+                    return this.client.logger.log(dispatcher.constructor.name, error);
                 }
-                dispatcher.queue.push(track);
-                this.set(guild.id, dispatcher);
-                this.client.logger.log(dispatcher.constructor.name, `Existing dispatcher @ guild "${guild.id}" started player`);
-                return dispatcher;
             } else {
                 player = await node
                     .joinChannel({
