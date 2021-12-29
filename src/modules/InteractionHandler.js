@@ -91,6 +91,8 @@ class InteractionHandler extends EventEmitter {
         try {
             if (interaction.isCommand() || interaction.isContextMenu()) {
                 const command = this.commands.get(interaction.commandName);
+                const dispatcher = this.client.queue.get(interaction.guildId);
+
                 if (!command) return;
                 if (command.permissions && !InteractionHandler.checkPermission(command.permissions, interaction))
                     return interaction.reply({
@@ -103,9 +105,10 @@ class InteractionHandler extends EventEmitter {
                         content: 'You are not in a voice channel!',
                         ephemeral: true,
                     });
-                const dispatcher = this.client.queue.get(interaction.guildId);
+
                 // Manual checking for stop command acting as a `/leave` command override
                 if (interaction.commandName === 'stop') {
+                    // const botVoice = (await interaction.guild.voiceStates.cache.get(this.client.user.id)) || null;
                     if (config.foreverMode) {
                         this.client.logger.log(this.constructor.name, `Executing ${command.type ? 'context' : 'command'} ${command.name} (@${command.uid})`);
                         await command.run({ interaction });
