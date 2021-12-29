@@ -1,5 +1,8 @@
+const { ShoukakuPlayer } = require('shoukaku');
 const RoxanneDispatcher = require('./RoxanneDispatcher.js');
-
+const { foreverMode } = require('../../config.json');
+let player = null;
+let dispatcher = null;
 class Queue extends Map {
     constructor(client, iterable) {
         super(iterable);
@@ -9,19 +12,26 @@ class Queue extends Map {
     async handle(guild, member, channel, node, track, first) {
         const existing = this.get(guild.id);
         if (!existing) {
-            let player;
-            try {
-                player = await node.joinChannel({
-                    guildId: guild.id,
-                    shardId: guild.shardId,
-                    channelId: member.voice.channelId,
-                    deaf: true,
-                });
-            } catch (error) {
-                return this.client.logger.debug(`QueueHandlerError`, error);
+            //24/7 mode checker
+            if (guild.voiceStates.cache.get(this.client.user.id)?.channelId && foreverMode) {
+                dispatcher.queue.push(track);
+                this.set(guild.id, dispatcher);
+                this.client.logger.log(dispatcher.constructor.name, `Existing dispatcher @ guild "${guild.id}" started player`);
+                return dispatcher;
+            } else {
+                player = await node
+                    .joinChannel({
+                        guildId: guild.id,
+                        shardId: guild.shardId,
+                        channelId: member.voice.channelId,
+                        deaf: true,
+                    })
+                    .catch(() => {
+                        return this.client.logger.debug(`QueueHandlerError`, error);
+                    });
             }
             this.client.logger.debug(player.constructor.name, `New connection @ guild "${guild.id}"`);
-            const dispatcher = new RoxanneDispatcher({
+            dispatcher = new RoxanneDispatcher({
                 client: this.client,
                 guild,
                 channel,

@@ -10,10 +10,6 @@ class MessageCreate extends RoxanneEvent {
         return false;
     }
 
-    static supportServer() {
-        return 'https://discord.gg/2EE8a3dmxU';
-    }
-
     async run(message) {
         const helpEmbed = new MessageEmbed()
             .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
@@ -39,11 +35,11 @@ class MessageCreate extends RoxanneEvent {
             .setFooter(`The Music Project • ${this.client.interactions.commands.size} commands loaded`);
 
         const supportButton = new MessageActionRow().addComponents(
-            [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(MessageCreate.supportServer()).setLabel('Support Server')],
+            [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(this.client.util.supportServer).setLabel('Support Server')],
             [new MessageButton().setEmoji('🎵').setStyle('LINK').setURL('https://statuspage.freshping.io/58439-RoxanneMusicBot').setLabel('Music Status Page')],
             [new MessageButton().setStyle('LINK').setURL(this.client.util.invite).setLabel('Invite me!')]
         );
-        if (!['918662128632733696', '714232432672505928', '556316704838385665'].includes(message.guild.id)) return;
+        // if (!['918662128632733696', '714232432672505928', '556316704838385665'].includes(message.guild.id)) return;
 
         if (message.content === `<@!${this.client.user.id}> good bot`) {
             return message.reply(':3');

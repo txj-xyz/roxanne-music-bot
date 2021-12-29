@@ -8,6 +8,7 @@ class UtilityHandler {
     constructor(client) {
         this.client = client;
         this.invite = inviteURL;
+        this.supportServer = 'https://discord.gg/GJanE63MGj';
         this.db = new DatabaseHandler(client);
         this.humanizeTime = this.humanizeTime;
         this.ytMeta = this.ytMeta;

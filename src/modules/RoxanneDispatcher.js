@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const Wait = require('util').promisify(setTimeout);
+const { foreverMode } = require('../../config.json');
 
 class RoxanneDispatcher {
     constructor({ client, guild, channel, player }) {
@@ -15,7 +16,7 @@ class RoxanneDispatcher {
         let _notifiedOnce = false;
 
         this.player.on('start', () => {
-            if (this.repeat === 'one' || this.queue.length < 1) {
+            if (this.repeat === 'one' && this.queue.length < 1) {
                 if (_notifiedOnce) return;
                 else _notifiedOnce = true;
             }
@@ -40,6 +41,7 @@ class RoxanneDispatcher {
         });
 
         this.player.on('closed', async (payload) => {
+            if (!this.exists) return this.client.logger.debug(this.constructor.name, 'Closed event found exists, returning'); // Catch if the queue is empty, then return instead of reconnecting.
             await Wait(5000);
             if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
                 await this.player.connection.reconnect();
@@ -63,7 +65,7 @@ class RoxanneDispatcher {
 
     destroy(reason) {
         this.queue.length = 0;
-        this.player.connection.disconnect();
+        foreverMode ? null : this.player.connection.disconnect();
         this.client.queue.delete(this.guild.id);
         this.client.logger.debug(this.player.constructor.name, `Destroyed the player & connection @ guild "${this.guild.id}"\nReason: ${reason || 'No Reason Provided'}`);
         if (this.stopped) return;

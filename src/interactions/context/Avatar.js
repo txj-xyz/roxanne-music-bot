@@ -1,5 +1,5 @@
 const RoxanneContext = require('../../abstract/RoxanneContext.js');
-
+const { MessageAttachment, MessageEmbed } = require('discord.js');
 class AvatarContext extends RoxanneContext {
     get name() {
         return 'Avatar';
@@ -15,7 +15,8 @@ class AvatarContext extends RoxanneContext {
         });
         const targetID = await interaction.guild.members.fetch(interaction.targetId);
         const avatar = targetID.user.displayAvatarURL({ dynamic: true });
-        await interaction.editReply(`${avatar}?size=4096`);
+        const avatarEmbed = new MessageEmbed().setDescription(`Avatar of ${targetID.user.toString()}`);
+        await interaction.editReply({ embeds: [avatarEmbed], files: [new MessageAttachment(`${avatar}?size=4096`)] });
     }
 }
 module.exports = AvatarContext;

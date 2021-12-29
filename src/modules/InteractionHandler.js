@@ -104,6 +104,21 @@ class InteractionHandler extends EventEmitter {
                         ephemeral: true,
                     });
                 const dispatcher = this.client.queue.get(interaction.guildId);
+                // Manual checking for stop command acting as a `/leave` command override
+                if (interaction.commandName === 'stop') {
+                    if (config.foreverMode) {
+                        this.client.logger.log(this.constructor.name, `Executing ${command.type ? 'context' : 'command'} ${command.name} (@${command.uid})`);
+                        await command.run({ interaction });
+                        this.client.commandsRun++;
+                        return;
+                    } else {
+                        this.client.logger.log(this.constructor.name, `Executing ${command.type ? 'context' : 'command'} ${command.name} (@${command.uid})`);
+                        await command.run({ interaction, dispatcher });
+                        this.client.commandsRun++;
+                        return;
+                    }
+                }
+
                 if (command.playerCheck?.dispatcher && !dispatcher)
                     return interaction.reply({
                         content: 'Nothing is playing in this server!',
