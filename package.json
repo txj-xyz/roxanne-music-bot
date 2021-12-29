@@ -13,7 +13,7 @@
         "@discordjs/collection": "^0.3.2",
         "@discordjs/rest": "^0.1.0-canary.0",
         "@godaddy/terminus": "^4.9.0",
-        "apple-music-metadata": "^1.0.9",
+        "apple-music-metadata": "^1.0.10",
         "async-await-retry": "^1.2.4",
         "axios": "^0.24.0",
         "azuma": "^2.1.2",
