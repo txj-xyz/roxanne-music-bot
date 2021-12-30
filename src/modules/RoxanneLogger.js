@@ -11,7 +11,7 @@ class RoxanneLogger {
     }
 
     debug(title, message) {
-        if (!message.includes('loaded')) this.webhook.send(`[Process ${process.pid}] [Cluster ${this.id}] [${title}] ${message}`);
+        if (!message?.includes('loaded')) this.webhook.send(`[Process ${process.pid}] [Cluster ${this.id}] [${title}] ${message}`);
         console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${title}] ${message}`);
     }
 
