@@ -8,5 +8,6 @@
     "youtube_key": "API v3 KEY",
     "dbUrl": "redis://IP:PORT",
     "ipcSocket": 9999,
+    "prometheusPort": 45000,
     "foreverMode": true
 }
