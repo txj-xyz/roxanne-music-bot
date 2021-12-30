@@ -3,6 +3,10 @@
 class PrometheusCollector {
     constructor(client) {
         this.client = client;
+        this._roxanne_ws_ping = new client.prom.client.Gauge({
+            name: 'roxanne_ws_ping',
+            help: 'ping in ms to discord gateway websocket',
+        });
         this._roxanne_guilds = new client.prom.client.Gauge({
             name: 'roxanne_guilds',
             help: 'total guilds across all shards',
@@ -34,6 +38,7 @@ class PrometheusCollector {
             this.client.shard.broadcastEval('this.queue.size'),
         ]);
         return {
+            ws_ping: this.client.ws.ping,
             guilds: guilds.reduce((sum, count) => sum + count),
             channels: channels.reduce((sum, count) => sum + count),
             players: players.reduce((sum, count) => sum + count),
@@ -45,6 +50,7 @@ class PrometheusCollector {
     async start() {
         // Set initial values from the first gather.
         let i = await this.gather();
+        this._roxanne_ws_ping.set(i.ws_ping);
         this._roxanne_guilds.set(i.guilds);
         this._roxanne_channels.set(i.channels);
         this._roxanne_music_players.set(i.players);
@@ -53,6 +59,7 @@ class PrometheusCollector {
 
         setInterval(async () => {
             i = await this.gather();
+            this._roxanne_ws_ping.set(i.ws_ping);
             this._roxanne_guilds.set(i.guilds);
             this._roxanne_channels.set(i.guilds);
             this._roxanne_music_players.set(i.players);
