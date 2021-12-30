@@ -1,7 +1,7 @@
 const { Client, LimitedCollection, WebhookClient } = require('discord.js');
 const { Cheshire } = require('cheshire');
 const { Collection } = require('@discordjs/collection');
-const { token } = require('../config.json');
+const { token, prometheusPort } = require('../config.json');
 const RoxanneLogger = require('./modules/RoxanneLogger.js');
 const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
 const Queue = require('./modules/Queue.js');
@@ -9,7 +9,6 @@ const InteractionHandler = require('./modules/InteractionHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
 const UtilityHandler = require('./modules/UtilityHandler.js');
 const APM = require('prometheus-middleware');
-
 class Roxanne extends Client {
     constructor(options) {
         // create cache
@@ -32,6 +31,14 @@ class Roxanne extends Client {
         };
         // pass options
         super(options);
+
+        //Prometheus
+        this.prom = new APM({
+            METRICS_ROUTE: '/metrics',
+            PORT: prometheusPort,
+        });
+        this.prom.init();
+
         this.color = 0x7e686c;
         this.quitting = false;
         this.location = process.cwd();
@@ -43,12 +50,6 @@ class Roxanne extends Client {
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
         this.util = new UtilityHandler(this);
-        this.prom = new APM({
-            METRICS_ROUTE: '/metrics',
-            PORT: 45000,
-        });
-        this.prom.init();
-
         ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event) => process.once(event, this.exit.bind(this)));
     }
 
