@@ -50,6 +50,7 @@ class PrometheusCollector {
     async start() {
         // Set initial values from the first gather.
         let i = await this.gather();
+        this.client.logger.debug(this.constructor.name, `Stats pulled: ${JSON.stringify(i, null, null)}`);
         this._roxanne_ws_ping.set(i.ws_ping);
         this._roxanne_guilds.set(i.guilds);
         this._roxanne_channels.set(i.channels);
@@ -61,11 +62,11 @@ class PrometheusCollector {
             i = await this.gather();
             this._roxanne_ws_ping.set(i.ws_ping);
             this._roxanne_guilds.set(i.guilds);
-            this._roxanne_channels.set(i.guilds);
+            this._roxanne_channels.set(i.channels);
             this._roxanne_music_players.set(i.players);
             this._roxanne_user_count.set(i.userCount);
             this._roxanne_commands_run.set(i.commandsRun);
-        }, 5000);
+        }, 10 * 1000);
     }
 }
 
