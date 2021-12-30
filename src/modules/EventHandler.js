@@ -4,6 +4,7 @@ class EventHandler {
     constructor(client) {
         this.client = client;
         this.built = false;
+        client.on('shardDisconnect', (event, id) => client.logger.debug(`Shard ${id}`, `Shard Disconnecting`));
         client.on('shardReconnecting', (id) => client.logger.debug(`Shard ${id}`, 'Shard Reconnecting'));
         client.on('shardResumed', (id, rep) => client.logger.debug(`Shard ${id}`, `Shard Resume | ${rep} events replayed`));
         client.on('shardReady', (id) => client.logger.debug(`Shard ${id}`, 'Shard Ready'));
