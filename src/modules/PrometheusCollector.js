@@ -3,7 +3,6 @@
 class PrometheusCollector {
     constructor(client) {
         this.client = client;
-
         this._roxanne_guilds = new client.prom.client.Gauge({
             name: 'roxanne_guilds',
             help: 'total guilds across all shards',
@@ -24,6 +23,8 @@ class PrometheusCollector {
             name: 'roxanne_commands_run',
             help: 'total commands run on the bot',
         });
+
+        this.client.logger.debug(this.constructor.name, 'Loaded OK');
     }
 
     async gather() {
