@@ -18,6 +18,7 @@ class PrometheusCollector {
                 players: players.reduce((sum, count) => sum + count),
                 userCount: this.client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c),
                 commandsRun: this.client.commandsRun,
+                uptime: this.client.util.humanizeTime(this.client.uptime),
             };
         };
         this.client.logger.debug(this.constructor.name, `Stats pulled: ${JSON.stringify(await gather(), null, null)}`);
@@ -71,6 +72,14 @@ class PrometheusCollector {
             async collect() {
                 const _ = await gather();
                 this.set(_.commandsRun);
+            },
+        });
+        new this.client.prom.client.Gauge({
+            name: 'roxanne_uptime',
+            help: 'uptime of process',
+            async collect() {
+                const _ = await gather();
+                this.set(_.uptime);
             },
         });
     }
