@@ -137,6 +137,10 @@ class Play extends RoxanneInteraction {
                 return await interaction.editReply(`Sorry human, I was not able to find anything from your search.\n\`Message: ${playlist.exception.message}\``);
             }
 
+            if (playlist.loadType === 'TRACK_LOADED' && !playlist.tracks[0]) {
+                return await interaction.editReply(`There was an error finding the song information, please try again.`);
+            }
+
             for (const res of playlist.tracks) {
                 if (res) {
                     let resTrack = new ShoukakuTrack(res);
