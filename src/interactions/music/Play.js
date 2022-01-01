@@ -138,8 +138,10 @@ class Play extends RoxanneInteraction {
             }
 
             for (const res of playlist.tracks) {
-                let resTrack = new ShoukakuTrack(res);
-                fullResolvedList.push(resTrack);
+                if (res) {
+                    let resTrack = new ShoukakuTrack(res);
+                    fullResolvedList.push(resTrack);
+                }
             }
             const firstTrack = fullResolvedList.shift();
             const startDispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, firstTrack);
@@ -153,8 +155,10 @@ class Play extends RoxanneInteraction {
             fullResolvedList = [];
 
             for (const postRes of playlist.tracks.slice(1)) {
-                let resTrack = new ShoukakuTrack(postRes);
-                await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, resTrack);
+                if (postRes) {
+                    let resTrack = new ShoukakuTrack(postRes);
+                    await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, resTrack);
+                }
             }
             return;
         }
