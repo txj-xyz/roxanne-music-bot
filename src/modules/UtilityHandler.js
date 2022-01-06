@@ -11,6 +11,7 @@ class UtilityHandler {
         this.supportServer = 'https://discord.gg/GJanE63MGj';
         this.db = new DatabaseHandler(client);
         this.humanizeTime = this.humanizeTime;
+        this.convertMS = this.convertMS;
         this.ytMeta = this.ytMeta;
         this.lavaConnect(spotifyClientID, spotifySecret, servers);
     }
@@ -35,7 +36,18 @@ class UtilityHandler {
         if (min > 59) hr = ((hr = Math.floor(min / 60)) => hr >= 10 ? hr : `0${hr}`)()
         min = ((m = min - hr * 60) => m >= 10 ? m : `0${m}`)()
         sec = ((s = Math.floor(sec % 60)) => s >= 10 ? s : `0${s}`)()
-        return hr > 59 ? 'Live! 🔴' : (hr != '' ? `${hr}:${min}:${sec}` : `${min}:${sec}`)
+        return (hr != '' ? `${hr}:${min}:${sec}` : `${min}:${sec}`)
+    }
+
+    convertMS(ms) {
+        let seconds = (ms / 1000).toFixed(1),
+            minutes = (ms / (1000 * 60)).toFixed(1),
+            hours = (ms / (1000 * 60 * 60)).toFixed(1),
+            days = (ms / (1000 * 60 * 60 * 24)).toFixed(1);
+        if (seconds < 60) return seconds + ' Sec';
+        else if (minutes < 60) return minutes + ' Min';
+        else if (hours < 24) return hours + ' Hrs';
+        else return days + ' Days';
     }
 
     convertNumToInternational(number) {
