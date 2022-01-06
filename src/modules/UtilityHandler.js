@@ -36,7 +36,7 @@ class UtilityHandler {
         if (min > 59) hr = ((hr = Math.floor(min / 60)) => hr >= 10 ? hr : `0${hr}`)()
         min = ((m = min - hr * 60) => m >= 10 ? m : `0${m}`)()
         sec = ((s = Math.floor(sec % 60)) => s >= 10 ? s : `0${s}`)()
-        return (hr != '' ? `${hr}:${min}:${sec}` : `${min}:${sec}`)
+        return hr > 59 ? 'Live! 🔴' : (hr != '' ? `${hr}:${min}:${sec}` : `${min}:${sec}`)
     }
 
     convertMS(ms) {
