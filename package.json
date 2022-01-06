@@ -28,7 +28,7 @@
         "prometheus-middleware": "^1.0.0",
         "redis": "^4.0.0",
         "shoukaku": "^2.1.0",
-        "tiktok-scraper": "^1.4.36",
+        "tiktok-scraper": "https://github.com/Pterko/tiktok-scraper.git",
         "utf-8-validate": "^5.0.5",
         "uuid": "^8.3.2"
     },

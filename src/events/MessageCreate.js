@@ -56,7 +56,7 @@ class MessageCreate extends RoxanneEvent {
             }
         }
 
-        if (message.content.includes('tiktok.com')) {
+        if (message.content.includes('tiktok.com') && !message.author.bot) {
             const tiktokLink = message.content.match(this.client.util.urlRegex)[0];
             try {
                 const videoMeta = await getVideoMeta(tiktokLink, {});
@@ -69,7 +69,7 @@ class MessageCreate extends RoxanneEvent {
                     .addField('**Comments**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.commentCount)), true)
                     .setFooter(`Uploaded: ${new Date(videoMeta.collector[0]?.createTime * 1000).toLocaleString()}`);
 
-                await message.channel.send({ embeds: [videoMetaEmbed], files: [new MessageAttachment(videoMeta.collector[0]?.videoUrl, `tiktok.mp4`)] });
+                await message.reply({ embeds: [videoMetaEmbed], files: [new MessageAttachment(videoMeta.collector[0]?.videoUrl, `tiktok.mp4`)] });
             } catch (error) {
                 this.client.logger.error(error);
             }
