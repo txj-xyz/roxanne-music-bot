@@ -32,13 +32,6 @@ class Roxanne extends Client {
         // pass options
         super(options);
 
-        //Prometheus
-        this.prom = new APM({
-            METRICS_ROUTE: '/metrics',
-            PORT: prometheusPort,
-        });
-        this.prom.init();
-
         this.color = 0x7e686c;
         this.quitting = false;
         this.location = process.cwd();
