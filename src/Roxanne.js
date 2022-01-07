@@ -1,4 +1,4 @@
-const { Client, LimitedCollection, WebhookClient } = require('discord.js');
+const { Client, LimitedCollection } = require('discord.js');
 const { Cheshire } = require('cheshire');
 const { Collection } = require('@discordjs/collection');
 const { token, prometheusPort } = require('../config.json');
@@ -8,7 +8,6 @@ const Queue = require('./modules/Queue.js');
 const InteractionHandler = require('./modules/InteractionHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
 const UtilityHandler = require('./modules/UtilityHandler.js');
-const APM = require('prometheus-middleware');
 class Roxanne extends Client {
     constructor(options) {
         // create cache
