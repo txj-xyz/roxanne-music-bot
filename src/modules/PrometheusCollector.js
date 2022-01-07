@@ -1,9 +1,10 @@
 const APM = require('prometheus-middleware');
+const { prometheusPort } = require('../../config.json');
 class PrometheusCollector extends APM {
     constructor(client) {
         super({
             METRICS_ROUTE: '/metrics',
-            PORT: 45001,
+            PORT: prometheusPort,
         });
         this.init();
         this.prom = this;
