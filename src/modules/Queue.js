@@ -40,7 +40,7 @@ class Queue extends Map {
                         channelId: member.voice.channelId,
                         deaf: true,
                     })
-                    .catch(() => {
+                    .catch((error) => {
                         return this.client.logger.debug(`QueueHandlerError`, error);
                     });
             }
