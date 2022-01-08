@@ -14,9 +14,10 @@ class UtilityHandler {
         this.convertMS = this.convertMS;
         this.ytMeta = this.ytMeta;
         this.lavaConnect(spotifyClientID, spotifySecret, servers);
+        // prettier-ignore
+        this.urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
+        this.loadingEmbed = new MessageEmbed().setAuthor('Loading.. Please wait :)');
     }
-    urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
-    loadingEmbed = new MessageEmbed().setAuthor('Loading.. Please wait :)');
 
     removeArrayIndex(array, indexID) {
         return array.filter((_, index) => index != indexID - 1);
