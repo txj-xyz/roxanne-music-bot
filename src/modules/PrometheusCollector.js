@@ -29,7 +29,6 @@ class PrometheusCollector extends APM {
             };
         };
         let _;
-        _ = await gather();
         setInterval(async () => (_ = await gather()), 4 * 1000);
         this.roxanne.logger.debug(this.constructor.name, `Stats pulled: ${JSON.stringify(await gather(), null, null)}`);
         try {
