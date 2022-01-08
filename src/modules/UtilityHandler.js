@@ -1,6 +1,5 @@
 const { LavasfyClient } = require('lavasfy');
 const axios = require('axios');
-const DatabaseHandler = require('./DatabaseHandler.js');
 const { token, webhookUrl, inviteURL, youtube_key, spotifyClientID, spotifySecret } = require('../../config.json');
 const servers = require('../../lavasfy-servers.json');
 const { MessageEmbed } = require('discord.js');
@@ -9,7 +8,6 @@ class UtilityHandler {
         this.client = client;
         this.invite = inviteURL;
         this.supportServer = 'https://discord.gg/GJanE63MGj';
-        this.db = new DatabaseHandler(client);
         this.humanizeTime = this.humanizeTime;
         this.convertMS = this.convertMS;
         this.ytMeta = this.ytMeta;
