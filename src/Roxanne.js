@@ -1,13 +1,14 @@
 const { Client, LimitedCollection } = require('discord.js');
 const { Cheshire } = require('cheshire');
 const { Collection } = require('@discordjs/collection');
-const { token, prometheusPort } = require('../config.json');
+const { token } = require('../config.json');
 const RoxanneLogger = require('./modules/RoxanneLogger.js');
 const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
 const Queue = require('./modules/Queue.js');
 const InteractionHandler = require('./modules/InteractionHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
 const UtilityHandler = require('./modules/UtilityHandler.js');
+
 class Roxanne extends Client {
     constructor(options) {
         // create cache
