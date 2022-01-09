@@ -1,6 +1,5 @@
 const { LavasfyClient } = require('lavasfy');
 const axios = require('axios');
-const DatabaseHandler = require('./DatabaseHandler.js');
 const { token, webhookUrl, inviteURL, youtube_key, spotifyClientID, spotifySecret } = require('../../config.json');
 const servers = require('../../lavasfy-servers.json');
 const { MessageEmbed } = require('discord.js');
@@ -9,14 +8,14 @@ class UtilityHandler {
         this.client = client;
         this.invite = inviteURL;
         this.supportServer = 'https://discord.gg/GJanE63MGj';
-        this.db = new DatabaseHandler(client);
         this.humanizeTime = this.humanizeTime;
         this.convertMS = this.convertMS;
         this.ytMeta = this.ytMeta;
         this.lavaConnect(spotifyClientID, spotifySecret, servers);
+        // prettier-ignore
+        this.urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
+        this.loadingEmbed = new MessageEmbed().setAuthor('Loading.. Please wait :)');
     }
-    urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
-    loadingEmbed = new MessageEmbed().setAuthor('Loading.. Please wait :)');
 
     removeArrayIndex(array, indexID) {
         return array.filter((_, index) => index != indexID - 1);

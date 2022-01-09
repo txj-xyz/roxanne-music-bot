@@ -1,14 +1,14 @@
-const { Client, LimitedCollection, WebhookClient } = require('discord.js');
+const { Client, LimitedCollection } = require('discord.js');
 const { Cheshire } = require('cheshire');
 const { Collection } = require('@discordjs/collection');
-const { token, prometheusPort } = require('../config.json');
+const { token } = require('../config.json');
 const RoxanneLogger = require('./modules/RoxanneLogger.js');
 const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
 const Queue = require('./modules/Queue.js');
 const InteractionHandler = require('./modules/InteractionHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
 const UtilityHandler = require('./modules/UtilityHandler.js');
-const APM = require('prometheus-middleware');
+
 class Roxanne extends Client {
     constructor(options) {
         // create cache
@@ -31,13 +31,6 @@ class Roxanne extends Client {
         };
         // pass options
         super(options);
-
-        //Prometheus
-        this.prom = new APM({
-            METRICS_ROUTE: '/metrics',
-            PORT: prometheusPort,
-        });
-        this.prom.init();
 
         this.color = 0x7e686c;
         this.quitting = false;

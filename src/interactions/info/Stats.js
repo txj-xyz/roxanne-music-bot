@@ -29,8 +29,6 @@ class Stats extends RoxanneInteraction {
             userCount: client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c),
             guilds: guilds.reduce((sum, count) => sum + count),
         };
-        // client.db.redis.set('stats', JSON.stringify(obj)).catch(_ => null);
-        // const dbResult = this.client.db.redis.get('stats')
         return obj;
     }
 
