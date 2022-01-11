@@ -40,8 +40,9 @@ class MessageCreate extends RoxanneEvent {
             [new MessageButton().setStyle('LINK').setURL(this.client.util.invite).setLabel('Invite me!')]
         );
         // if (!['918662128632733696', '714232432672505928', '556316704838385665'].includes(message.guild.id)) return;
-
-        if (message.content === `<@!${this.client.user.id}> good bot`) {
+        if (message.content === `<@!${this.client.user.id}>`) {
+            return message.react('👀');
+        } else if (message.content === `<@!${this.client.user.id}> good bot`) {
             return message.reply(':3');
         }
 
