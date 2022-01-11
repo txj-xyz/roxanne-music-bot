@@ -33,6 +33,7 @@ class Queue extends Map {
                     return this.client.logger.log(dispatcher.constructor.name, error);
                 }
             } else {
+                //TODO: check voice user limit before joining.
                 player = await node
                     .joinChannel({
                         guildId: guild.id,
