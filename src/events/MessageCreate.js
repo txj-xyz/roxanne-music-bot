@@ -46,9 +46,9 @@ class MessageCreate extends RoxanneEvent {
             return message.react('👀');
         } else if (message.content === `<@!${this.client.user.id}> good bot`) {
             return message.reply(':3');
-        } else if (message.author.id.includes(owners[0]) && command.startsWith('::nick')) {
+        } else if (message.author.id.includes(owners[0]) && message.content.startsWith(`<@!${this.client.user.id}> nick`)) {
             try {
-                message.guild.me.setNickname(args.join(' ') || null);
+                message.guild.me.setNickname(args.slice(1).join(' ') || null);
             } catch (error) {
                 return message.react('❎');
             }
