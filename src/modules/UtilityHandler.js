@@ -1,6 +1,6 @@
 const { LavasfyClient } = require('lavasfy');
 const axios = require('axios');
-const { token, webhookUrl, inviteURL, youtube_key, spotifyClientID, spotifySecret } = require('../../config.json');
+const { inviteURL, youtube_key, spotifyClientID, spotifySecret } = require('../../config.json');
 const servers = require('../../lavalink-server.json');
 const { MessageEmbed } = require('discord.js');
 class UtilityHandler {
@@ -8,6 +8,7 @@ class UtilityHandler {
         this.client = client;
         this.invite = inviteURL;
         this.supportServer = 'https://discord.gg/GJanE63MGj';
+        this.grafana = 'https://grafana.txj-dev.xyz/d/roxanne-is-a-cutie';
         this.humanizeTime = this.humanizeTime;
         this.convertMS = this.convertMS;
         this.ytMeta = this.ytMeta;
