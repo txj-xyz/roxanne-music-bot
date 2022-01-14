@@ -18,7 +18,9 @@ class UtilityHandler {
     }
 
     deleteMessage(interaction, id) {
-        interaction.channel.messages.fetch(id).then((message) => message.delete());
+        interaction.channel.messages.fetch(id).then((message) => {
+            return message.delete();
+        });
     }
 
     removeArrayIndex(array, indexID) {
