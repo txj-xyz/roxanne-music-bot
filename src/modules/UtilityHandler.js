@@ -17,6 +17,10 @@ class UtilityHandler {
         this.loadingEmbed = new MessageEmbed().setAuthor('Loading.. Please wait :)');
     }
 
+    deleteMessage(interaction, id) {
+        interaction.channel.messages.fetch(id).then((message) => message.delete());
+    }
+
     removeArrayIndex(array, indexID) {
         return array.filter((_, index) => index != indexID - 1);
     }
