@@ -60,7 +60,7 @@ class PlayNext extends RoxanneInteraction {
             await node.load(query).then(async (r) => {
                 if (r.loadType === 'LOAD_FAILED') {
                     await interaction.editReply({
-                        content: '<a:embed_loading:695358635110301726> Please wait while I grab songs from Spotify <a:embed_loading:695358635110301726>',
+                        content: 'Please wait while I grab songs from Spotify',
                         components: [],
                     });
                     reject('LOAD_FAILED');
