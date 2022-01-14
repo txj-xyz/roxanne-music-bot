@@ -1,4 +1,5 @@
 const RoxanneEvent = require('../abstract/RoxanneEvent.js');
+const { owners } = require('../../config.json');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageAttachment } = require('discord.js');
 const { getVideoMeta } = require('tiktok-scraper');
 class MessageCreate extends RoxanneEvent {
@@ -11,6 +12,7 @@ class MessageCreate extends RoxanneEvent {
     }
 
     async run(message) {
+        const [command, ...args] = message.content.split(' ');
         const helpEmbed = new MessageEmbed()
             .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
             .setTitle('• Help Menu')
@@ -44,8 +46,14 @@ class MessageCreate extends RoxanneEvent {
             return message.react('👀');
         } else if (message.content === `<@!${this.client.user.id}> good bot`) {
             return message.reply(':3');
+        } else if (message.author.id.includes(owners[0]) && command.startsWith('::nick')) {
+            try {
+                message.guild.me.setNickname(args.join(' ') || null);
+            } catch (error) {
+                return message.react('❎');
+            }
+            return message.react('✅');
         }
-
         if (message.content.startsWith('/')) {
             const findCommand = message.content.slice(1).split(' ')[0];
             if (this.client.interactions.commands.get(findCommand)) {
