@@ -1,7 +1,7 @@
 const { LavasfyClient } = require('lavasfy');
 const axios = require('axios');
 const { token, webhookUrl, inviteURL, youtube_key, spotifyClientID, spotifySecret } = require('../../config.json');
-const servers = require('../../lavasfy-servers.json');
+const servers = require('../../lavalink-server.json');
 const { MessageEmbed } = require('discord.js');
 class UtilityHandler {
     constructor(client) {

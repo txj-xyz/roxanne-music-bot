@@ -1,20 +1,32 @@
 [
     {
+        "id": "lavalink-server-1",
         "name": "lavalink-server-1",
-        "url": "lavalink-server.com",
+        "host": "lavalink-server.com",
+        "url": "lavalink-server.com:2335",
+        "port": 2335,
         "auth": "password",
-        "secure": true
+        "password": "password",
+        "secure": false
     },
     {
+        "id": "lavalink-server-2",
         "name": "lavalink-server-2",
-        "url": "lavalink-server.com",
+        "host": "lavalink-server.com",
+        "url": "lavalink-server.com:2335",
+        "port": 2335,
         "auth": "password",
-        "secure": true
+        "password": "password",
+        "secure": false
     },
     {
+        "id": "lavalink-server-3",
         "name": "lavalink-server-3",
-        "url": "lavalink-server.com",
+        "host": "lavalink-server.com",
+        "url": "lavalink-server.com:2335",
+        "port": 2335,
         "auth": "password",
-        "secure": true
+        "password": "password",
+        "secure": false
     }
 ]
