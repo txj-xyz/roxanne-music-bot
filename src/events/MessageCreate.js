@@ -1,5 +1,5 @@
 const RoxanneEvent = require('../abstract/RoxanneEvent.js');
-const { owners } = require('../../config.json');
+const { owners, tiktok } = require('../../config.json');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageAttachment } = require('discord.js');
 const { getVideoMeta } = require('tiktok-scraper');
 class MessageCreate extends RoxanneEvent {
@@ -9,6 +9,10 @@ class MessageCreate extends RoxanneEvent {
 
     get once() {
         return false;
+    }
+
+    get enabled() {
+        return true;
     }
 
     async run(message) {
@@ -64,8 +68,7 @@ class MessageCreate extends RoxanneEvent {
                 });
             }
         }
-
-        if (message.content.includes('tiktok.com') && !message.author.bot) {
+        if (tiktok && message.content.includes('tiktok.com') && !message.author.bot) {
             const tiktokLink = message.content.match(this.client.util.urlRegex)[0];
             try {
                 const videoMeta = await getVideoMeta(tiktokLink, {});

@@ -9,6 +9,10 @@ class Ratelimit extends RoxanneEvent {
         return false;
     }
 
+    get enabled() {
+        return true;
+    }
+
     async run(info) {
         this.client.logger.log(
             this.constructor.name,

@@ -14,13 +14,19 @@ class EventHandler {
         if (this.built) return this;
         const events = readdirSync(this.client.location + '/src/events');
         let index = 0;
+        let disabledIndex = 0;
         for (let event of events) {
             event = new (require(`../events/${event}`))(this.client);
-            const exec = event.exec.bind(event);
-            event.once ? this.client.once(event.name, event.exec.bind(event)) : this.client.on(event.name, exec);
-            index++;
+            if (event.enabled) {
+                const exec = event.exec.bind(event);
+                event.once ? this.client.once(event.name, event.exec.bind(event)) : this.client.on(event.name, exec);
+                index++;
+            } else if (!event.enabled) {
+                disabledIndex++;
+            }
         }
         this.client.logger.debug(this.constructor.name, `Loaded ${index} client event(s)`);
+        this.client.logger.debug(this.constructor.name, `${disabledIndex} disabled client event(s)`);
         this.built = true;
         return this;
     }
