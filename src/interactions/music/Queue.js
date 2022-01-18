@@ -77,7 +77,7 @@ class Queue extends RoxanneInteraction {
                 .setPages(pages)
                 .setListenUsers(interaction.user.id)
                 .setListenTimeout(60 * 1000)
-                .setListenEndMethod('remove_components')
+                .setListenEndMethod('delete')
                 .setDefaultButtons(pageButtonList)
                 .build();
         } else {
