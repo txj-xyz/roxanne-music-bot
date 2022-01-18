@@ -118,7 +118,13 @@ class Play extends RoxanneInteraction {
         }
 
         // Spotify Integration Tracks / Playlists
-        if (this.client.util.checkURL(query) && query.match(this.client.util.lava.spotifyPattern)) {
+        if (this.client.util.checkURL(query) && query.match(/^(?:https:\/\/open\.spotify\.com\/(?:user\/[A-Za-z0-9]+\/)?|spotify:)(album|playlist|track)(?:[/:])([A-Za-z0-9]+).*$/)) {
+            if (!this.client.util.lava)
+                return await interaction.editReply({
+                    content: 'Spotify is disabled at the moment.',
+                    components: [],
+                    embeds: [],
+                });
             let playlist;
             let fullResolvedList = [];
 
@@ -198,6 +204,12 @@ class Play extends RoxanneInteraction {
     async buttonSpotifyPlaylist(interaction, query) {
         const node = await this.client.shoukaku.getNode();
         // Spotify Integration Tracks / Playlists select menus
+        if (!this.client.util.lava)
+            return await interaction.editReply({
+                content: 'Spotify is disabled at the moment.',
+                components: [],
+                embeds: [],
+            });
         if (this.client.util.checkURL(query) && query.match(this.client.util.lava.spotifyPattern)) {
             let playlist;
             let fullResolvedList = [];
