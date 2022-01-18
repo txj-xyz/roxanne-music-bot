@@ -3,11 +3,11 @@ class PrometheusCollector extends APM {
     constructor(client) {
         super({
             METRICS_ROUTE: '/metrics',
-            PORT: this.client.util.config.prometheusPort,
+            PORT: client.util.config.prometheusPort,
         });
+        this.roxanne = client;
         this.init();
         this.prom = this;
-        this.roxanne = client;
         client.logger.debug(this.constructor.name, 'Loaded OK');
     }
 
