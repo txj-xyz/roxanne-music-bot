@@ -18,21 +18,21 @@ class Stop extends RoxanneInteraction {
     async run({ interaction, dispatcher }) {
         const botVoice = await interaction.guild.voiceStates.cache.get(this.client.user.id)?.channelId;
         // Catch not same channel as curently playing
-        if (botVoice && this.client.util.config.foreverMove && botVoice !== interaction.member.voice.channelId) {
+        if (botVoice && this.client.util.config.foreverMode && botVoice !== interaction.member.voice.channelId) {
             return interaction.reply({
                 content: "You are not in the same voice channel I'm currently connected to!",
                 ephemeral: true,
             });
         }
         // Manually handle the dispatcher checking here
-        if (!dispatcher && this.client.queue.has(interaction.guild.id) && this.client.util.config.foreverMove) {
+        if (!dispatcher && this.client.queue.has(interaction.guild.id) && this.client.util.config.foreverMode) {
             await interaction.deferReply();
             const dispatcherManual = this.client.queue.get(interaction.guild.id);
             try {
                 dispatcherManual.queue.length = 0;
                 dispatcherManual.repeat = 'off';
                 dispatcherManual.stopped = true;
-                if (this.client.util.config.foreverMove) {
+                if (this.client.util.config.foreverMode) {
                     dispatcherManual.player.stopTrack();
                     dispatcherManual.player.connection.disconnect();
                     this.client.queue.delete(interaction.guild.id);
@@ -52,7 +52,7 @@ class Stop extends RoxanneInteraction {
             }
         }
         // Catch if the bot is still in a voice channel
-        if (!dispatcher && !this.client.queue.has(interaction.guild.id) && this.client.util.config.foreverMove) {
+        if (!dispatcher && !this.client.queue.has(interaction.guild.id) && this.client.util.config.foreverMode) {
             if ((await interaction.guild.voiceStates.cache.get(this.client.user.id)?.channelId) ? true : false) {
                 try {
                     await interaction.guild.voiceStates.cache.get(this.client.user.id).disconnect();
