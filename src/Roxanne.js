@@ -33,6 +33,7 @@ class Roxanne extends Client {
         super(options);
 
         this.color = 0x7e686c;
+        this.util = new UtilityHandler(this);
         this.quitting = false;
         this.location = process.cwd();
 
@@ -42,7 +43,6 @@ class Roxanne extends Client {
         this.commandsRun = 0;
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
-        this.util = new UtilityHandler(this);
         ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event) => process.once(event, this.exit.bind(this)));
     }
 
