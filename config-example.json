@@ -9,5 +9,6 @@
     "ipcSocket": 9999,
     "prometheusPort": 45000,
     "foreverMode": true,
-    "tiktok": false
+    "tiktokMessageEvent": false,
+    "helpMessageEvent": false
 }
