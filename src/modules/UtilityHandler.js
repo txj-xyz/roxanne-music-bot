@@ -1,18 +1,19 @@
 const { LavasfyClient } = require('lavasfy');
 const axios = require('axios');
-const { inviteURL, youtube_key, spotifyClientID, spotifySecret } = require('../../config.json');
+const config = require('../../config.json');
 const servers = require('../../lavalink-server.json');
 const { MessageEmbed } = require('discord.js');
 class UtilityHandler {
     constructor(client) {
         this.client = client;
-        this.invite = inviteURL;
+        this.config = config;
+        this.invite = this.config.inviteURL;
         this.supportServer = 'https://discord.gg/GJanE63MGj';
         this.grafana = 'https://grafana.txj-dev.xyz/d/roxanne-is-a-cutie';
         this.humanizeTime = this.humanizeTime;
         this.convertMS = this.convertMS;
         this.ytMeta = this.ytMeta;
-        this.lavaConnect(spotifyClientID, spotifySecret, servers);
+        this.lavaConnect(this.config.spotifyClientID, this.config.spotifySecret, servers);
         // prettier-ignore
         this.urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
         this.loadingEmbed = new MessageEmbed().setAuthor('Loading.. Please wait :)');
@@ -106,12 +107,12 @@ class UtilityHandler {
         try {
             const videoStats = await axios({
                 method: 'get',
-                url: `https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${id}&key=${youtube_key}`,
+                url: `https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${id}&key=${this.config.youtube_key}`,
                 responseType: 'json',
             });
             return videoStats.data.items.slice(0).some((e) => e) ? videoStats.data.items.slice(0)[0] : null;
         } catch (err) {
-            return err;
+            return null;
         }
     }
 }

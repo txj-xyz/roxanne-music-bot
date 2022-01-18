@@ -1,6 +1,4 @@
-const { ShoukakuPlayer } = require('shoukaku');
 const RoxanneDispatcher = require('./RoxanneDispatcher.js');
-const { foreverMode } = require('../../config.json');
 let player = null;
 let dispatcher = null;
 class Queue extends Map {
@@ -14,7 +12,7 @@ class Queue extends Map {
         if (!existing) {
             //24/7 mode checker
             const botVoice = guild.voiceStates.cache.get(this.client.user.id);
-            if (botVoice?.channelId && foreverMode) {
+            if (botVoice?.channelId && this.client.util.config.foreverMode) {
                 try {
                     const userVoice = await guild.voiceStates.cache.get(member.user.id);
                     if (botVoice?.channelId !== member.voice.channelId) {

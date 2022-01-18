@@ -1,6 +1,5 @@
 const RoxanneEvent = require('../abstract/RoxanneEvent.js');
 const PrometheusCollector = require('../modules/PrometheusCollector.js');
-const { promethusEnabled } = require('../../config.json');
 class Ready extends RoxanneEvent {
     get name() {
         return 'ready';
@@ -18,7 +17,7 @@ class Ready extends RoxanneEvent {
         this.client.logger.debug(`${this.client.user.username}`, `Ready! Serving ${this.client.guilds.cache.size} guild(s) with ${this.client.users.cache.size} user(s)`);
 
         // When client is ready, start gathering Prom stats
-        if (promethusEnabled) new PrometheusCollector(this.client).start();
+        if (this.client.util.config.promethusEnabled) new PrometheusCollector(this.client).start();
 
         if (!this.interval) {
             await this.client.user.setActivity("What's the worst that could happen?!");

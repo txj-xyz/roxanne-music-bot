@@ -1,6 +1,5 @@
 const { MessageEmbed } = require('discord.js');
 const Wait = require('util').promisify(setTimeout);
-const { foreverMode } = require('../../config.json');
 
 class RoxanneDispatcher {
     constructor({ client, guild, channel, player }) {
@@ -65,7 +64,7 @@ class RoxanneDispatcher {
 
     destroy(reason) {
         this.queue.length = 0;
-        foreverMode ? null : this.player.connection.disconnect();
+        this.client.util.config.foreverMode ? null : this.player.connection.disconnect();
         this.client.queue.delete(this.guild.id);
         this.client.logger.debug(this.player.constructor.name, `Destroyed the player & connection @ guild "${this.guild.id}"\nReason: ${reason || 'No Reason Provided'}`);
         if (this.stopped) return;

@@ -1,5 +1,4 @@
 const RoxanneEvent = require('../abstract/RoxanneEvent.js');
-const { owners, tiktokMessageEvent, helpMessageEvent } = require('../../config.json');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageAttachment } = require('discord.js');
 const { getVideoMeta } = require('tiktok-scraper');
 class MessageCreate extends RoxanneEvent {
@@ -55,7 +54,7 @@ class MessageCreate extends RoxanneEvent {
             default:
                 break;
         }
-        if (message.author.id.includes(owners[0]) && message.content.startsWith(`<@!${this.client.user.id}> nick`)) {
+        if (message.author.id.includes(this.client.util.config.owners[0]) && message.content.startsWith(`<@!${this.client.user.id}> nick`)) {
             try {
                 message.guild.me.setNickname(args.slice(1).join(' ') || null);
             } catch (error) {
@@ -63,7 +62,7 @@ class MessageCreate extends RoxanneEvent {
             }
             return message.react('✅');
         }
-        if (helpMessageEvent && message.content.startsWith('/')) {
+        if (this.client.util.config.helpMessageEvent && message.content.startsWith('/')) {
             const findCommand = message.content.slice(1).split(' ')[0];
             if (this.client.interactions.commands.get(findCommand)) {
                 await message.reply({
@@ -73,7 +72,7 @@ class MessageCreate extends RoxanneEvent {
                 });
             }
         }
-        if (tiktokMessageEvent && message.content.includes('tiktok.com') && !message.author.bot) {
+        if (this.client.util.config.tiktokMessageEvent && message.content.includes('tiktok.com') && !message.author.bot) {
             const tiktokLink = message.content.match(this.client.util.urlRegex)[0];
             try {
                 const videoMeta = await getVideoMeta(tiktokLink, {});
