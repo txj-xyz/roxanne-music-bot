@@ -91,9 +91,9 @@ class Search extends RoxanneInteraction {
                 url: track.info.uri,
                 length: track.info.length,
                 identifier: track.info.identifier,
-                view_count: _meta.statistics.viewCount?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') || null,
-                likes_count: _meta.statistics.likeCount?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') || null,
-                upload_date: Search.convertZDate(_meta.snippet.publishedAt) || null,
+                view_count: _meta?.statistics.viewCount?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') || 'N/A',
+                likes_count: _meta?.statistics.likeCount?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') || 'N/A',
+                upload_date: Search.convertZDate(_meta?.snippet.publishedAt) || 'N/A',
             });
         }
         const _chunkSearch = Search.chunkify(mappedSearch, 1);

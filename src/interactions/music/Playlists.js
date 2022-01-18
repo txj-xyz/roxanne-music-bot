@@ -38,6 +38,13 @@ class PlaylistMenu extends RoxanneInteraction {
             link: 'https://www.youtube.com/watch?v=RKSr5ovamds&list=PL9BCA60EEB1C8893D',
         },
         {
+            label: 'Relaxful',
+            description: 'The ultimate chill playlist from Duelist Cap.',
+            value: 'duelist_cap_playlist',
+            type: 'buttonYoutubePlaylist',
+            link: 'https://www.youtube.com/playlist?list=PLmy5a-gcq3BaiEi-Y_ypeou8NSlHQWm64',
+        },
+        {
             label: 'Rocking out w/ Alda',
             description: 'The perfect playlist for rockers alike.',
             value: 'alda_playlist',
@@ -64,7 +71,7 @@ class PlaylistMenu extends RoxanneInteraction {
         const pageBuild = new PagesBuilder(interaction)
             .setColor(this.client.color)
             .setListenUsers(interaction.user.id)
-            .setListenTimeout(10000)
+            .setListenTimeout(5 * 1000)
             .setListenEndMethod('components_remove')
             .setDefaultButtons([])
             .setPaginationFormat('')
@@ -75,7 +82,7 @@ class PlaylistMenu extends RoxanneInteraction {
                     name: 'custom',
                     async callback(menu) {
                         const selection = PlaylistMenu.menuOptions.filter((_label) => _label.value === menu.values[0])?.[0];
-                        await interaction.editReply({ content: null, embeds: [client.util.loadingEmbed] });
+                        await interaction.editReply({ content: null, embeds: [client.util.loadingEmbed], components: [] });
                         await play(interaction, selection.type, selection.link);
                         pageBuild.stopListen();
                     },

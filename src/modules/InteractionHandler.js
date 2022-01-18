@@ -2,7 +2,6 @@ const { readdirSync } = require('fs');
 const { MessageEmbed } = require('discord.js');
 const { Collection } = require('@discordjs/collection');
 const EventEmitter = require('events');
-const config = require('../../config.json');
 
 class InteractionHandler extends EventEmitter {
     constructor(client) {
@@ -15,7 +14,7 @@ class InteractionHandler extends EventEmitter {
     }
 
     static checkPermission(permissions, interaction) {
-        if (permissions.includes('OWNER')) return config.owners.includes(interaction.user.id);
+        if (permissions.includes('OWNER')) return this.client.util.config.owners.includes(interaction.user.id);
         else return interaction.channel.permissionsFor(interaction.member).has(permissions);
     }
 
@@ -107,7 +106,7 @@ class InteractionHandler extends EventEmitter {
                     });
 
                 // Manual checking for stop command acting as a `/leave` command override
-                if (interaction.commandName === 'stop' && config.foreverMode) {
+                if (interaction.commandName === 'stop' && this.client.util.config.foreverMode) {
                     // const botVoice = (await interaction.guild.voiceStates.cache.get(this.client.user.id)) || null;
                     this.client.logger.log(this.constructor.name, `Executing ${command.type ? 'context' : 'command'} ${command.name} (@${command.uid})`);
                     await command.run({ interaction });

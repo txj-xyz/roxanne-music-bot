@@ -7,6 +7,9 @@
     "spotifySecret": "String",
     "youtube_key": "API v3 KEY",
     "ipcSocket": 9999,
+    "prometheusEnabled": false,
     "prometheusPort": 45000,
-    "foreverMode": true
+    "foreverMode": true,
+    "tiktokMessageEvent": false,
+    "helpMessageEvent": false
 }

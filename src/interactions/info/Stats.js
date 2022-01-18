@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 
 class Stats extends RoxanneInteraction {
@@ -60,7 +60,8 @@ Music Nodes :: ${dbQuery.servers}
             )
             .setTimestamp()
             .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
-        await interaction.editReply({ embeds: [embed] });
+        const dashboardButton = new MessageActionRow().addComponents([new MessageButton().setStyle('LINK').setURL(this.client.util.grafana).setLabel('Web Dashboard')]);
+        await interaction.editReply({ embeds: [embed], components: [dashboardButton] });
     }
 }
 module.exports = Stats;

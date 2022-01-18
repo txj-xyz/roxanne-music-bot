@@ -10,7 +10,12 @@ class MessageCreate extends RoxanneEvent {
         return false;
     }
 
+    get enabled() {
+        return true;
+    }
+
     async run(message) {
+        const [command, ...args] = message.content.split(' ');
         const helpEmbed = new MessageEmbed()
             .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
             .setTitle('• Help Menu')
@@ -36,16 +41,28 @@ class MessageCreate extends RoxanneEvent {
 
         const supportButton = new MessageActionRow().addComponents(
             [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(this.client.util.supportServer).setLabel('Support Server')],
-            [new MessageButton().setEmoji('🎵').setStyle('LINK').setURL('https://statuspage.freshping.io/58439-RoxanneMusicBot').setLabel('Music Status Page')],
+            [new MessageButton().setEmoji('🎵').setStyle('LINK').setURL(this.client.util.grafana).setLabel('Status Page')],
             [new MessageButton().setStyle('LINK').setURL(this.client.util.invite).setLabel('Invite me!')]
         );
-        // if (!['918662128632733696', '714232432672505928', '556316704838385665'].includes(message.guild.id)) return;
-
-        if (message.content === `<@!${this.client.user.id}> good bot`) {
-            return message.reply(':3');
+        switch (message.content) {
+            case `<@!${this.client.user.id}>`:
+                message.react('👀');
+                break;
+            case `<@!${this.client.user.id}> good bot`:
+                message.reply(':3');
+                break;
+            default:
+                break;
         }
-
-        if (message.content.startsWith('/')) {
+        if (message.author.id.includes(this.client.util.config.owners[0]) && message.content.startsWith(`<@!${this.client.user.id}> nick`)) {
+            try {
+                message.guild.me.setNickname(args.slice(1).join(' ') || null);
+            } catch (error) {
+                return message.react('❎');
+            }
+            return message.react('✅');
+        }
+        if (this.client.util.config.helpMessageEvent && message.content.startsWith('/')) {
             const findCommand = message.content.slice(1).split(' ')[0];
             if (this.client.interactions.commands.get(findCommand)) {
                 await message.reply({
@@ -55,8 +72,7 @@ class MessageCreate extends RoxanneEvent {
                 });
             }
         }
-
-        if (message.content.includes('tiktok.com') && !message.author.bot) {
+        if (this.client.util.config.tiktokMessageEvent && message.content.includes('tiktok.com') && !message.author.bot) {
             const tiktokLink = message.content.match(this.client.util.urlRegex)[0];
             try {
                 const videoMeta = await getVideoMeta(tiktokLink, {});

@@ -1,9 +1,9 @@
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const Wait = require('util').promisify(setTimeout);
 
-class Stop extends RoxanneInteraction {
+class Leave extends RoxanneInteraction {
     get name() {
-        return 'stop';
+        return 'leave';
     }
 
     get description() {
@@ -83,8 +83,8 @@ class Stop extends RoxanneInteraction {
             dispatcher.player.connection.disconnect();
             dispatcher.player.stopTrack();
             Wait(500);
-            await interaction.editReply('I stopped and destroyed the player in this guild!');
+            await interaction.editReply('I stopped the player and left the voice chat!');
         }
     }
 }
-module.exports = Stop;
+module.exports = Leave;
