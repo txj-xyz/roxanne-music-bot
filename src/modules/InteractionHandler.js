@@ -13,8 +13,8 @@ class InteractionHandler extends EventEmitter {
         this.client.on('interactionCreate', (interaction) => this.exec(interaction));
     }
 
-    static checkPermission(permissions, interaction) {
-        if (permissions.includes('OWNER')) return this.client.util.config.owners.includes(interaction.user.id);
+    static checkPermission(permissions, interaction, client) {
+        if (permissions.includes('OWNER')) return client.util.config.owners.includes(interaction.user.id);
         else return interaction.channel.permissionsFor(interaction.member).has(permissions);
     }
 
@@ -93,7 +93,7 @@ class InteractionHandler extends EventEmitter {
                 const dispatcher = this.client.queue.get(interaction.guildId);
 
                 if (!command) return;
-                if (command.permissions && !InteractionHandler.checkPermission(command.permissions, interaction))
+                if (command.permissions && !InteractionHandler.checkPermission(command.permissions, interaction, this.client))
                     return interaction.reply({
                         content: "You don't have the required permissions to use this command!",
                         ephemeral: true,
