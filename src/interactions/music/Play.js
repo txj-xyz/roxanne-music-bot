@@ -118,7 +118,7 @@ class Play extends RoxanneInteraction {
         }
 
         // Spotify Integration Tracks / Playlists
-        if (this.client.util.checkURL(query) && query.match(/^(?:https:\/\/open\.spotify\.com\/(?:user\/[A-Za-z0-9]+\/)?|spotify:)(album|playlist|track)(?:[/:])([A-Za-z0-9]+).*$/)) {
+        if (this.client.util.checkURL(query) && query.match(this.client.util.spotifyRegex)) {
             if (!this.client.util.lava)
                 return await interaction.editReply({
                     content: 'Spotify is disabled at the moment.',
@@ -139,6 +139,16 @@ class Play extends RoxanneInteraction {
                 return await interaction.editReply('Sorry human, I was not able to load the playlist after 10 tries.');
             }
 
+            // switch (playlist.loadType) {
+            //     case 'NO_MATCHES':
+            //         await interaction.editReply(`Sorry human, I was not able to find anything from your search.\n\`Message: ${playlist.exception.message}\``);
+            //         break;
+            //     case 'TRACK_LOADED':
+            //         await interaction.editReply(`There was an error finding the song information, please try again.`);
+            //         break;
+            //     default:
+            //         break;
+            // }
             if (playlist.loadType === 'NO_MATCHES') {
                 return await interaction.editReply(`Sorry human, I was not able to find anything from your search.\n\`Message: ${playlist.exception.message}\``);
             }
