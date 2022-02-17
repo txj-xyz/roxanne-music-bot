@@ -75,7 +75,7 @@ class Search extends RoxanneInteraction {
 
         const node = await this.client.shoukaku.getNode();
         // await interaction.editReply('Searching my music servers for results..');
-        const search = await node.rest.resolve(query, 'youtube');
+        const search = await node.rest.resolve(query);
 
         if (!search?.tracks.length) return interaction.editReply("I didn't find any search results on the query you provided!");
 
@@ -135,7 +135,7 @@ class Search extends RoxanneInteraction {
             .setColor(c.color)
             .setPages(pages)
             .setListenUsers(interaction.user.id)
-            .setListenTimeout(30000)
+            .setListenTimeout(60000)
             .setListenEndMethod('edit')
             .setDefaultButtons(searchPageButtonList)
             .addComponents([new MessageButton().setCustomId('custom').setEmoji('✅').setLabel('Confirm').setStyle('SUCCESS')])
