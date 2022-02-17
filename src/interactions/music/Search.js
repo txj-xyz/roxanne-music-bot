@@ -75,7 +75,7 @@ class Search extends RoxanneInteraction {
 
         const node = await this.client.shoukaku.getNode();
         // await interaction.editReply('Searching my music servers for results..');
-        const search = await node.rest.resolve(query);
+        const search = await node.rest.resolve(query, 'youtube');
 
         if (!search?.tracks.length) return interaction.editReply("I didn't find any search results on the query you provided!");
 
