@@ -3,8 +3,6 @@ const { ShoukakuTrack } = require('shoukaku');
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const retry = require('async-await-retry');
 
-// Apple only
-// const { autoGetApple } = require('apple-music-metadata');
 class Play extends RoxanneInteraction {
     get name() {
         return 'play';
