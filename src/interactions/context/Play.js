@@ -65,7 +65,7 @@ class PlayContext extends RoxanneContext {
                             await interaction.deferReply({
                                 ephemeral: false,
                             });
-                            this.client.interactions.commands.get('play').buttonSpotifyPlaylist(interaction, linkFound);
+                            this.client.interactions.commands.get('play').buttonYoutubePlaylist(interaction, linkFound);
                             break;
                         }
                         case 1: {
