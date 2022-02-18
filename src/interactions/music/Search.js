@@ -135,7 +135,7 @@ class Search extends RoxanneInteraction {
             .setColor(c.color)
             .setPages(pages)
             .setListenUsers(interaction.user.id)
-            .setListenTimeout(30000)
+            .setListenTimeout(60000)
             .setListenEndMethod('edit')
             .setDefaultButtons(searchPageButtonList)
             .addComponents([new MessageButton().setCustomId('custom').setEmoji('✅').setLabel('Confirm').setStyle('SUCCESS')])
