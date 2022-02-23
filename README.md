@@ -1,27 +1,30 @@
 # ✨ Roxanne Music Bot ✨
 
-## ⚠️ Installation 
+## ⚠️ Installation
 
 Install dependencies
+
 ```
-# npm install
+# npm install && rm -Rf node_modules/canvas
 ```
 
-Register and Update Slash commands
+Register and Update Slash commands.
+
+> e.x: `slash-reloader-config-example.json`
+
 ```
 # npm run slash
 ```
 
 Run the bot instance
+
 ```
 # npm run start
 ```
 
+## 🚧 Prerequisites
 
-## 🚧 Prerequisites 
+-   [Node.js 17+](https://nodejs.org/en/download/)
+-   [Lavalink Server (dev branch only)](https://github.com/freyacodes/Lavalink#server-configuration)
 
-- [Node.js 17+](https://nodejs.org/en/download/)
-- [discord.js@13.0.1^](https://www.npmjs.com/package/discord.js/v/13)
-- [Lavalink Server](https://github.com/freyacodes/Lavalink#server-configuration)
-
-> NOTE: Lavalink is needed for music functionality. You need to have a working Lavalink server to make the bot work. You can run this on Repl.it if you need to do so as well.
+> NOTE: Lavalink (dev branch) is needed for music functionality. You need to have a working Lavalink server to make the bot work.
