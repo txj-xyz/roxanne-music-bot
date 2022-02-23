@@ -28,6 +28,7 @@
         "prometheus-middleware": "^1.0.0",
         "shoukaku": "^2.1.0",
         "tiktok-scraper": "https://github.com/Pterko/tiktok-scraper.git",
+        "unshorten.it": "^1.0.0",
         "utf-8-validate": "^5.0.5",
         "uuid": "^8.3.2"
     },
