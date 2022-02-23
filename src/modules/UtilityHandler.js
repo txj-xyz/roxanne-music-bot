@@ -1,5 +1,6 @@
 const { LavasfyClient } = require('lavasfy');
 const axios = require('axios');
+const unshortener = require('unshorten.it');
 const config = require('../../config.json');
 const servers = require('../../lavalink-server.json');
 const { MessageEmbed } = require('discord.js');
@@ -63,6 +64,14 @@ class UtilityHandler {
             : Math.abs(Number(number)) >= 1.0e3
             ? (Math.abs(Number(number)) / 1.0e3).toFixed(1) + 'K'
             : Math.abs(Number(number));
+    }
+    async unshortenLink(link) {
+        try {
+            const resolved = await unshortener(link);
+            return String(resolved);
+        } catch (error) {
+            return error;
+        }
     }
 
     async lavaConnect(clientID, clientSecret, servers) {

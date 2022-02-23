@@ -1,7 +1,6 @@
 const RoxanneEvent = require('../abstract/RoxanneEvent.js');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageAttachment } = require('discord.js');
 const { getVideoMeta } = require('tiktok-scraper');
-const unshortener = require('unshorten.it');
 
 class MessageCreate extends RoxanneEvent {
     get name() {
@@ -77,18 +76,17 @@ class MessageCreate extends RoxanneEvent {
         if (this.client.util.config.tiktokMessageEvent && message.content.includes('tiktok.com') && !message.author.bot) {
             const tiktokLink = message.content.match(this.client.util.urlRegex)[0];
             try {
-                unshortener(tiktokLink).then(async (long_url) => {
-                    const videoMeta = await getVideoMeta(long_url, {});
-                    const videoMetaEmbed = new MessageEmbed()
-                        .setColor(this.client.color)
-                        .setURL(long_url)
-                        .setTitle(`"${videoMeta.collector[0]?.text}"`, null, long_url)
-                        .addField('**Likes**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.diggCount)), true)
-                        .addField('**Views**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.playCount)), true)
-                        .addField('**Comments**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.commentCount)), true)
-                        .setFooter(`Uploaded: ${new Date(videoMeta.collector[0]?.createTime * 1000).toLocaleString()}`);
-                    await message.reply({ embeds: [videoMetaEmbed], files: [new MessageAttachment(videoMeta.collector[0]?.videoUrl, `tiktok.mp4`)] });
-                });
+                const resolvedLink = await this.client.util.unshortenLink(tiktokLink);
+                const videoMeta = await getVideoMeta(resolvedLink, {});
+                const videoMetaEmbed = new MessageEmbed()
+                    .setColor(this.client.color)
+                    .setURL(resolvedLink)
+                    .setTitle(`"${videoMeta.collector[0]?.text}"`, null, resolvedLink)
+                    .addField('**Likes**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.diggCount)), true)
+                    .addField('**Views**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.playCount)), true)
+                    .addField('**Comments**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.commentCount)), true)
+                    .setFooter(`Uploaded: ${new Date(videoMeta.collector[0]?.createTime * 1000).toLocaleString()}`);
+                await message.reply({ embeds: [videoMetaEmbed], files: [new MessageAttachment(videoMeta.collector[0]?.videoUrl, `tiktok.mp4`)] });
             } catch (error) {
                 this.client.logger.error(error);
             }
