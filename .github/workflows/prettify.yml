@@ -1,49 +1,24 @@
 name: Prettify Code
 
 on:
-    push:
-        branches: [master]
-    pull_request:
-        branches: [master]
+  pull_request:
+  push:
+    branches:
+    - master
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
+  prettier:
+    runs-on: ubuntu-latest
 
-            - name: ✨ Prettify the files
-              run: npx prettier --write .
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.head_ref }}
 
-            - name: 📝 Declaring variables
-              id: vars
-              shell: bash
-              run: |
-                  echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-            - name: 🔍 Check for any changes
-              run: |
-                  STATUS_ARGS=$1
-                  PATHSPEC=$2
-                  function check() {
-                    if [[ -z "$(git status --porcelain $STATUS_ARGS $PATHSPEC)" ]];
-                    then
-                      echo "0"
-                    else
-                      echo "1"
-                    fi
-                  }
-                  echo ::set-output name=changed::$(check)
-
-            - name: 🚀 Publish to github
-              run: |
-                  if [ ${{ steps.vars.outputs.changed }} = "1" ];
-                  then
-                    git add .
-                    git config --local user.email "jfinelli3@gmail.com"
-                    git config --local user.name "GitHub Actions"
-                    git commit -m "style(${{ steps.vars.outputs.sha_short }}): Prettified the codes"
-                    git push
-                  else
-                    echo "Nothing to prettify"
-                  fi
+    - name: Prettify code
+      uses: creyD/prettier_action@v3.1
+      with:
+        prettier_options: --write **/*.{js,md}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
