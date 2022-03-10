@@ -16,12 +16,17 @@ class Ready extends RoxanneEvent {
     async run() {
         this.client.logger.debug(`${this.client.user.username}`, `Ready! Serving ${this.client.guilds.cache.size} guild(s) with ${this.client.users.cache.size} user(s)`);
 
-        // When client is ready, start gathering Prom stats
         if (this.client.util.config.prometheusEnabled) new PrometheusCollector(this.client).start();
 
         if (!this.interval) {
             await this.client.user.setActivity("What's the worst that could happen?!");
-            const statuses = ['If you see this, dont look down. :)', 'Always got to make time for tea-time!', 'Burning... Love!', 'Going crazy, too much to do, too little time.'];
+            //prettier-ignore
+            const statuses = [
+                'If you see this, dont look down. :)',
+                'Always got to make time for tea-time!',
+                'Burning... Love!',
+                'Going crazy, too much to do, too little time.'
+            ];
             this.interval = setInterval(() => {
                 const current = statuses.shift();
                 this.client.user.setActivity(current);

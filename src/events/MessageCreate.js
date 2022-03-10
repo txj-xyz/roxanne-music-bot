@@ -45,16 +45,7 @@ class MessageCreate extends RoxanneEvent {
             [new MessageButton().setEmoji('🎵').setStyle('LINK').setURL(this.client.util.grafana).setLabel('Status Page')],
             [new MessageButton().setStyle('LINK').setURL(this.client.util.invite).setLabel('Invite me!')]
         );
-        switch (message.content) {
-            case `<@!${this.client.user.id}>`:
-                message.react('👀');
-                break;
-            case `<@!${this.client.user.id}> good bot`:
-                message.reply(':3');
-                break;
-            default:
-                break;
-        }
+
         if (message.author.id.includes(this.client.util.config.owners[0]) && message.content.startsWith(`<@!${this.client.user.id}> nick`)) {
             try {
                 message.guild.me.setNickname(args.slice(1).join(' ') || null);

@@ -26,6 +26,7 @@ class Search extends RoxanneInteraction {
     static pageLimit = 10;
 
     static chunkify(arr, len) {
+        //literally stolen from lodash
         let chunks = [];
         let i = 0;
         let n = arr.length;
@@ -49,39 +50,28 @@ class Search extends RoxanneInteraction {
 
     async run({ interaction }) {
         const mappedSearch = [];
-
         const searchPageButtonList = [
             {
                 stop: new MessageButton().setEmoji('❌').setLabel('Cancel').setStyle('DANGER'),
             },
             {
-                back: new MessageButton()
-                    .setEmoji('⬅️')
-                    // .setLabel('Previous Result')
-                    .setStyle('SECONDARY'),
+                back: new MessageButton().setEmoji('⬅️').setStyle('SECONDARY'),
             },
             {
-                next: new MessageButton()
-                    .setEmoji('➡️')
-                    // .setLabel('Next Result')
-                    .setStyle('SECONDARY'),
+                next: new MessageButton().setEmoji('➡️').setStyle('SECONDARY'),
             },
         ];
-
-        // Reply before processing any other messages and check for link
         await interaction.deferReply();
         const query = interaction.options.getString('query', true);
+        //TODO: redo interaction handling so we can generally reject certain scenarios.
         if (query.includes('https://')) return await interaction.editReply('I can only search for words, try searching a term instead.');
 
         const node = await this.client.shoukaku.getNode();
-        // await interaction.editReply('Searching my music servers for results..');
         const search = await node.rest.resolve(query, 'youtube');
-
         if (!search?.tracks.length) return interaction.editReply("I didn't find any search results on the query you provided!");
-
         const _search = search.tracks.slice(0, Search.pageLimit ? Search.pageLimit : search.tracks.length);
 
-        // await interaction.editReply('Querying for the video information....')
+        await interaction.editReply('Querying for the video information....');
         for await (const track of _search) {
             const _meta = await this.client.util.ytMeta(track.info.identifier);
             mappedSearch.push({

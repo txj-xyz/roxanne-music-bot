@@ -44,35 +44,6 @@ class PlayNext extends RoxanneInteraction {
         return { voice: true, dispatcher: false, channel: false };
     }
 
-    static checkURL(string) {
-        try {
-            new URL(string);
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
-
-    static async spotifyRetry(lavasfyClient, query, interaction) {
-        // eslint-disable-next-line no-async-promise-executor
-        return new Promise(async (resolve, reject) => {
-            const node = await lavasfyClient.getNode();
-            await node.load(query).then(async (r) => {
-                if (r.loadType === 'LOAD_FAILED') {
-                    await interaction.editReply({
-                        content: 'Please wait while I grab songs from Spotify',
-                        components: [],
-                    });
-                    reject('LOAD_FAILED');
-                } else if (r.loadType.includes('LOADED')) {
-                    resolve(r);
-                } else if (r.loadType === 'NO_MATCHES') {
-                    resolve(r);
-                }
-            });
-        });
-    }
-
     async run({ interaction, dispatcher }) {
         await interaction.deferReply();
         if (!interaction.options.data.length) {
