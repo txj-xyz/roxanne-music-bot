@@ -13,5 +13,13 @@
     "prometheusPort": 45000,
     "foreverMode": true,
     "tiktokMessageEvent": false,
-    "helpMessageEvent": false
+    "helpMessageEvent": false,
+    "shoukakuOptions": {
+        "moveOnDisconnect": true,
+        "resumable": "resumableRoxanne",
+        "resumableTimeout": 45,
+        "reconnectInterval": 2000,
+        "reconnectTries": 5,
+        "restTimeout": 10000
+    }
 }
