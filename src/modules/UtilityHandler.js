@@ -14,13 +14,14 @@ class UtilityHandler {
         this.humanizeTime = this.humanizeTime;
         this.convertMS = this.convertMS;
         this.ytMeta = this.ytMeta;
+        this.deleteMessage = this.deleteMessage;
         // prettier-ignore
         this.urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
         this.loadingEmbed = new MessageEmbed().setAuthor('Loading.. Please wait :)');
     }
 
     deleteMessage(interaction, id) {
-        interaction.channel.messages.fetch(id).then((message) => message.delete());
+        return interaction.channel.messages.fetch(id).then((message) => message.delete());
     }
 
     rollRandomInt16(number) {
