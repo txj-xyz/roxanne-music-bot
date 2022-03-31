@@ -10,7 +10,7 @@ class UtilityHandler {
         this.config = config;
         this.invite = this.config.inviteURL;
         this.supportServer = this.config.supportServer;
-        this.grafana = this.config.grafanaLink;
+        this.grafana = this.config.grafana;
         this.humanizeTime = this.humanizeTime;
         this.convertMS = this.convertMS;
         this.ytMeta = this.ytMeta;
