@@ -3,6 +3,8 @@
     "token": "token_string",
     "webhookUrl": "https://discord.com/api/webhooks/id/token",
     "inviteURL": "https://discord.com/oauth2/authorize?client_id=CLIENTID&permissions=PERMISSIONS_BITFIELD&scope=applications.commands%20bot",
+    "supportServer": "https://discord.gg/rebootpvm",
+    "grafanaLink": "https://grafana.txj-dev.xyz/d/roxanne-is-a-cutie",
     "spotifyClientID": "String",
     "spotifySecret": "String",
     "youtube_key": "API v3 KEY",

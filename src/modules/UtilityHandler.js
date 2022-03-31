@@ -9,8 +9,8 @@ class UtilityHandler {
         this.client = client;
         this.config = config;
         this.invite = this.config.inviteURL;
-        this.supportServer = 'https://discord.gg/GJanE63MGj';
-        this.grafana = 'https://grafana.txj-dev.xyz/d/roxanne-is-a-cutie';
+        this.supportServer = this.config.supportServer;
+        this.grafana = this.config.grafanaLink;
         this.humanizeTime = this.humanizeTime;
         this.convertMS = this.convertMS;
         this.ytMeta = this.ytMeta;
