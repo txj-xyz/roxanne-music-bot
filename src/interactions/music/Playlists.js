@@ -24,14 +24,14 @@ class PlaylistMenu extends RoxanneInteraction {
             link: 'https://open.spotify.com/playlist/4YLTXRl623J8WXYyZse3rk',
         },
         {
-            label: "Deep House 2022 Mix",
+            label: 'Deep House 2022 Mix',
             description: 'Provided by Phatkez.',
             value: 'deep_house_playlist',
             type: 'buttonYoutubePlaylist',
             link: 'https://open.spotify.com/playlist/6vDGVr652ztNWKZuHvsFvx',
         },
         {
-            label: "Weeb PVM Mix",
+            label: 'Weeb PVM Mix',
             description: 'Provided by Phatkez.',
             value: 'weeb_mix_playlist',
             type: 'buttonYoutubePlaylist',
@@ -43,7 +43,7 @@ class PlaylistMenu extends RoxanneInteraction {
             value: 'dnb_playlist',
             type: 'buttonYoutubePlaylist',
             link: 'https://www.youtube.com/watch?v=RKSr5ovamds&list=PL9BCA60EEB1C8893D',
-        }
+        },
     ];
 
     async run({ interaction }) {
