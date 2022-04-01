@@ -38,6 +38,13 @@ class PlaylistMenu extends RoxanneInteraction {
             link: 'https://open.spotify.com/playlist/3mwSeW8PTKQyPjoVPTdvaC',
         },
         {
+            label: 'Anime Bangers',
+            description: 'Provided by dewittejager.',
+            value: 'anime_bangers_playlist',
+            type: 'buttonPlaylistQuery',
+            link: 'https://open.spotify.com/playlist/6cUD8U5zwIJOxDHWKD0SoU',
+        },
+        {
             label: 'Drum and Bass Monstercat Playlist',
             description: 'Built for gamers, by gamers.',
             value: 'dnb_playlist',
