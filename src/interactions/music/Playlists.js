@@ -17,13 +17,6 @@ class PlaylistMenu extends RoxanneInteraction {
 
     static menuOptions = [
         {
-            label: 'TXB Official Playlist',
-            description: 'Spotify playlist for TXB Tunes!',
-            value: 'txb_playlist',
-            type: 'buttonYoutubePlaylist',
-            link: 'https://open.spotify.com/playlist/1Ac9XPXCQaTUjTNbnNwYhV',
-        },
-        {
             label: "TXJ's Rap Spotify Playlist",
             description: 'All heat bangers.',
             value: 'txj_playlist',
@@ -43,13 +36,6 @@ class PlaylistMenu extends RoxanneInteraction {
             value: 'duelist_cap_playlist',
             type: 'buttonYoutubePlaylist',
             link: 'https://www.youtube.com/playlist?list=PLmy5a-gcq3BaiEi-Y_ypeou8NSlHQWm64',
-        },
-        {
-            label: 'Rocking out w/ Alda',
-            description: 'The perfect playlist for rockers alike.',
-            value: 'alda_playlist',
-            type: 'buttonYoutubePlaylist',
-            link: 'https://open.spotify.com/playlist/6CtQMssfXfWwUnAwZclC6b',
         },
     ];
 
