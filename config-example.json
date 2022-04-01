@@ -53,5 +53,10 @@
             "password": "password",
             "secure": false
         }
-    ]
+    ],
+    "slashReloader": {
+        "dev": false,
+        "clientId": "client_id",
+        "guildId": "guild_id"
+    }
 }
