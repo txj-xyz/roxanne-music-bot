@@ -40,7 +40,8 @@ class RoxanneDispatcher {
         });
 
         this.player.on('closed', async (payload) => {
-            if (!this.exists) return this.client.logger.debug(this.constructor.name, `Closed event found no queue, disconnecting from voice channel with WS Code: ${payload.code}.`); // Catch if the queue is empty, then return instead of reconnecting.
+            // Catch if the queue is empty, then return instead of reconnecting.
+            if (!this.exists) return this.client.logger.debug(this.constructor.name, `Closed event found no queue, disconnecting from voice channel with WS Code: ${payload.code}.`);
             await Wait(5000);
             if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
                 await this.player.connection.reconnect();
@@ -66,7 +67,10 @@ class RoxanneDispatcher {
         this.queue.length = 0;
         this.client.util.config.foreverMode ? null : this.player.connection.disconnect();
         this.client.queue.delete(this.guild.id);
-        this.client.logger.debug(this.player.constructor.name, `Destroyed the player & connection @ guild "${this.guild.id}"\nReason: ${reason || 'No Reason Provided'}`);
+        this.client.logger.debug(this.player.constructor.name, `Destroyed player & connection`, {
+            guild: guild.name,
+            guildID: guild.id
+        });
         if (this.stopped) return;
         this.channel.send('No more songs in queue, feel free to queue more songs!').catch(() => null);
     }

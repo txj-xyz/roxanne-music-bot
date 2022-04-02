@@ -18,14 +18,20 @@ class Queue extends Map {
                     if (botVoice?.channelId !== member.voice.channelId) {
                         try {
                             botVoice.setChannel(userVoice?.channelId);
-                            this.client.logger.log('Queue', `Existing dispatcher @ guild "${guild.id}" moving player`);
+                            this.client.logger.log('Queue', `Existing dispatcher moving player`, {
+                                guild: guild.name,
+                                guildID: guild.id,
+                            });
                         } catch (error) {
-                            this.client.logger.log('Queue', 'Failed to move voice channels.');
+                            this.client.logger.error('Queue', 'Failed to move voice channels.');
                         }
                     }
                     dispatcher.queue.push(track);
                     this.set(guild.id, dispatcher);
-                    this.client.logger.log(dispatcher.constructor.name, `Existing dispatcher @ guild "${guild.id}" started player`);
+                    this.client.logger.log(dispatcher.constructor.name, `Existing dispatcher started player`, {
+                        guild: guild.name,
+                        guildID: guild.id,
+                    });
                     return dispatcher;
                 } catch (error) {
                     return this.client.logger.log(dispatcher.constructor.name, error);
@@ -40,10 +46,13 @@ class Queue extends Map {
                         deaf: true,
                     })
                     .catch((error) => {
-                        return this.client.logger.debug(`QueueHandlerError`, error);
+                        return this.client.logger.error(`QueueHandlerError`, error);
                     });
             }
-            this.client.logger.debug(player.constructor.name, `New connection @ guild "${guild.id}"`);
+            this.client.logger.log(player.constructor.name, 'New player connection', {
+                guild: guild.name,
+                guildID: guild.id,
+            });
             dispatcher = new RoxanneDispatcher({
                 client: this.client,
                 guild,
@@ -52,7 +61,10 @@ class Queue extends Map {
             });
             dispatcher.queue.push(track);
             this.set(guild.id, dispatcher);
-            this.client.logger.debug(dispatcher.constructor.name, `New player dispatcher @ guild "${guild.id}"`);
+            this.client.logger.log(dispatcher.constructor.name, `New player dispatcher`, {
+                guild: guild.name,
+                guildID: guild.id,
+            });
             return dispatcher;
         }
         first ? existing.queue.unshift(track) : existing.queue.push(track);
