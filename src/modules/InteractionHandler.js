@@ -144,7 +144,8 @@ class InteractionHandler extends EventEmitter {
                     type: command.type,
                     user: `${interaction.user.username}#${interaction.user.discriminator}`,
                     userID: interaction.user.id,
-                    guild: `${interaction.guild.name} | ${interaction.guild.id}`,
+                    guild: interaction.guild.name,
+                    guildID: interaction.guild.id,
                     channel: interaction.channel.name,
                 });
                 await command.run({ interaction, dispatcher });
