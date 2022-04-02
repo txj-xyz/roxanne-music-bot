@@ -49,7 +49,7 @@ class Queue extends Map {
                         return this.client.logger.error(`QueueHandlerError`, error);
                     });
             }
-            this.client.logger.log(player.constructor.name, 'New player connection', {
+            this.client.logger.log('[Queue]', 'New player connection', {
                 guild: guild.name,
                 guildID: guild.id,
             });
@@ -61,7 +61,7 @@ class Queue extends Map {
             });
             dispatcher.queue.push(track);
             this.set(guild.id, dispatcher);
-            this.client.logger.log(dispatcher.constructor.name, `New player dispatcher`, {
+            this.client.logger.log('[Queue]', `New player dispatcher`, {
                 guild: guild.name,
                 guildID: guild.id,
             });
