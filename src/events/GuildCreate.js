@@ -14,7 +14,10 @@ class GuildCreate extends RoxanneEvent {
     }
 
     async run(guild) {
-        this.client.logger.log(this.constructor.name, `New guild => ${guild.name} with ${guild.memberCount} members`);
+        this.client.logger.log(this.constructor.name, `Joined guild`, {
+            name: guild.name,
+            members: guild.memberCount
+        });
     }
 }
 module.exports = GuildCreate;
