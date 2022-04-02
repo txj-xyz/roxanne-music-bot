@@ -13,11 +13,11 @@ class RoxanneLogger {
 
     static logFormat(constructor, message, stdin) {
         return {
-            processID: process.pid,
-            clusterID: this.id,
+            processID: process.pid ?? null,
+            clusterID: this.id ?? null,
             handlerID: constructor,
-            commandMessage: message.toString(),
-            childProcess: stdin,
+            commandMessage: message?.toString() ?? null,
+            childProcess: stdin ?? null,
         };
     }
 
@@ -36,7 +36,7 @@ class RoxanneLogger {
     }
 
     error(error) {
-        this.webhook.send(`\`\`\`json\n${JSON.stringify(RoxanneLogger.logFormat(handlerName, message), null, 2)}\n\`\`\``);
+        this.webhook.send(`\`\`\`json\n${JSON.stringify(RoxanneLogger.logFormat(error), null, 2)}\n\`\`\``);
         console.error(`[Process ${process.pid}] [Cluster ${this.id}] `, error);
     }
 }
