@@ -33,7 +33,7 @@ class InteractionHandler extends EventEmitter {
                 // this.client.logger.debug(this.constructor.name, `\tCommand '${Command.name}' loaded (@${Command.uid})`);
             }
         }
-        this.client.logger.log(this.constructor.name, `Loaded ${this.commands.size} interaction client command(s)`, this.commands);
+        this.client.logger.log(this.constructor.name, `Loaded ${this.commands.size} interaction client command(s)`, this.commands.map(c=>c.name));
         this.built = true;
         return this;
     }
