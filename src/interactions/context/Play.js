@@ -65,14 +65,14 @@ class PlayContext extends RoxanneContext {
                             await interaction.deferReply({
                                 ephemeral: false,
                             });
-                            this.client.interactions.commands.get('play').buttonYoutubePlaylist(interaction, linkFound);
+                            this.client.interactions.commands.get('play').buttonPlaylistQuery(interaction, linkFound);
                             break;
                         }
                         case 1: {
                             await interaction.deferReply({
                                 ephemeral: false,
                             });
-                            this.client.interactions.commands.get('play').buttonYoutubePlaylist(interaction, linkFound, false);
+                            this.client.interactions.commands.get('play').buttonPlaylistQuery(interaction, linkFound, false);
                             break;
                         }
                     }
@@ -97,7 +97,7 @@ class PlayContext extends RoxanneContext {
                                     await interaction.deferReply({
                                         ephemeral: false,
                                     });
-                                    this.client.interactions.commands.get('play').buttonYoutubePlaylist(interaction, linkFound, false);
+                                    this.client.interactions.commands.get('play').buttonPlaylistQuery(interaction, linkFound, false);
                                     break;
                                 }
                             }

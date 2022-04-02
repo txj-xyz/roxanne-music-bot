@@ -60,7 +60,7 @@ class Play extends RoxanneInteraction {
         dispatcher?.play();
     }
 
-    async buttonYoutubePlaylist(interaction, query, radio = false) {
+    async buttonPlaylistQuery(interaction, query, radio = false) {
         const node = await this.client.shoukaku.getNode();
         // YouTube Playlist integration for select menus
         if (this.client.util.checkURL(query)) {

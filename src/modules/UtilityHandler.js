@@ -4,23 +4,29 @@ const unshortener = require('unshorten.it');
 const config = require('../../config.json');
 const servers = require('../../lavalink-server.json');
 const { MessageEmbed } = require('discord.js');
+
 class UtilityHandler {
     constructor(client) {
         this.client = client;
         this.config = config;
         this.invite = this.config.inviteURL;
-        this.supportServer = 'https://discord.gg/rebootpvm';
-        this.grafana = 'https://grafana.txj-dev.xyz/d/roxanne-is-a-cutie';
+        this.supportServer = this.config.supportServer;
+        this.grafana = this.config.grafanaLink;
         this.humanizeTime = this.humanizeTime;
         this.convertMS = this.convertMS;
         this.ytMeta = this.ytMeta;
+        this.deleteMessage = this.deleteMessage;
         // prettier-ignore
         this.urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
         this.loadingEmbed = new MessageEmbed().setAuthor('Loading.. Please wait :)');
     }
 
     deleteMessage(interaction, id) {
-        interaction.channel.messages.fetch(id).then((message) => message.delete());
+        return interaction.channel.messages.fetch(id).then((message) => message.delete());
+    }
+
+    rollRandomInt16(number) {
+        return Math.floor(Math.random() * number);
     }
 
     removeArrayIndex(array, indexID) {

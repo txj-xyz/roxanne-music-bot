@@ -17,39 +17,39 @@ class PlaylistMenu extends RoxanneInteraction {
 
     static menuOptions = [
         {
-            label: 'TXB Official Playlist',
-            description: 'Spotify playlist for TXB Tunes!',
-            value: 'txb_playlist',
-            type: 'buttonYoutubePlaylist',
-            link: 'https://open.spotify.com/playlist/1Ac9XPXCQaTUjTNbnNwYhV',
-        },
-        {
             label: "TXJ's Rap Spotify Playlist",
             description: 'All heat bangers.',
             value: 'txj_playlist',
-            type: 'buttonYoutubePlaylist',
+            type: 'buttonPlaylistQuery',
             link: 'https://open.spotify.com/playlist/4YLTXRl623J8WXYyZse3rk',
+        },
+        {
+            label: 'Deep House 2022 Mix',
+            description: 'Provided by Phatkez.',
+            value: 'deep_house_playlist',
+            type: 'buttonPlaylistQuery',
+            link: 'https://open.spotify.com/playlist/6vDGVr652ztNWKZuHvsFvx',
+        },
+        {
+            label: 'Weeb PVM Mix',
+            description: 'Provided by Phatkez.',
+            value: 'weeb_mix_playlist',
+            type: 'buttonPlaylistQuery',
+            link: 'https://open.spotify.com/playlist/3mwSeW8PTKQyPjoVPTdvaC',
+        },
+        {
+            label: 'Anime Bangers',
+            description: 'Provided by dewittejager.',
+            value: 'anime_bangers_playlist',
+            type: 'buttonPlaylistQuery',
+            link: 'https://open.spotify.com/playlist/6cUD8U5zwIJOxDHWKD0SoU',
         },
         {
             label: 'Drum and Bass Monstercat Playlist',
             description: 'Built for gamers, by gamers.',
             value: 'dnb_playlist',
-            type: 'buttonYoutubePlaylist',
+            type: 'buttonPlaylistQuery',
             link: 'https://www.youtube.com/watch?v=RKSr5ovamds&list=PL9BCA60EEB1C8893D',
-        },
-        {
-            label: 'Relaxful',
-            description: 'The ultimate chill playlist from Duelist Cap.',
-            value: 'duelist_cap_playlist',
-            type: 'buttonYoutubePlaylist',
-            link: 'https://www.youtube.com/playlist?list=PLmy5a-gcq3BaiEi-Y_ypeou8NSlHQWm64',
-        },
-        {
-            label: 'Rocking out w/ Alda',
-            description: 'The perfect playlist for rockers alike.',
-            value: 'alda_playlist',
-            type: 'buttonYoutubePlaylist',
-            link: 'https://open.spotify.com/playlist/6CtQMssfXfWwUnAwZclC6b',
         },
     ];
 

@@ -2,7 +2,9 @@
     "owners": ["user_id"],
     "token": "token_string",
     "webhookUrl": "https://discord.com/api/webhooks/id/token",
-    "inviteURL": "https://discord.com/oauth2/authorize?client_id=CLIENTID&permissions=PERMISSIONS_BITFIELD&scope=applications.commands%20bot",
+    "inviteURL": "https://google.com/",
+    "supportServer": "https://google.com/",
+    "grafanaLink": "https://google.com/",
     "spotifyClientID": "String",
     "spotifySecret": "String",
     "youtube_key": "API v3 KEY",
@@ -11,5 +13,50 @@
     "prometheusPort": 45000,
     "foreverMode": true,
     "tiktokMessageEvent": false,
-    "helpMessageEvent": false
+    "helpMessageEvent": false,
+    "shoukakuOptions": {
+        "moveOnDisconnect": true,
+        "resumable": "resumableRoxanne",
+        "resumableTimeout": 45,
+        "reconnectInterval": 2000,
+        "reconnectTries": 5,
+        "restTimeout": 10000
+    },
+    "lavalinkOptions": [
+        {
+            "id": "lavalink-server-1",
+            "name": "lavalink-server-1",
+            "host": "lavalink-server.com",
+            "url": "lavalink-server.com:2335",
+            "port": 2335,
+            "auth": "password",
+            "password": "password",
+            "secure": false
+        },
+        {
+            "id": "lavalink-server-2",
+            "name": "lavalink-server-2",
+            "host": "lavalink-server.com",
+            "url": "lavalink-server.com:2335",
+            "port": 2335,
+            "auth": "password",
+            "password": "password",
+            "secure": false
+        },
+        {
+            "id": "lavalink-server-3",
+            "name": "lavalink-server-3",
+            "host": "lavalink-server.com",
+            "url": "lavalink-server.com:2335",
+            "port": 2335,
+            "auth": "password",
+            "password": "password",
+            "secure": false
+        }
+    ],
+    "slashReloader": {
+        "dev": false,
+        "clientId": "client_id",
+        "guildId": "guild_id"
+    }
 }

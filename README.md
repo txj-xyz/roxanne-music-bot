@@ -4,13 +4,15 @@
 
 Install dependencies
 
+**NOTE: Depending if `canvas` can build on your OS or not, you either need to remove the folder or allow it to build**
+
 ```
-# npm install && rm -Rf node_modules/canvas
+npm i && rm -Rvf node_modules/canvas
 ```
 
 Register and Update Slash commands.
 
-> e.x: `slash-reloader-config-example.json`
+> see: `slash-reloader-config-example.json`
 
 ```
 # npm run slash

@@ -11,7 +11,7 @@ class CoinFlip extends RoxanneInteraction {
 
     static rolledResult() {
         let flippedCoin;
-        const coinFlip = Math.floor(Math.random() * 2);
+        const coinFlip = this.client.util.rollRandomInt16(2);
         if (coinFlip == 0) {
             flippedCoin = 'Heads';
         } else {
