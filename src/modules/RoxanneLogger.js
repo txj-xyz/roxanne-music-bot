@@ -21,9 +21,10 @@ class RoxanneLogger {
         };
     }
 
-    debug(handlerName, message) {
+    debug(handlerName, message, _cxt) {
+        _cxt ? _cxt : (_cxt = null);
         if (!message?.includes('loaded')) {
-            this.webhook.send(`\`\`\`json\n${JSON.stringify(RoxanneLogger.logFormat(handlerName, message), null, 2)}\n\`\`\``);
+            this.webhook.send(`\`\`\`json\n${JSON.stringify(RoxanneLogger.logFormat(handlerName, message, _cxt), null, 2)}\n\`\`\``);
         }
         console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${handlerName}] ${message}`);
     }
