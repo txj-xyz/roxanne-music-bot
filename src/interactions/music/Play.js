@@ -65,12 +65,13 @@ class Play extends RoxanneInteraction {
         // YouTube Playlist integration for select menus
         if (this.client.util.checkURL(query)) {
             const result = await node.rest.resolve(query);
-            if (!result)
+            if (result.type == 'LOAD_FAILED' || !result) {
                 return interaction.editReply({
-                    content: "I didn't find any song on the query you provided!",
+                    content: "I didn't find anything on the query you provided!",
                     components: [],
                     embeds: [],
                 });
+            }
             const { type, tracks, playlistName } = result;
             const track = tracks.shift();
             const playlist = type === 'PLAYLIST';
