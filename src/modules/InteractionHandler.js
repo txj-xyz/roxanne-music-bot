@@ -93,11 +93,15 @@ class InteractionHandler extends EventEmitter {
                 const dispatcher = this.client.queue.get(interaction.guildId);
 
                 if (!command) return;
-                if (command.permissions && !InteractionHandler.checkPermission(command.permissions, interaction, this.client))
+
+                // no perms check before run
+                if (command.permissions && !InteractionHandler.checkPermission(command.permissions, interaction, this.client)) {
                     return interaction.reply({
                         content: "You don't have the required permissions to use this command!",
                         ephemeral: true,
                     });
+                }
+
                 // player related stuff
                 if (command.playerCheck?.voice && !interaction.member.voice.channelId)
                     return interaction.reply({
@@ -105,7 +109,7 @@ class InteractionHandler extends EventEmitter {
                         ephemeral: true,
                     });
 
-                // Manual checking for stop command acting as a `/leave` command override
+                // manual checking for stop command acting as a `/leave` command override
                 if (interaction.commandName === 'stop' && this.client.util.config.foreverMode) {
                     // const botVoice = (await interaction.guild.voiceStates.cache.get(this.client.user.id)) || null;
                     this.client.logger.log(this.constructor.name, `Executing ${command.type ? 'context' : 'command'} ${command.name} (@${command.uid})`);
@@ -114,17 +118,21 @@ class InteractionHandler extends EventEmitter {
                     return;
                 }
 
-                if (command.playerCheck?.dispatcher && !dispatcher)
+                if (command.playerCheck?.dispatcher && !dispatcher) {
                     return interaction.reply({
                         content: 'Nothing is playing in this server!',
                         ephemeral: true,
                     });
-                if (command.playerCheck?.channel && dispatcher.player.connection.channelId !== interaction.member.voice.channelId)
+                }
+
+                if (command.playerCheck?.channel && dispatcher.player.connection.channelId !== interaction.member.voice.channelId) {
                     return interaction.reply({
                         content: "You are not in the same voice channel I'm currently connected to!",
                         ephemeral: true,
                     });
-                // execute le commandz
+                }
+
+                // general interaction commands
                 this.client.logger.log(this.constructor.name, `Executing ${command.type ? 'context' : 'command'} ${command.name} (@${command.uid})`);
                 await command.run({ interaction, dispatcher });
                 this.client.commandsRun++;
