@@ -22,7 +22,7 @@ class RoxanneLogger {
 
     debug(handlerName, message) {
         if (!message?.includes('loaded')) {
-            this.webhook.send(`\`\`\`js\n${JSON.stringify(this.logFormat(handlerName, message), null, 2)}\n\`\`\``);
+            this.webhook.send(`\`\`\`js\n${JSON.stringify(RoxanneLogger.logFormat(handlerName, message), null, 2)}\n\`\`\``);
         }
         console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${handlerName}] ${message}`);
     }
