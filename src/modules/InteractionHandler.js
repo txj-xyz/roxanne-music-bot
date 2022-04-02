@@ -30,12 +30,7 @@ class InteractionHandler extends EventEmitter {
                 const Command = new Interaction(this.client);
                 Command.category = directory.name.charAt(0).toUpperCase() + directory.name.substring(1);
                 this.commands.set(Command.name, Command);
-<<<<<<< HEAD
-                this.client.logger.debug(this.constructor.name, `\tCommand '${Command.name}' loaded (@${Command.uid})`);
-=======
-                builtFiles.push(`\tCommand '${Command.name}' loaded (@${Command.uid})`);
                 // this.client.logger.debug(this.constructor.name, `\tCommand '${Command.name}' loaded (@${Command.uid})`);
->>>>>>> 151032177e4e0745bc7a6c4795f66479a51d727d
             }
         }
         this.client.logger.log(this.constructor.name, `Loaded ${this.commands.size} interaction client command(s)`, builtFiles.toString());
