@@ -38,7 +38,7 @@ class Stop extends RoxanneInteraction {
                     this.client.queue.delete(interaction.guild.id);
                     this.client.logger.debug(this.name, `Destroyed the existing player & connection`, {
                         guild: interaction.guild.name,
-                        guildID: interaction.guild.id
+                        guildID: interaction.guild.id,
                     });
                 }
                 Wait(500);

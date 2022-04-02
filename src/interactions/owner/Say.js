@@ -34,7 +34,7 @@ class Say extends RoxanneInteraction {
         this.client.logger.log(this.constructor.name, `Sent Message`, {
             message: message,
             user: interaction.user.username,
-            userID: interaction.user.id
+            userID: interaction.user.id,
         });
     }
 }

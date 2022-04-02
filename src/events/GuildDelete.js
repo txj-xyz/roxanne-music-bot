@@ -17,7 +17,7 @@ class GuildDelete extends RoxanneEvent {
         if (!guild.available) return;
         this.client.logger.log(this.constructor.name, `Left guild`, {
             name: guild.name,
-            members: guild.memberCount
+            members: guild.memberCount,
         });
     }
 }
