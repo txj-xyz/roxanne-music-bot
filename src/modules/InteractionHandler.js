@@ -138,7 +138,17 @@ class InteractionHandler extends EventEmitter {
                 }
 
                 // general interaction commands
-                this.client.logger.log(this.constructor.name, `Executing ${command.type ? 'context' : 'command'} ${command.name} (@${command.uid})`);
+                this.client.logger.log(this.constructor.name, `Executing ${command.type ? 'context' : 'command'}`,
+                    {
+                        uid: command.uid,
+                        name: command.name,
+                        type: command.type,
+                        user: `${interaction.user.username}#${interaction.user.discriminator}`,
+                        userID: interaction.user.id,
+                        guild: `${interaction.guild.name} | ${interaction.guild.id}`,
+                        channel: interaction.channel.name
+                    }
+                );
                 await command.run({ interaction, dispatcher });
                 this.client.commandsRun++;
             }

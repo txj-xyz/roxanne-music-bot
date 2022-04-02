@@ -17,7 +17,7 @@ class RoxanneLogger {
             clusterID: this.id,
             handlerID: constructor,
             commandMessage: message.toString(),
-            stdin: stdin,
+            childProcess: stdin,
         };
     }
 
