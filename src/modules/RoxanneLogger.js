@@ -11,7 +11,7 @@ class RoxanneLogger {
         return isMaster ? 'Parent' : process.env.CLUSTER_ID;
     }
 
-    get logFormat(constructor, message) {
+    static logFormat(constructor, message) {
         return {
             processID: process.pid,
             clusterID: this.id,
