@@ -19,6 +19,7 @@ class InteractionHandler extends EventEmitter {
     }
 
     build() {
+        let builtFiles = [];
         if (this.built) return this;
         const directories = readdirSync(`${this.client.location}/src/interactions`, { withFileTypes: true });
         for (const directory of directories) {
@@ -30,10 +31,11 @@ class InteractionHandler extends EventEmitter {
                 const Command = new Interaction(this.client);
                 Command.category = directory.name.charAt(0).toUpperCase() + directory.name.substring(1);
                 this.commands.set(Command.name, Command);
-                this.client.logger.debug(this.constructor.name, `\tCommand '${Command.name}' loaded (@${Command.uid})`);
+                builtFiles.push(`\tCommand '${Command.name}' loaded (@${Command.uid})`)
+                // this.client.logger.debug(this.constructor.name, `\tCommand '${Command.name}' loaded (@${Command.uid})`);
             }
         }
-        this.client.logger.log(this.constructor.name, `Loaded ${this.commands.size} interaction client command(s)`);
+        this.client.logger.log(this.constructor.name, `Loaded ${this.commands.size} interaction client command(s)`, builtFiles.toString());
         this.built = true;
         return this;
     }
