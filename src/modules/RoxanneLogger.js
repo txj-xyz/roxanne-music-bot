@@ -16,16 +16,13 @@ class RoxanneLogger {
             processID: process.pid,
             clusterID: this.id,
             handlerID: constructor,
-            commandMessage: message.toString()
+            commandMessage: message.toString(),
         };
     }
 
     debug(handlerName, message) {
-
         if (!message?.includes('loaded')) {
-
             this.webhook.send(`\`\`\`js\n${JSON.stringify(this.logFormat(handlerName, message), null, 2)}\n\`\`\``);
-
         }
         console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${handlerName}] ${message}`);
     }
