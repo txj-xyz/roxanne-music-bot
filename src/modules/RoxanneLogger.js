@@ -1,6 +1,6 @@
 const { isMaster } = require('cluster');
 const { webhookUrl } = require('../../config.json');
-const { WebhookClient } = require('discord.js');
+const { WebhookClient, MessageEmbed, Message } = require('discord.js');
 
 class RoxanneLogger {
     constructor() {
@@ -11,32 +11,39 @@ class RoxanneLogger {
         return isMaster ? 'Parent' : process.env.CLUSTER_ID;
     }
 
-    static logFormat(constructor, message, stdin) {
-        return {
-            processID: process.pid ?? null,
-            clusterID: this.id ?? null,
-            handlerID: constructor,
-            commandMessage: message?.toString() ?? null,
-            childProcess: stdin ?? null,
+    logEmbed(message, type = 'json') {
+        const _parsed = {
+            processID: process.pid,
+            clusterID: this.id,
+            msg: message,
         };
-    }
 
-    debug(handlerName, message, _cxt) {
-        _cxt ? _cxt : (_cxt = null);
-        if (!message?.includes('loaded')) {
-            this.webhook.send(`\`\`\`json\n${JSON.stringify(RoxanneLogger.logFormat(handlerName, message, _cxt), null, 2)}\n\`\`\``);
+        try {
+            //prettier-ignore
+            return new MessageEmbed()
+            .setDescription(`\`\`\`${type}\n${JSON.stringify(_parsed.msg, null, 2)}\n\`\`\``)
+            .setFooter(`PID: ${_parsed.processID} - Cluster ID: ${_parsed.clusterID}`);
+        } catch (error) {
+            return new MessageEmbed().setDescription(`Log parsing error\n\`\`\`js\n${error.toString()}\n\`\`\``);
         }
-        console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${handlerName}] ${message}`);
     }
 
-    log(handlerName, message, _cxt) {
-        _cxt ? _cxt : (_cxt = null);
-        this.webhook.send(`\`\`\`json\n${JSON.stringify(RoxanneLogger.logFormat(handlerName, message, _cxt), null, 2)}\n\`\`\``);
-        console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${handlerName}] ${message}`);
+    debug(handler, message) {
+        console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${handler}] ${message}`);
     }
 
-    error(error) {
-        this.webhook.send(`\`\`\`json\n${error}\n\`\`\``);
+    log(message) {
+        this.webhook.send({ embeds: [this.logEmbed(message)] });
+        console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${message.constructor}] `, message);
+    }
+
+    error(error, message) {
+        message ? message : (message = null);
+        try {
+            this.webhook.send({ embeds: [this.logEmbed(message)] });
+        } catch (error) {
+            return console.error(`[Process ${process.pid}] [Cluster ${this.id}] `, error);
+        }
         console.error(`[Process ${process.pid}] [Cluster ${this.id}] `, error);
     }
 }
