@@ -36,7 +36,7 @@ class RoxanneLogger {
     }
 
     error(error) {
-        this.webhook.send(`\`\`\`json\n${JSON.stringify(RoxanneLogger.logFormat(error.substring(0, 1500)), null, 2)}\n\`\`\``);
+        this.webhook.send(`\`\`\`json\n${error}\n\`\`\``);
         console.error(`[Process ${process.pid}] [Cluster ${this.id}] `, error);
     }
 }
