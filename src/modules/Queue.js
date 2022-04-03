@@ -18,7 +18,9 @@ class Queue extends Map {
                     if (botVoice?.channelId !== member.voice.channelId) {
                         try {
                             botVoice.setChannel(userVoice?.channelId);
-                            this.client.logger.log('Queue', `Existing dispatcher moving player`, {
+                            this.client.logger.log({
+                                constructor: this.constructor?.name || 'Queue',
+                                message: 'Existing dispatcher moving player',
                                 guild: guild.name,
                                 guildID: guild.id,
                             });
@@ -28,13 +30,15 @@ class Queue extends Map {
                     }
                     dispatcher.queue.push(track);
                     this.set(guild.id, dispatcher);
-                    this.client.logger.log(dispatcher.constructor.name, `Existing dispatcher started player`, {
+                    this.client.logger.log({
+                        constructor: dispatcher?.constructor.name,
+                        message: 'Existing dispatcher started player',
                         guild: guild.name,
                         guildID: guild.id,
                     });
                     return dispatcher;
                 } catch (error) {
-                    return this.client.logger.log(dispatcher.constructor.name, error);
+                    return this.client.logger.error(dispatcher.constructor.name, error.toString());
                 }
             } else {
                 //TODO: check voice user limit before joining.
@@ -49,25 +53,34 @@ class Queue extends Map {
                         return this.client.logger.error(`QueueHandlerError`, error);
                     });
             }
-            this.client.logger.log('[Queue]', 'New player connection', {
+
+            this.client.logger.log({
+                constructor: this.constructor.name,
+                message: 'New player connection',
                 guild: guild.name,
                 guildID: guild.id,
             });
+
             dispatcher = new RoxanneDispatcher({
                 client: this.client,
                 guild,
                 channel,
                 player,
             });
+
             dispatcher.queue.push(track);
             this.set(guild.id, dispatcher);
-            this.client.logger.log('[Queue]', `New player dispatcher`, {
+            this.client.logger.log({
+                constructor: this.constructor.name,
+                message: 'New player dispatcher',
                 guild: guild.name,
                 guildID: guild.id,
             });
             return dispatcher;
         }
+
         first ? existing.queue.unshift(track) : existing.queue.push(track);
+
         return null;
     }
 }

@@ -67,10 +67,7 @@ class RoxanneDispatcher {
         this.queue.length = 0;
         this.client.util.config.foreverMode ? null : this.player.connection.disconnect();
         this.client.queue.delete(this.guild.id);
-        this.client.logger.debug(this.player.constructor.name, `Destroyed player & connection`, {
-            guild: this.guild.name,
-            guildID: this.guild.id,
-        });
+        this.client.logger.debug(this.player.constructor.name, `Destroyed player & connection`);
         if (this.stopped) return;
         this.channel.send('No more songs in queue, feel free to queue more songs!').catch(() => null);
     }
