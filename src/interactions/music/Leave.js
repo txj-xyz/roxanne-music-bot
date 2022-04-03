@@ -36,10 +36,7 @@ class Leave extends RoxanneInteraction {
                     dispatcherManual.player.stopTrack();
                     dispatcherManual.player.connection.disconnect();
                     this.client.queue.delete(interaction.guild.id);
-                    this.client.logger.debug(this.name, `Destroyed the existing player & connection`, {
-                        guild: interaction.guild.name,
-                        guildID: interaction.guild.id,
-                    });
+                    this.client.logger.debug(this.name, `Destroyed the existing player & connection`);
                 }
                 Wait(500);
                 return await interaction.editReply({
