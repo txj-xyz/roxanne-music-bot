@@ -25,7 +25,7 @@ class ShoukakuHandler extends Shoukaku {
                 ws: code,
                 reason: reason || null,
                 resumed: resumed,
-            })
+            });
         });
         this.on('disconnect', (name, players, moved) => {
             client.logger.log({
@@ -34,7 +34,7 @@ class ShoukakuHandler extends Shoukaku {
                 nodeMoved: moved || null,
                 guild: guild.name,
                 guildID: guild.id,
-            })
+            });
         });
         // this.on('debug', (name, reason) => client.logger.log(`Lavalink Node: ${name}`, reason || 'No reason'));
     }
