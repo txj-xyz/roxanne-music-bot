@@ -14,7 +14,7 @@ class Ratelimit extends RoxanneEvent {
     }
 
     async run(info) {
-        this.client.logger.log(
+        this.client.logger.debug(
             this.constructor.name,
             '\n' +
                 `  Route                    : ${info.route}\n` +

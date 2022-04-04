@@ -30,15 +30,10 @@ class InteractionHandler extends EventEmitter {
                 const Command = new Interaction(this.client);
                 Command.category = directory.name.charAt(0).toUpperCase() + directory.name.substring(1);
                 this.commands.set(Command.name, Command);
-                // this.client.logger.debug(this.constructor.name, `\tCommand '${Command.name}' loaded (@${Command.uid})`);
+                this.client.logger.debug(this.constructor.name, `\tCommand '${Command.name}' loaded (@${Command.uid})`);
             }
         }
-        this.client.logger.log(
-            this.constructor.name,
-            this.constructor.name,
-            `Loaded ${this.commands.size} interaction client command(s)`,
-            this.commands.map((c) => c.name)
-        );
+        this.client.logger.debug(this.constructor.name, `Loaded ${this.commands.size} interaction client command(s)`);
         this.built = true;
         return this;
     }
@@ -50,7 +45,7 @@ class InteractionHandler extends EventEmitter {
      * development tool and not be available to actual users, even admins.
      */
     rebuild() {
-        this.client.logger.log(this.constructor.name, '---- Live reload triggered ----');
+        this.client.logger.debug(this.constructor.name, '---- Live reload triggered ----');
 
         // let stashed = this.commands;
         try {
@@ -73,7 +68,7 @@ class InteractionHandler extends EventEmitter {
             throw error;
         }
 
-        this.client.logger.log(this.constructor.name, '---- Live reload completed ----');
+        this.client.logger.debug(this.constructor.name, '---- Live reload completed ----');
         return this; // For the sake of transparency, this behaves just as build()
     }
 
@@ -117,7 +112,15 @@ class InteractionHandler extends EventEmitter {
                 // manual checking for stop command acting as a `/leave` command override
                 if (interaction.commandName === 'stop' && this.client.util.config.foreverMode) {
                     // const botVoice = (await interaction.guild.voiceStates.cache.get(this.client.user.id)) || null;
-                    this.client.logger.log(this.constructor.name, `Executing ${command.type ? 'context' : 'command'} ${command.name} (@${command.uid})`);
+
+                    this.client.logger.log({
+                        constructor: this.constructor.name,
+                        message: `Executing Command ${command.name}`,
+                        user: interaction.user.username,
+                        userID: interaction.user.id,
+                        uid: command.uid,
+                    });
+
                     await command.run({ interaction });
                     this.client.commandsRun++;
                     return;
@@ -138,7 +141,9 @@ class InteractionHandler extends EventEmitter {
                 }
 
                 // general interaction commands
-                this.client.logger.log(this.constructor.name, `Executing ${command.type ? 'context' : 'command'}`, {
+                this.client.logger.log({
+                    constructor: this.constructor.name,
+                    message: `Executing Command ${command.name}`,
                     commandName: command.name,
                     uid: command.uid,
                     type: command.type,
@@ -147,6 +152,7 @@ class InteractionHandler extends EventEmitter {
                     guild: interaction.guild.name,
                     guildID: interaction.guild.id,
                     channel: interaction.channel.name,
+                    channelId: interaction.channel.id,
                 });
                 await command.run({ interaction, dispatcher });
                 this.client.commandsRun++;
@@ -158,7 +164,12 @@ class InteractionHandler extends EventEmitter {
                 .setDescription(`\`\`\`js\n ${error.toString()}\`\`\``)
                 .setTimestamp()
                 .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
-            this.client.logger.log(this.constructor.name, `Something errored! \`${error.toString()}\``);
+            // TODO: CONVERT TO ERROR
+            this.client.logger.log({
+                constructor: this.constructor.name,
+                message: 'Something errored!',
+                error: error.toString(),
+            });
 
             if (interaction.replied || interaction.deferred) await interaction.editReply({ embeds: [embed] }).catch((error) => this.emit('error', error));
             else await interaction.reply({ embeds: [embed] }).catch((error) => this.emit('error', error));

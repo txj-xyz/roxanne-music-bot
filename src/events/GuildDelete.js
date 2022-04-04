@@ -15,9 +15,11 @@ class GuildDelete extends RoxanneEvent {
 
     async run(guild) {
         if (!guild.available) return;
-        this.client.logger.log(this.constructor.name, `Left guild`, {
-            name: guild.name,
-            members: guild.memberCount,
+        this.client.logger.log({
+            constructor: this.constructor.name,
+            message: 'Left guild',
+            guildName: guild.name,
+            guildMembers: guild.memberCount,
         });
     }
 }

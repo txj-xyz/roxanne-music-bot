@@ -31,8 +31,9 @@ class Say extends RoxanneInteraction {
         const message = interaction.options.getString('message', true);
         await interaction.channel.send(message);
         await interaction.editReply(`Sent Message: \`\`\`\n${message}\n\`\`\``);
-        this.client.logger.log(this.constructor.name, `Sent Message`, {
-            message: message,
+        this.client.logger.log({
+            constructor: this.constructor.name,
+            message: 'Sent Message',
             user: interaction.user.username,
             userID: interaction.user.id,
         });
