@@ -34,7 +34,7 @@ class RoxanneLogger {
 
     log(message) {
         this.webhook.send({ embeds: [this.logEmbed(message)] });
-        console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${message.constructor}] `, message);
+        console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${message.constructor}] `, JSON.stringify(message, null, null));
     }
 
     error(error, message) {

@@ -42,11 +42,40 @@ class Play extends RoxanneInteraction {
             if (!track?.info) {
                 return await interaction.editReply('There was an error finding the song information, please try again.');
             }
+
+            // Log song request
+            if (!playlist) {
+                this.client.logger.log({
+                    constructor: this.constructor.name,
+                    message: 'Handling new single Queue request',
+                    playlist: playlist,
+                    query: query,
+                    node: node.name,
+                    track: track.info,
+                    guild: interaction.guild.name,
+                    guildID: interaction.guild.id,
+                });
+            }
+
             const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
             if (playlist) {
                 for (const track of tracks) await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
+
+                // Log playlist request
+                this.client.logger.log({
+                    constructor: this.constructor.name,
+                    message: 'Handling new single Queue request',
+                    playlist: playlist,
+                    query: query,
+                    node: node.name,
+                    playlistLength: tracks?.length || null,
+                    guild: interaction.guild.name,
+                    guildID: interaction.guild.id,
+                });
             }
-            await interaction.editReply(playlist ? `Added the playlist \`${playlistName}\` in queue!` : `Added the track \`${track?.info.title}\` in queue!`).catch(() => null);
+            await interaction
+                .editReply(playlist ? `Added \`${tracks?.length}\` tracks from the playlist \`${playlistName}\` in queue!` : `Added the track \`${track?.info.title}\` in queue!`)
+                .catch(() => null);
             dispatcher?.play();
             return;
         }
@@ -56,6 +85,18 @@ class Play extends RoxanneInteraction {
         if (!search?.tracks.length) return interaction.editReply("I didn't find anything on the query you provided!");
         const track = search.tracks.shift();
         const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
+
+        // Log song searching query request
+        this.client.logger.log({
+            constructor: this.constructor.name,
+            message: 'Handling new single query Queue request',
+            query: search,
+            node: node.name,
+            track: track.info,
+            guild: interaction.guild.name,
+            guildID: interaction.guild.id,
+        });
+
         await interaction.editReply(`Added the track \`${track.info.title}\` in queue!`).catch(() => null);
         dispatcher?.play();
     }
@@ -75,10 +116,39 @@ class Play extends RoxanneInteraction {
             const { type, tracks, playlistName } = result;
             const track = tracks.shift();
             const playlist = type === 'PLAYLIST';
+
+            // Log song request via button / menu
+
+            if (!playlist && !radio) {
+                this.client.logger.log({
+                    constructor: this.constructor.name,
+                    message: 'Handling new InteractionContext request',
+                    query: query,
+                    node: node.name,
+                    track: track.info,
+                    guild: interaction.guild.name,
+                    guildID: interaction.guild.id,
+                });
+            }
+
             const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
             if (playlist) {
+                // Queue up tracks
                 for (const track of tracks) await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
+
+                // Log playlist request
+                this.client.logger.log({
+                    constructor: this.constructor.name,
+                    message: 'Handling new InteractionContext request',
+                    playlist: playlist,
+                    query: query,
+                    node: node.name,
+                    playlistLength: tracks?.length || null,
+                    guild: interaction.guild.name,
+                    guildID: interaction.guild.id,
+                });
             }
+
             if (radio) {
                 await interaction
                     .editReply({
@@ -89,9 +159,10 @@ class Play extends RoxanneInteraction {
                     .catch(() => null);
                 return dispatcher?.play();
             }
+
             await interaction
                 .editReply({
-                    content: playlist ? `Added the playlist \`${playlistName}\` in queue!` : `Added the track \`${track.info.title}\` in queue!`,
+                    content: playlist ? `Added \`${tracks?.length}\` tracks from the playlist \`${playlistName}\` in queue!` : `Added the track \`${track.info.title}\` in queue!`,
                     components: [],
                     embeds: [],
                 })
