@@ -11,18 +11,12 @@ class RoxanneLogger {
         return isMaster ? 'Parent' : process.env.CLUSTER_ID;
     }
 
-    logEmbed(message, type = 'json') {
-        const _parsed = {
-            processID: process.pid,
-            clusterID: this.id,
-            msg: message,
-        };
-
+    logEmbed(message) {
         try {
             //prettier-ignore
             return new MessageEmbed()
-            .setDescription(`\`\`\`${type}\n${JSON.stringify(_parsed.msg, null, 2)}\n\`\`\``)
-            .setFooter(`PID: ${_parsed.processID} - Cluster ID: ${_parsed.clusterID}`);
+            .setDescription(`\`\`\`json\n${JSON.stringify(message, null, 2)}\n\`\`\``)
+            .setFooter(`PID: ${process.pid} - Cluster ID: ${this.id}`);
         } catch (error) {
             return new MessageEmbed().setDescription(`Log parsing error\n\`\`\`js\n${error.toString()}\n\`\`\``);
         }
