@@ -83,7 +83,7 @@ class Stop extends RoxanneInteraction {
             dispatcher.player.connection.disconnect();
             dispatcher.player.stopTrack();
             Wait(500);
-            await interaction.editReply('I stopped the music and left voice chat!');
+            await interaction.editReply('I stopped the music!');
         }
     }
 }
