@@ -31,14 +31,13 @@ class RoxanneLogger {
         console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${message.constructor}] `, JSON.stringify(message, null, null));
     }
 
-    error(error, message) {
-        message ? message : (message = null);
+    error(error, message = 'Error detected, please check console') {
         try {
             this.webhook.send({ embeds: [this.logEmbed(message)] });
         } catch (error) {
             return console.error(`[Process ${process.pid}] [Cluster ${this.id}] `, error);
         }
-        console.error(`[Process ${process.pid}] [Cluster ${this.id}] `, error);
+        console.error(`[ERROR] [Process ${process.pid}] [Cluster ${this.id}] `, error);
     }
 }
 
