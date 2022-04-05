@@ -38,7 +38,7 @@ class Queue extends Map {
                     });
                     return dispatcher;
                 } catch (error) {
-                    return this.client.logger.error(dispatcher.constructor.name, error.toString());
+                    return this.client.logger.error('Queue Module', error.toString());
                 }
             } else {
                 //TODO: check voice user limit before joining.
