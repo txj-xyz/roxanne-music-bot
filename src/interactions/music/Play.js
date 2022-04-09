@@ -90,7 +90,7 @@ class Play extends RoxanneInteraction {
         this.client.logger.log({
             constructor: this.constructor.name,
             message: 'Handling new single query Queue request',
-            query: search,
+            query: query,
             node: node.name,
             track: track.info,
             guild: interaction.guild.name,
