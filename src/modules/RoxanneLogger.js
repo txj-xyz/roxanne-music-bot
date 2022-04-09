@@ -11,18 +11,12 @@ class RoxanneLogger {
         return isMaster ? 'Parent' : process.env.CLUSTER_ID;
     }
 
-    logEmbed(message, type = 'json') {
-        const _parsed = {
-            processID: process.pid,
-            clusterID: this.id,
-            msg: message,
-        };
-
+    logEmbed(message) {
         try {
             //prettier-ignore
             return new MessageEmbed()
-            .setDescription(`\`\`\`${type}\n${JSON.stringify(_parsed.msg, null, 2)}\n\`\`\``)
-            .setFooter(`PID: ${_parsed.processID} - Cluster ID: ${_parsed.clusterID}`);
+            .setDescription(`\`\`\`json\n${JSON.stringify(message, null, 2)}\n\`\`\``)
+            .setFooter(`PID: ${process.pid} - Cluster ID: ${this.id}`);
         } catch (error) {
             return new MessageEmbed().setDescription(`Log parsing error\n\`\`\`js\n${error.toString()}\n\`\`\``);
         }
@@ -37,14 +31,13 @@ class RoxanneLogger {
         console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${message.constructor}] `, JSON.stringify(message, null, null));
     }
 
-    error(error, message) {
-        message ? message : (message = null);
+    error(error, message = 'Error detected, please check console') {
         try {
             this.webhook.send({ embeds: [this.logEmbed(message)] });
         } catch (error) {
             return console.error(`[Process ${process.pid}] [Cluster ${this.id}] `, error);
         }
-        console.error(`[Process ${process.pid}] [Cluster ${this.id}] `, error);
+        console.error(`[ERROR] [Process ${process.pid}] [Cluster ${this.id}] `, error);
     }
 }
 
