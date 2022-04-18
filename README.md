@@ -30,3 +30,10 @@ Run the bot instance
 -   [Lavalink Server (dev branch only)](https://github.com/freyacodes/Lavalink#server-configuration)
 
 > NOTE: Lavalink (dev branch) is needed for music functionality. You need to have a working Lavalink server to make the bot work.
+
+
+## Public Bot
+
+There is an Official version of Roxanne that runs 24/7, feel free to invite it using the link below
+
+https://discord.com/oauth2/authorize?client_id=918660439506837575&permissions=414518209792&scope=applications.commands%20bot
