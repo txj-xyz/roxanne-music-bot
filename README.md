@@ -31,7 +31,6 @@ Run the bot instance
 
 > NOTE: Lavalink (dev branch) is needed for music functionality. You need to have a working Lavalink server to make the bot work.
 
-
 ## Public Bot
 
 There is an Official version of Roxanne that runs 24/7, feel free to invite it using the link below
