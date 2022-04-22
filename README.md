@@ -12,7 +12,7 @@ npm i && rm -Rvf node_modules/canvas
 
 Register and Update Slash commands.
 
-> see: `slash-reloader-config-example.json`
+> see: `config-example.json <slashReloader>`
 
 ```
 npm run slash
