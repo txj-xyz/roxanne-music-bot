@@ -1,4 +1,4 @@
-# ✨ Roxanne Music Bot ✨
+## ✨ Roxanne Music Bot ✨ [![CodeFactor](https://www.codefactor.io/repository/github/txj-xyz/roxanne-music-bot/badge/master)](https://www.codefactor.io/repository/github/txj-xyz/roxanne-music-bot/overview/master)
 
 ## ⚠️ Installation
 
@@ -12,16 +12,16 @@ npm i && rm -Rvf node_modules/canvas
 
 Register and Update Slash commands.
 
-> see: `slash-reloader-config-example.json`
+> see: `config-example.json <slashReloader>`
 
 ```
-# npm run slash
+npm run slash
 ```
 
 Run the bot instance
 
 ```
-# npm run start
+npm run start
 ```
 
 ## 🚧 Prerequisites
@@ -30,3 +30,11 @@ Run the bot instance
 -   [Lavalink Server (dev branch only)](https://github.com/freyacodes/Lavalink#server-configuration)
 
 > NOTE: Lavalink (dev branch) is needed for music functionality. You need to have a working Lavalink server to make the bot work.
+
+## Public Bot
+
+There is an Official version of Roxanne that runs 24/7, feel free to invite it using the link below
+
+https://roxanne.txj-dev.xyz/
+
+https://discord.com/oauth2/authorize?client_id=918660439506837575&permissions=414518209792&scope=applications.commands%20bot
