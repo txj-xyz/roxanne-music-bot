@@ -5,6 +5,10 @@ const { WebhookClient, MessageEmbed } = require('discord.js');
 class RoxanneLogger {
     constructor() {
         this.webhook = new WebhookClient({ url: webhookUrl });
+        this.webhook.send('Health check initialized').catch((err) => {
+            this.webhook = null;
+            console.log(`[ERROR] [Process ${process.pid}] [Cluster ${this.id}] Failed to initialize webhook, invalid URI, ${err.toString()}`);
+        });
     }
 
     get id() {
@@ -27,15 +31,15 @@ class RoxanneLogger {
     }
 
     log(message) {
-        this.webhook.send({ embeds: [this.logEmbed(message)] });
+        if (this.webhook) {
+            this.webhook.send({ embeds: [this.logEmbed(message)] }).catch(console.error);
+        }
         console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${message.constructor}] `, JSON.stringify(message, null, null));
     }
 
     error(error, message = 'Error detected, please check console') {
-        try {
-            this.webhook.send({ embeds: [this.logEmbed(message)] });
-        } catch (error) {
-            return console.error(`[Process ${process.pid}] [Cluster ${this.id}] `, error);
+        if (this.webhook) {
+            this.webhook.send({ embeds: [this.logEmbed(message)] }).catch(console.error);
         }
         console.error(`[ERROR] [Process ${process.pid}] [Cluster ${this.id}] `, error);
     }
