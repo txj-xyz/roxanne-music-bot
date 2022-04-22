@@ -15,13 +15,13 @@ Register and Update Slash commands.
 > see: `slash-reloader-config-example.json`
 
 ```
-# npm run slash
+npm run slash
 ```
 
 Run the bot instance
 
 ```
-# npm run start
+npm run start
 ```
 
 ## 🚧 Prerequisites
