@@ -27,19 +27,19 @@ const rest = new REST({ version: '9' }).setToken(token);
 // start the load up process
 (async () => {
     try {
-        console.log(`• Refreshing client "${config.clientId}" slash commands. Developer Mode? ${config.dev}`);
-        if (config.dev) {
+        console.log(`• Refreshing client "${config.slashReloader.clientId}" slash commands. Developer Mode? ${config.slashReloader.dev}`);
+        if (config.slashReloader.dev) {
             // if dev mode is enabled, refresh commands on guild basis on the id of the guild you provided
-            await rest.put(Routes.applicationGuildCommands(config.clientId, config.guildId), {
+            await rest.put(Routes.applicationGuildCommands(config.slashReloader.clientId, config.slashReloader.guildId), {
                 body: commands,
             });
         } else {
             // else refresh globally
-            await rest.put(Routes.applicationCommands(config.clientId), {
+            await rest.put(Routes.applicationCommands(config.slashReloader.clientId), {
                 body: commands,
             });
         }
-        console.log(`• Success! Refreshed client "${config.clientId}" slash commands`);
+        console.log(`• Success! Refreshed client "${config.slashReloader.clientId}" slash commands`);
     } catch (error) {
         console.error(error);
     }
