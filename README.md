@@ -1,4 +1,3 @@
-
 ## ✨ Roxanne Music Bot ✨ [![CodeFactor](https://www.codefactor.io/repository/github/txj-xyz/roxanne-music-bot/badge/master)](https://www.codefactor.io/repository/github/txj-xyz/roxanne-music-bot/overview/master)
 
 ## ⚠️ Installation
