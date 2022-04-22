@@ -1,6 +1,6 @@
 const { isMaster } = require('cluster');
 const { webhookUrl } = require('../../config.json');
-const { WebhookClient, MessageEmbed, Message } = require('discord.js');
+const { WebhookClient, MessageEmbed } = require('discord.js');
 
 class RoxanneLogger {
     constructor() {
