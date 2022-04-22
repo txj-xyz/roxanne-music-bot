@@ -72,7 +72,7 @@ class MessageCreate extends RoxanneEvent {
                 const videoMetaEmbed = new MessageEmbed()
                     .setColor(this.client.color)
                     .setURL(resolvedLink)
-                    .setTitle(`"${videoMeta.collector[0]?.text}"`, null, resolvedLink)
+                    .setTitle(`"${videoMeta.collector[0]?.text.substring(0, 254)}"`, null, resolvedLink)
                     .addField('**Likes**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.diggCount)), true)
                     .addField('**Views**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.playCount)), true)
                     .addField('**Comments**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.commentCount)), true)
