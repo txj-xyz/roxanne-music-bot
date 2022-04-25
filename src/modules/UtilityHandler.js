@@ -1,4 +1,3 @@
-const { LavasfyClient } = require('lavasfy');
 const axios = require('axios');
 const unshortener = require('unshorten.it');
 const config = require('../../config.json');
