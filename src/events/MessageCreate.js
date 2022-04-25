@@ -42,7 +42,6 @@ class MessageCreate extends RoxanneEvent {
 
         const supportButton = new MessageActionRow().addComponents(
             [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(this.client.util.supportServer).setLabel('Support Server')],
-            [new MessageButton().setEmoji('🎵').setStyle('LINK').setURL(this.client.util.grafana).setLabel('Status Page')],
             [new MessageButton().setStyle('LINK').setURL(this.client.util.invite).setLabel('Invite me!')]
         );
 

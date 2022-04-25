@@ -17,7 +17,7 @@ class Stats extends RoxanneInteraction {
         else return `${Math.round(MB)} MB`;
     }
 
-    static updateDBStats(interaction, client, message, guilds, channels, memory, players) {
+    static updateStats(interaction, client, message, guilds, channels, memory, players) {
         let obj = {
             servers: Array.from(client.shoukaku.nodes.keys()).join(', '),
             commandsRun: client.commandsRun,
@@ -40,28 +40,27 @@ class Stats extends RoxanneInteraction {
             this.client.shard.broadcastEval('process.memoryUsage()'),
             this.client.shard.broadcastEval('this.queue.size'),
         ]);
-        const dbQuery = Stats.updateDBStats(interaction, this.client, message, guilds, channels, memory, players);
+        const statsQuery = Stats.updateStats(interaction, this.client, message, guilds, channels, memory, players);
 
         const embed = new MessageEmbed()
             .setColor(this.client.color)
             .setTitle('Status')
             .setDescription(
                 `\`\`\`ml\n
-Guilds      :: ${dbQuery.guilds}
-User Count  :: ${dbQuery.userCount}
-Channels    :: ${dbQuery.channels}
-Players     :: ${dbQuery.players}
-Memory      :: ${dbQuery.memory}
-Ping        :: ${dbQuery.ping} MS
-Uptime      :: ${dbQuery.uptime}
-CMDs Run    :: ${dbQuery.commandsRun}
-Music Nodes :: ${dbQuery.servers}
+Guilds      :: ${statsQuery.guilds}
+User Count  :: ${statsQuery.userCount}
+Channels    :: ${statsQuery.channels}
+Players     :: ${statsQuery.players}
+Memory      :: ${statsQuery.memory}
+Ping        :: ${statsQuery.ping} MS
+Uptime      :: ${statsQuery.uptime}
+CMDs Run    :: ${statsQuery.commandsRun}
+Music Nodes :: ${statsQuery.servers}
 \`\`\``
             )
             .setTimestamp()
             .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
-        const dashboardButton = new MessageActionRow().addComponents([new MessageButton().setStyle('LINK').setURL(this.client.util.grafana).setLabel('Web Dashboard')]);
-        await interaction.editReply({ embeds: [embed], components: [dashboardButton] });
+        await interaction.editReply({ embeds: [embed], components: [] });
     }
 }
 module.exports = Stats;
