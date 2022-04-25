@@ -64,11 +64,11 @@ class Search extends RoxanneInteraction {
         await interaction.deferReply();
         const query = interaction.options.getString('query', true);
         //TODO: redo interaction handling so we can generally reject certain scenarios.
-        if (query.includes('https://')) return await interaction.editReply('I can only search for words, try searching a term instead.');
+        if (query.includes('https://')) return await interaction.editReply('I can only search for words.');
 
         const node = await this.client.shoukaku.getNode();
         const search = await node.rest.resolve(query, 'youtube');
-        if (!search?.tracks.length) return interaction.editReply("I didn't find any search results on the query you provided!");
+        if (!search?.tracks.length) return interaction.editReply("I didn't find any search results!");
         const _search = search.tracks.slice(0, Search.pageLimit ? Search.pageLimit : search.tracks.length);
 
         await interaction.editReply('Querying for the video information....');
@@ -125,7 +125,7 @@ class Search extends RoxanneInteraction {
             .setColor(c.color)
             .setPages(pages)
             .setListenUsers(interaction.user.id)
-            .setListenTimeout(60000)
+            .setListenTimeout(60 * 1000)
             .setListenEndMethod('edit')
             .setDefaultButtons(searchPageButtonList)
             .addComponents([new MessageButton().setCustomId('custom').setEmoji('✅').setLabel('Confirm').setStyle('SUCCESS')])
