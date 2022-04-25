@@ -24,10 +24,6 @@ class UtilityHandler {
         return interaction.channel.messages.fetch(id).then((message) => message.delete());
     }
 
-    rollRandomInt16(number) {
-        return Math.floor(Math.random() * number);
-    }
-
     removeArrayIndex(array, indexID) {
         return array.filter((_, index) => index != indexID - 1);
     }
