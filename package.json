@@ -18,6 +18,7 @@
         "axios": "^0.24.0",
         "azuma": "2.1.2",
         "bufferutil": "^4.0.5",
+        "colors": "^1.4.0",
         "count-interval": "^1.0.1",
         "discord-api-types": "^0.24.0",
         "discord.js": "13.3.1",
