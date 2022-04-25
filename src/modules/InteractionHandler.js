@@ -146,7 +146,7 @@ class InteractionHandler extends EventEmitter {
                     message: `Executing Command ${command.name}`,
                     commandName: command.name,
                     uid: command.uid,
-                    type: interaction.isContextMenu() ? 'Interaction' : 'ContextMenu',
+                    type: interaction.isContextMenu() ? 'ContextMenu' : 'Interaction',
                     user: `${interaction.user.username}#${interaction.user.discriminator}`,
                     userID: interaction.user.id,
                     guild: interaction.guild.name,
