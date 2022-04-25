@@ -62,7 +62,7 @@ class PlayNext extends RoxanneInteraction {
 
         const query = interaction.options.getString('query', false);
         if (query) {
-            await interaction.editReply('PlayNext Query is disabled at the moment.');
+            await interaction.editReply('PlayNext Query is disabled.');
         }
     }
 }

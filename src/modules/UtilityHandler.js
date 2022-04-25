@@ -1,4 +1,3 @@
-const { LavasfyClient } = require('lavasfy');
 const axios = require('axios');
 const unshortener = require('unshorten.it');
 const config = require('../../config.json');
@@ -10,7 +9,6 @@ class UtilityHandler {
         this.config = config;
         this.invite = this.config.inviteURL;
         this.supportServer = this.config.supportServer;
-        this.grafana = this.config.grafanaLink;
         this.humanizeTime = this.humanizeTime;
         this.convertMS = this.convertMS;
         this.ytMeta = this.ytMeta;
@@ -22,10 +20,6 @@ class UtilityHandler {
 
     deleteMessage(interaction, id) {
         return interaction.channel.messages.fetch(id).then((message) => message.delete());
-    }
-
-    rollRandomInt16(number) {
-        return Math.floor(Math.random() * number);
     }
 
     removeArrayIndex(array, indexID) {

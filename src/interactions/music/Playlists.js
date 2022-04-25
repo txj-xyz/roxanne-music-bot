@@ -71,7 +71,7 @@ class PlaylistMenu extends RoxanneInteraction {
         const pageBuild = new PagesBuilder(interaction)
             .setColor(this.client.color)
             .setListenUsers(interaction.user.id)
-            .setListenTimeout(5 * 1000)
+            .setListenTimeout(30 * 1000)
             .setListenEndMethod('components_remove')
             .setDefaultButtons([])
             .setPaginationFormat('')

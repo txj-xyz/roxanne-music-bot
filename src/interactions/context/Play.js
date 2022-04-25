@@ -19,6 +19,7 @@ class PlayContext extends RoxanneContext {
     ];
 
     async run({ interaction, dispatcher }) {
+        const _client = this.client;
         if (this.client.queue.get(interaction.guild.id) && dispatcher.player.connection.channelId !== interaction.member.voice.channelId) {
             return await interaction.reply({
                 content: "You are not in the same voice channel I'm currently connected to!",
@@ -27,6 +28,11 @@ class PlayContext extends RoxanneContext {
         }
         let linkFound = null;
         const fetchMessage = await interaction.channel.messages.fetch(interaction.targetId);
+
+        // Enable new play request
+        async function play(interaction, link) {
+            _client.interactions.commands.get('play')['buttonPlaylistQuery'](interaction, link);
+        }
 
         let embedMatchString;
         embedMatchString = null;
@@ -65,14 +71,14 @@ class PlayContext extends RoxanneContext {
                             await interaction.deferReply({
                                 ephemeral: false,
                             });
-                            this.client.interactions.commands.get('play').buttonPlaylistQuery(interaction, linkFound);
+                            play(interaction, linkFound);
                             break;
                         }
                         case 1: {
                             await interaction.deferReply({
                                 ephemeral: false,
                             });
-                            this.client.interactions.commands.get('play').buttonPlaylistQuery(interaction, linkFound, false);
+                            play(interaction, linkFound);
                             break;
                         }
                     }
@@ -90,14 +96,14 @@ class PlayContext extends RoxanneContext {
                                     await interaction.deferReply({
                                         ephemeral: false,
                                     });
-                                    this.client.interactions.commands.get('play').buttonSpotifyPlaylist(interaction, linkFound);
+                                    play(interaction, linkFound);
                                     break;
                                 }
                                 case 1: {
                                     await interaction.deferReply({
                                         ephemeral: false,
                                     });
-                                    this.client.interactions.commands.get('play').buttonPlaylistQuery(interaction, linkFound, false);
+                                    play(interaction, linkFound);
                                     break;
                                 }
                             }
