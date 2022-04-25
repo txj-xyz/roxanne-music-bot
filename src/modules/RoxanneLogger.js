@@ -1,7 +1,7 @@
 const { isMaster } = require('cluster');
 const { webhookUrl } = require('../../config.json');
 const { WebhookClient, MessageEmbed } = require('discord.js');
-const colors = require('colors');
+const colors = require('@colors/colors');
 
 colors.setTheme({
     info: 'green',
