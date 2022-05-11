@@ -4,7 +4,7 @@ class RoxanneEvent extends EventEmitter {
     constructor(client) {
         super();
         this.client = client;
-        if (this.constructor === RoxanneEvent) throw new TypeError('Abstract class "RoxanneEvent" cannot be initiated directly.');
+        if (this.constructor === RoxanneEvent) throw new TypeError('Abstract class "RoxanneEvent" cannot be instantiated directly.');
         if (this.name === undefined) throw new TypeError('Classes extending RoxanneEvent must have a getter "name"');
         if (this.once === undefined) throw new TypeError('Classes extending RoxanneEvent must have a getter "once"');
         if (this.enabled === undefined) throw new TypeError('Classes extending RoxanneEvent must have a getter "enabled"');

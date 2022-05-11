@@ -1,5 +1,4 @@
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
-// TODO: move Wait(Int) to utility handler
 const Wait = require('util').promisify(setTimeout);
 
 class Stop extends RoxanneInteraction {
