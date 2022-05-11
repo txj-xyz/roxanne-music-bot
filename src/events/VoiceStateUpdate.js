@@ -39,7 +39,6 @@ class VoiceStateUpdate extends RoxanneEvent {
 
         switch (_state.type) {
             case 'leaveEvent':
-                console.log('fired event for leaving');
                 if (_state.members.size === 0) {
                     activeQueue.queue.length = 0;
                     activeQueue.repeat = 'off';
