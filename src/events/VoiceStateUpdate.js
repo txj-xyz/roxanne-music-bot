@@ -21,7 +21,7 @@ class VoiceStateUpdate extends RoxanneEvent {
         if (oldState.channel === null && newState.channel !== null) _state.type = 'joinEvent';
         if (oldState.channel !== null && newState.channel === null) _state.type = 'leaveEvent';
         if (oldState.channel !== null && newState.channel !== null) return; // moveEvent
-        if (oldState.channel === null && newState.channel === null) return;
+        if (oldState.channel === null && newState.channel === null) return; // make sure both events not Null
         const activeQueue = this.client.queue.get(guildID) ?? null;
         const player = activeQueue?.player.connection ?? null;
 
@@ -29,11 +29,13 @@ class VoiceStateUpdate extends RoxanneEvent {
         if (!activeQueue && !player) return;
 
         // check if the bot's voice channel is involved (return otherwise)
-        if (!_state.channel || _state.channel.id !== player?.channelId) return;
+        // explicitly assign only the oldState to remember the channel
+        _state.channel = oldState.channel;
+        if (!_state.channel || _state.channel?.id !== player?.channelId) return;
 
         // filter current users in vc for bot user
         _state.members = _state.channel.members.filter((member) => !member.user.bot);
-        console.log(_state.members);
+        // console.log(_state.members);
 
         switch (_state.type) {
             case 'leaveEvent':
