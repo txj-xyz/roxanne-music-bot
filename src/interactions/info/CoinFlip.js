@@ -17,7 +17,7 @@ class CoinFlip extends RoxanneInteraction {
     }
 
     async run({ interaction }) {
-        const message = await interaction.deferReply();
+        await interaction.deferReply();
         await interaction.editReply(`**${CoinFlip.rolledResult().toString()}!**`);
     }
 }
