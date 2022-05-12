@@ -34,9 +34,8 @@ class Play extends RoxanneInteraction {
 
         // Check Youtube URL / Playlist
         if (this.client.util.checkURL(query)) {
-            if (query.includes('/shorts/')) {
-                query = query.replace('/shorts/', '/watch?v=');
-            }
+            query.includes('/shorts/') ? (query = query.replace('/shorts/', '/watch?v=')) : (query = query);
+
             const result = await node.rest.resolve(query);
             if (!result) return await interaction.editReply("I didn't find anything on the query you provided!");
             const { type, tracks, playlistName } = result;
