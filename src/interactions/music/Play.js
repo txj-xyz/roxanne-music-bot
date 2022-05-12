@@ -29,11 +29,14 @@ class Play extends RoxanneInteraction {
 
     async run({ interaction }) {
         await interaction.deferReply();
-        const query = interaction.options.getString('query', true);
+        let query = interaction.options.getString('query', true);
         const node = await this.client.shoukaku.getNode();
 
         // Check Youtube URL / Playlist
         if (this.client.util.checkURL(query)) {
+            if (query.includes('/shorts/')) {
+                query = query.replace('/shorts/', '/watch?v=');
+            }
             const result = await node.rest.resolve(query);
             if (!result) return await interaction.editReply("I didn't find anything on the query you provided!");
             const { type, tracks, playlistName } = result;
