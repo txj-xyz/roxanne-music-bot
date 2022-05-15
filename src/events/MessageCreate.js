@@ -16,7 +16,9 @@ class MessageCreate extends RoxanneEvent {
     }
 
     async run(message) {
+        if (message.author.bot) return;
         const [command, ...args] = message.content.split(' ');
+
         const helpEmbed = new MessageEmbed()
             .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
             .setTitle('• Help Menu')
@@ -45,6 +47,7 @@ class MessageCreate extends RoxanneEvent {
             [new MessageButton().setStyle('LINK').setURL(this.client.util.invite).setLabel('Invite me!')]
         );
 
+        // Nickname util
         if (message.author.id.includes(this.client.util.config.owners[0]) && message.content.startsWith(`<@!${this.client.user.id}> nick`)) {
             try {
                 message.guild.me.setNickname(args.slice(1).join(' ') || null);
@@ -53,6 +56,8 @@ class MessageCreate extends RoxanneEvent {
             }
             return message.react('✅');
         }
+
+        // Help message live trigger event
         if (this.client.util.config.helpMessageEvent && message.content.startsWith('/')) {
             const findCommand = message.content.slice(1).split(' ')[0];
             if (this.client.interactions.commands.get(findCommand)) {
@@ -63,7 +68,9 @@ class MessageCreate extends RoxanneEvent {
                 });
             }
         }
-        if (this.client.util.config.tiktokMessageEvent && message.content.includes('tiktok.com') && !message.author.bot) {
+
+        // tiktok mesage event
+        if (this.client.util.config.tiktokMessageEvent && message.content.includes('tiktok.com')) {
             const tiktokLink = message.content.match(this.client.util.urlRegex)[0];
             try {
                 const resolvedLink = await this.client.util.unshortenLink(tiktokLink);
@@ -81,6 +88,17 @@ class MessageCreate extends RoxanneEvent {
                 });
             } catch (error) {
                 this.client.logger.error(error, 'Video too Large to send.');
+            }
+        }
+
+        // o same / neverluck
+        if (this.client.util.neverLucky && message.guild.id === '825625035024629762') {
+            //prettier-ignore
+            switch (message.content.toLowerCase()) {
+                case 'o': message.channel.send('O'); break;
+                case 'osame': message.channel.send('Osame'); break;
+                case 'ounsame': message.channel.send('Ounsame'); break;
+                default: break;
             }
         }
     }
