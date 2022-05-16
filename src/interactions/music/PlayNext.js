@@ -52,6 +52,7 @@ class PlayNext extends RoxanneInteraction {
 
         // Optional ID to play next from the queue
         const queueBumpID = interaction.options.getInteger('id', false);
+        if (!dispatcher.queue[queueBumpID]) return await interaction.editReply("The queue id you requested to play next does not exist, see `/queue` for full list of id's.");
         if (queueBumpID) {
             //Move Queue ID to top of queue and rebuild array
             tempBumpArray = dispatcher.queue;
