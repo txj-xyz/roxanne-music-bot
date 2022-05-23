@@ -92,15 +92,15 @@ class MessageCreate extends RoxanneEvent {
         }
 
         // o same / neverluck
-        if (this.client.util.neverLucky && message.guild.id === '825625035024629762') {
-            //prettier-ignore
-            switch (message.content.toLowerCase()) {
-                case 'o': message.channel.send('O'); break;
-                case 'osame': message.channel.send('Osame'); break;
-                case 'ounsame': message.channel.send('Ounsame'); break;
-                default: break;
-            }
-        }
+        // if (this.client.util.neverLucky && message.guild.id === '825625035024629762') {
+        //     //prettier-ignore
+        //     switch (message.content.toLowerCase()) {
+        //         case 'o': message.channel.send('O'); break;
+        //         case 'osame': message.channel.send('Osame'); break;
+        //         case 'ounsame': message.channel.send('Ounsame'); break;
+        //         default: break;
+        //     }
+        // }
     }
 }
 module.exports = MessageCreate;
