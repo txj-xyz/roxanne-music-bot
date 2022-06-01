@@ -13,8 +13,9 @@
     "helpMessageEvent": false,
     "shoukakuOptions": {
         "moveOnDisconnect": true,
-        "resumable": "resumableRoxanne",
-        "resumableTimeout": 45,
+        "resume": true,
+        "resumeKey": "resumableRoxanne",
+        "resumeTimeout": 45,
         "reconnectInterval": 2000,
         "reconnectTries": 5,
         "restTimeout": 10000
