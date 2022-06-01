@@ -16,7 +16,6 @@
         "@godaddy/terminus": "^4.9.0",
         "async-await-retry": "^1.2.4",
         "axios": "^0.24.0",
-        "azuma": "2.1.2",
         "bufferutil": "^4.0.5",
         "count-interval": "^1.0.1",
         "discord-api-types": "^0.24.0",
