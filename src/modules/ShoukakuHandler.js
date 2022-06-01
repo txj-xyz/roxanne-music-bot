@@ -1,10 +1,8 @@
-const { Shoukaku, Libraries } = require('shoukaku');
-// const servers = require('../../lavalink-server.json');
-// const options = require('../../shoukaku-options.js');
+const { Shoukaku, Connectors } = require('shoukaku');
 
 class ShoukakuHandler extends Shoukaku {
     constructor(client) {
-        super(new Libraries.DiscordJS(client), client.util.config.lavalinkOptions, client.util.config.shoukakuOptions);
+        super(new Connectors.DiscordJS(client), client.util.config.lavalinkOptions, client.util.config.shoukakuOptions);
         this.on('ready', (name, resumed) => {
             client.logger.log({
                 constructor: this.constructor.name,
