@@ -1,5 +1,5 @@
 const { Constants, Intents, Util } = require('discord.js');
-const { Azuma } = require('azuma');
+const { ShardingManager } = require('kurasuta');
 const { join } = require('path');
 const { token, ipcSocket } = require('./config.json');
 
@@ -23,12 +23,12 @@ const sharderOptions = {
     token,
 };
 
-const ratelimitOptions = {
-    handlerSweepInterval: 2 * 6000,
-    hashInactiveTimeout: 4 * 6000,
-    requestOffset: 500,
-};
+// const ratelimitOptions = {
+//     handlerSweepInterval: 2 * 6000,
+//     hashInactiveTimeout: 4 * 6000,
+//     requestOffset: 500,
+// };
 
-const azuma = new Azuma(join(__dirname, '/src/RoxanneBaseCluster.js'), sharderOptions, ratelimitOptions);
-
-azuma.spawn().catch(console.error);
+// const azuma = new Azuma(join(__dirname, '/src/RoxanneBaseCluster.js'), sharderOptions, ratelimitOptions);
+new ShardingManager(join(__dirname, '/src/RoxanneBaseCluster.js'), sharderOptions).spawn();
+// azuma.spawn().catch(console.error);
