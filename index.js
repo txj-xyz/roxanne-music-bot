@@ -16,8 +16,8 @@ const customClientOptions = {
 
 const sharderOptions = {
     clientOptions: Util.mergeDefault(Constants.DefaultOptions, customClientOptions),
-    development: true,
-    ipcSocket: ipcSocket || 9999,
+    // development: true,
+    // ipcSocket: ipcSocket || 9999,
     client: RoxanneClient,
     timeout: 90000,
     token,
