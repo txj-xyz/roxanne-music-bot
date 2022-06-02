@@ -11,6 +11,7 @@
     "foreverMode": true,
     "tiktokMessageEvent": false,
     "helpMessageEvent": false,
+    "guildMessageDisabled": ["534508796639182860", "918662128632733696"],
     "shoukakuOptions": {
         "moveOnDisconnect": true,
         "resume": true,

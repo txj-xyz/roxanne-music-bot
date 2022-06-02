@@ -1,5 +1,5 @@
 const RoxanneEvent = require('../abstract/RoxanneEvent.js');
-const { MessageEmbed, MessageActionRow, MessageButton, MessageAttachment, ReactionUserManager } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton, MessageAttachment } = require('discord.js');
 const { getVideoMeta } = require('tiktok-scraper');
 
 class MessageCreate extends RoxanneEvent {
