@@ -38,9 +38,9 @@ class Play extends RoxanneInteraction {
 
             const result = await node.rest.resolve(query);
             if (!result) return await interaction.editReply("I didn't find anything on the query you provided!");
-            const { type, tracks, playlistName } = result;
+            const { loadType, tracks } = result;
             const track = tracks.shift();
-            const playlist = type === 'PLAYLIST';
+            const playlist = loadType === 'PLAYLIST_LOADED';
             if (!track?.info) {
                 return await interaction.editReply('There was an error finding the song information, please try again.');
             }
@@ -76,7 +76,7 @@ class Play extends RoxanneInteraction {
                 });
             }
             await interaction
-                .editReply(playlist ? `Added \`${tracks?.length}\` tracks from the playlist \`${playlistName}\` in queue!` : `Added the track \`${track?.info.title}\` in queue!`)
+                .editReply(playlist ? `Added \`${tracks?.length}\` tracks from the playlist \`${result.playlistInfo.name}\` in queue!` : `Added the track \`${track?.info.title}\` in queue!`)
                 .catch(() => null);
             dispatcher?.play();
             return;
@@ -108,16 +108,16 @@ class Play extends RoxanneInteraction {
         // YouTube Playlist integration for select menus
         if (this.client.util.checkURL(query)) {
             const result = await node.rest.resolve(query);
-            if (result.type == 'LOAD_FAILED' || !result) {
+            if (result.loadType == 'LOAD_FAILED' || !result) {
                 return interaction.editReply({
                     content: "I didn't find anything on the query you provided!",
                     components: [],
                     embeds: [],
                 });
             }
-            const { type, tracks, playlistName } = result;
+            const { loadType, tracks } = result;
             const track = tracks.shift();
-            const playlist = type === 'PLAYLIST';
+            const playlist = loadType === 'PLAYLIST';
 
             // Log song request via button / menu
 
@@ -164,7 +164,7 @@ class Play extends RoxanneInteraction {
 
             await interaction
                 .editReply({
-                    content: playlist ? `Added \`${tracks?.length}\` tracks from the playlist \`${playlistName}\` in queue!` : `Added the track \`${track.info.title}\` in queue!`,
+                    content: playlist ? `Added \`${tracks?.length}\` tracks from the playlist \`${result.playlistInfo.name}\` in queue!` : `Added the track \`${track.info.title}\` in queue!`,
                     components: [],
                     embeds: [],
                 })
