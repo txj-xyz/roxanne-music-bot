@@ -39,7 +39,7 @@ class RoxanneDispatcher {
             this.play();
         });
 
-        this.player.on('closed', async (payload) => {
+        this.player.on(['closed', 'stuck'], async (payload) => {
             // Catch if the queue is empty, then return instead of reconnecting.
             if (!this.exists) return this.client.logger.debug(this.constructor.name, `Closed event found no queue, disconnecting from voice channel with WS Code: ${payload.code}.`);
             await Wait(5000);
@@ -51,6 +51,20 @@ class RoxanneDispatcher {
                 if (![0, 1].includes(player.connection.state)) this.destroy();
             }
         });
+
+        // //TODO: NEED TO REWRITE THIS
+        // this.player.on('stuck', async (payload) => {
+        //     // Catch if the queue is empty, then return instead of reconnecting.
+        //     if (!this.exists) return this.client.logger.debug(this.constructor.name, `Closed event found no queue, disconnecting from voice channel with WS Code: ${payload.code}.`);
+        //     await Wait(5000);
+        //     if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
+        //         await this.player.connection.reconnect();
+        //         await Wait(100);
+        //         await this.player.resume();
+        //         await this.player.connection.setDeaf(true);
+        //         if (![0, 1].includes(player.connection.state)) this.destroy();
+        //     }
+        // });
     }
 
     get exists() {
@@ -60,7 +74,7 @@ class RoxanneDispatcher {
     play() {
         if (!this.exists || !this.queue.length) return this.destroy();
         this.current = this.queue.shift();
-        this.player.setVolume(0.5).playTrack(this.current.track);
+        this.player.setVolume(0.5).playTrack({ track: this.current.track });
     }
 
     destroy(reason) {
