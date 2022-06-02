@@ -7,7 +7,6 @@
     "spotifyClientID": "String",
     "spotifySecret": "String",
     "youtube_key": "API v3 KEY",
-    "ipcSocket": 9999,
     "foreverMode": true,
     "tiktokMessageEvent": false,
     "helpMessageEvent": false,
