@@ -91,9 +91,9 @@ class InteractionHandler extends EventEmitter {
             if (interaction.isCommand() || interaction.isContextMenu()) {
                 const command = this.commands.get(interaction.commandName);
                 const dispatcher = this.client.queue.get(interaction.guildId);
-                const userVoiceJoinable = (await interaction.member.voice.channel.joinable) || null;
-                const userVoiceChannelLimit = await interaction.member.voice.channel.userLimit;
-                const userVoiceChannelUserCount = await interaction.member.voice.channel.members.size;
+                const userVoiceJoinable = (await interaction.member.voice?.channel?.joinable) ?? null;
+                const userVoiceChannelLimit = (await interaction.member.voice?.channel?.userLimit) ?? null;
+                const userVoiceChannelUserCount = (await interaction.member.voice?.channel?.members?.size) ?? null;
                 if (!command) return;
 
                 // no perms check before run
@@ -104,28 +104,13 @@ class InteractionHandler extends EventEmitter {
                     });
                 }
 
-                // check if the channel is joinable before continuing logic flow
-                if (!userVoiceJoinable) {
-                    return interaction.reply({
-                        content: "I don't have the required permissions to join that channel!",
-                        ephemeral: true,
-                    });
-                }
-
-                // check if channel limit is reached and if so return cannot join
-                if (userVoiceChannelLimit === userVoiceChannelUserCount) {
-                    return interaction.reply({
-                        content: 'The channel is full and I am unable to join.',
-                        ephemeral: true,
-                    });
-                }
-
                 // player related stuff
-                if (command.playerCheck?.voice && !interaction.member.voice.channelId)
+                if (command.playerCheck?.voice && !interaction.member.voice.channelId) {
                     return interaction.reply({
                         content: 'You are not in a voice channel!',
                         ephemeral: true,
                     });
+                }
 
                 // manual checking for stop command acting as a `/leave` command override
                 if (interaction.commandName === 'stop' && this.client.util.config.foreverMode) {
@@ -149,6 +134,24 @@ class InteractionHandler extends EventEmitter {
                         content: 'Nothing is playing in this server!',
                         ephemeral: true,
                     });
+                }
+
+                // check if the channel is joinable before continuing logic flow
+                if (command.category === 'Music' || (interaction.isContextMenu() && interaction.commandName === 'Add to Queue!')) {
+                    if (!dispatcher && !userVoiceJoinable) {
+                        return interaction.reply({
+                            content: "I don't have the required permissions to join that channel!",
+                            ephemeral: true,
+                        });
+                    }
+
+                    // // check if channel limit is reached and if so return cannot join
+                    if (!dispatcher && userVoiceChannelLimit === userVoiceChannelUserCount) {
+                        return interaction.reply({
+                            content: 'The channel is full and I am unable to join.',
+                            ephemeral: true,
+                        });
+                    }
                 }
 
                 if (command.playerCheck?.channel && dispatcher.player.connection.channelId !== interaction.member.voice.channelId) {
