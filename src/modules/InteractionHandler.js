@@ -91,6 +91,7 @@ class InteractionHandler extends EventEmitter {
             if (interaction.isCommand() || interaction.isContextMenu()) {
                 const command = this.commands.get(interaction.commandName);
                 const dispatcher = this.client.queue.get(interaction.guildId);
+                const userVoiceJoinable = (await interaction.member.voice.channel.joinable) || null;
 
                 if (!command) return;
 
@@ -98,6 +99,14 @@ class InteractionHandler extends EventEmitter {
                 if (command.permissions && !InteractionHandler.checkPermission(command.permissions, interaction, this.client)) {
                     return interaction.reply({
                         content: "You don't have the required permissions to use this command!",
+                        ephemeral: true,
+                    });
+                }
+
+                // check if the channel is joinable before continuing logic flow
+                if (!userVoiceJoinable) {
+                    return interaction.reply({
+                        content: "I don't have the required permissions to join that channel!",
                         ephemeral: true,
                     });
                 }
