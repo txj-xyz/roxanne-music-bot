@@ -117,7 +117,7 @@ class Play extends RoxanneInteraction {
             }
             const { loadType, tracks } = result;
             const track = tracks.shift();
-            const playlist = loadType === 'PLAYLIST';
+            const playlist = loadType === 'PLAYLIST_LOADED';
 
             // Log song request via button / menu
 
