@@ -67,7 +67,8 @@ class Search extends RoxanneInteraction {
         if (query.includes('https://')) return await interaction.editReply('I can only search for words.');
 
         const node = await this.client.shoukaku.getNode();
-        const search = await node.rest.resolve(query, 'youtube');
+        const search = await node.rest.resolve(`ytsearch:${query}`);
+
         if (!search?.tracks.length) return interaction.editReply("I didn't find any search results!");
         const _search = search.tracks.slice(0, Search.pageLimit ? Search.pageLimit : search.tracks.length);
 
