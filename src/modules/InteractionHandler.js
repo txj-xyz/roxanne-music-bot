@@ -92,7 +92,8 @@ class InteractionHandler extends EventEmitter {
                 const command = this.commands.get(interaction.commandName);
                 const dispatcher = this.client.queue.get(interaction.guildId);
                 const userVoiceJoinable = (await interaction.member.voice.channel.joinable) || null;
-
+                const userVoiceChannelLimit = await interaction.member.voice.channel.userLimit;
+                const userVoiceChannelUserCount = await interaction.member.voice.channel.members.size;
                 if (!command) return;
 
                 // no perms check before run
@@ -107,6 +108,14 @@ class InteractionHandler extends EventEmitter {
                 if (!userVoiceJoinable) {
                     return interaction.reply({
                         content: "I don't have the required permissions to join that channel!",
+                        ephemeral: true,
+                    });
+                }
+
+                // check if channel limit is reached and if so return cannot join
+                if (userVoiceChannelLimit === userVoiceChannelUserCount) {
+                    return interaction.reply({
+                        content: 'The channel is full and I am unable to join.',
                         ephemeral: true,
                     });
                 }
