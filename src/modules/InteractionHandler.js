@@ -87,15 +87,14 @@ class InteractionHandler extends EventEmitter {
     }
 
     async exec(interaction) {
+        const userVoiceJoinable = (await interaction.member.voice?.channel?.joinable) ?? null;
+        const userVoiceChannelLimit = (await interaction.member.voice?.channel?.userLimit) ?? null;
+        const userVoiceChannelUserCount = (await interaction.member.voice?.channel?.members?.size) ?? null;
         try {
             if (interaction.isCommand() || interaction.isContextMenu()) {
                 const command = this.commands.get(interaction.commandName);
                 const dispatcher = this.client.queue.get(interaction.guildId);
-                const userVoiceJoinable = (await interaction.member.voice?.channel?.joinable) ?? null;
-                const userVoiceChannelLimit = (await interaction.member.voice?.channel?.userLimit) ?? null;
-                const userVoiceChannelUserCount = (await interaction.member.voice?.channel?.members?.size) ?? null;
                 if (!command) return;
-
                 // no perms check before run
                 if (command.permissions && !InteractionHandler.checkPermission(command.permissions, interaction, this.client)) {
                     return interaction.reply({
