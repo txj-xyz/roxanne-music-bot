@@ -83,7 +83,7 @@ class Play extends RoxanneInteraction {
         }
 
         // Single search request
-        const search = await node.rest.resolve(query, 'youtube');
+        const search = await node.rest.resolve(`ytsearch:${query}`);
         if (!search?.tracks.length) return interaction.editReply("I didn't find anything on the query you provided!");
         const track = search.tracks.shift();
         const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
