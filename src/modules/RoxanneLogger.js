@@ -51,6 +51,13 @@ class RoxanneLogger {
         }
         console.error(`[ERROR] [Process ${process.pid}] [Cluster ${this.id}] `.error, colors.error(error));
     }
+
+    playerError(error) {
+        if (this.webhook) {
+            this.webhook.send({ embeds: [this.logEmbed({ reason: error })] }).catch(console.error);
+        }
+        console.error(`[ERROR] [Process ${process.pid}] [Cluster ${this.id}] `.error, colors.error(error));
+    }
 }
 
 module.exports = RoxanneLogger;
