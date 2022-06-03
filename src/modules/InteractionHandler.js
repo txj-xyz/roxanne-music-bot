@@ -183,7 +183,7 @@ class InteractionHandler extends EventEmitter {
                 .setTitle('Something errored!')
                 .setDescription(`\`\`\`js\n ${error.toString()}\`\`\``)
                 .setTimestamp()
-                .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
+                .setFooter({ text: this.client.user.username, iconURL: this.client.user.displayAvatarURL() });
             // TODO: CONVERT TO ERROR
             this.client.logger.log({
                 constructor: this.constructor.name,

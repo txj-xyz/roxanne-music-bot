@@ -28,7 +28,7 @@ class RoxanneLogger {
             //prettier-ignore
             return new MessageEmbed()
             .setDescription(`\`\`\`json\n${JSON.stringify(message, null, 2)}\n\`\`\``)
-            .setFooter(`PID: ${process.pid} - Cluster ID: ${this.id}`);
+            .setFooter({text: `PID: ${process.pid} - Cluster ID: ${this.id}`});
         } catch (error) {
             return new MessageEmbed().setDescription(`Log parsing error\n\`\`\`js\n${error.toString()}\n\`\`\``);
         }

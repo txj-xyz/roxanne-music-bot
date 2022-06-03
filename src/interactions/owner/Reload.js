@@ -31,7 +31,7 @@ class Reload extends RoxanneInteraction {
                 .setTitle('Reload complete !')
                 .setDescription(`Successfully live reloaded ${this.client.interactions.commands.size} commands!`)
                 .setTimestamp()
-                .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
+                .setFooter({ text: this.client.user.username, iconURL: this.client.user.displayAvatarURL() });
         } catch (error) {
             this.client.logger.error(error);
             this.client.interactions = stashed;
@@ -42,7 +42,7 @@ class Reload extends RoxanneInteraction {
                 .setDescription('Live reload failed, I will attempt to continue with the previous state.')
                 .addField('Error output', `\`\`\`${error}\`\`\``)
                 .setTimestamp()
-                .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
+                .setFooter({ text: this.client.user.username, iconURL: this.client.user.displayAvatarURL() });
         } finally {
             await interaction.editReply({ embeds: [embed] });
         }

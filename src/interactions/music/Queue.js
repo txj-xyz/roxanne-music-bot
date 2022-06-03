@@ -65,7 +65,7 @@ class Queue extends RoxanneInteraction {
             for (const q of chunked) {
                 pages.push(
                     new MessageEmbed()
-                        .setAuthor('Now Playing', this.client.user.displayAvatarURL({ dynamic: true }))
+                        .setAuthor({ name: 'Now Playing', iconURL: this.client.user.displayAvatarURL({ dynamic: true }) })
                         .setURL(dispatcher.current.info.uri)
                         .setTitle(`**${dispatcher.current.info.title}**`)
                         .setThumbnail(`https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`)
@@ -83,14 +83,14 @@ class Queue extends RoxanneInteraction {
         } else {
             await interaction.deferReply();
             const embed = new MessageEmbed()
-                .setAuthor('Now Playing', this.client.user.displayAvatarURL({ dynamic: true }))
+                .setAuthor({ name: 'Now Playing', iconURL: this.client.user.displayAvatarURL({ dynamic: true }) })
                 .setThumbnail(`https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`)
                 .setURL(dispatcher.current.info.uri)
                 .setColor(this.client.color)
                 .setTitle(`**${dispatcher.current.info.title}**`)
                 .addField('⌛ Duration: ', `\`${this.client.util.humanizeTime(dispatcher.current.info.length)}\``, true)
                 .addField('🎵 Author: ', `\`${dispatcher.current.info.author}\``, true)
-                .setFooter(`• ${dispatcher.queue.length} total songs in queue`)
+                .setFooter({ text: `• ${dispatcher.queue.length} total songs in queue` })
                 .setTimestamp();
             await interaction.editReply({ embeds: [embed] });
         }

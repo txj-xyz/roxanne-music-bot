@@ -76,7 +76,7 @@ class RadioMenu extends RoxanneInteraction {
             return await interaction.reply({ content: '**Human, Please stop the player or wait for the queue to finish before using this command.**', ephemeral: true });
         }
 
-        const page = new MessageEmbed().setAuthor('Live Radio Stations!').setDescription('Select a stream from the drop down!');
+        const page = new MessageEmbed().setAuthor({ name: 'Live Radio Stations!' }).setDescription('Select a stream from the drop down!');
         //prettier-ignore
         const row = new MessageActionRow().addComponents(
             new MessageSelectMenu()

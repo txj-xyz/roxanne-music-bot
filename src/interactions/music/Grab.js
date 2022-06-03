@@ -17,7 +17,7 @@ class Grab extends RoxanneInteraction {
         const dispatcher = this.client.queue.get(interaction.guild.id) || undefined;
         if (!dispatcher) return await interaction.editReply('There is nothing playing at the moment.');
         const embed = new MessageEmbed()
-            .setAuthor('Song saved', this.client.user.displayAvatarURL({ dynamic: true }))
+            .setAuthor({ name: 'Song saved', iconURL: this.client.user.displayAvatarURL({ dynamic: true }) })
             .setThumbnail(`https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`)
             .setURL(dispatcher.current.info.uri)
             .setColor(this.client.color)
