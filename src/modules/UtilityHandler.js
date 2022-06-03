@@ -15,7 +15,7 @@ class UtilityHandler {
         this.deleteMessage = this.deleteMessage;
         // prettier-ignore
         this.urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
-        this.loadingEmbed = new MessageEmbed().setAuthor('Loading.. Please wait :)');
+        this.loadingEmbed = new MessageEmbed().setAuthor({ name: 'Loading.. Please wait :)' });
     }
 
     deleteMessage(interaction, id) {
@@ -61,6 +61,13 @@ class UtilityHandler {
             : Math.abs(Number(number)) >= 1.0e3
             ? (Math.abs(Number(number)) / 1.0e3).toFixed(1) + 'K'
             : Math.abs(Number(number));
+    }
+
+    convertBytes(bytes) {
+        const MB = Math.floor((bytes / 1024 / 1024) % 1000);
+        const GB = Math.floor(bytes / 1024 / 1024 / 1024);
+        if (MB >= 1000) return `${GB.toFixed(1)} GB`;
+        else return `${Math.round(MB)} MB`;
     }
 
     async unshortenLink(link) {
