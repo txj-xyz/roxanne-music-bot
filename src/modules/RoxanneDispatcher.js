@@ -14,43 +14,41 @@ class RoxanneDispatcher {
 
         let _notifiedOnce = false;
 
-        this.player.on('start', () => {
-            if (this.repeat === 'one' && this.queue.length < 1) {
-                if (_notifiedOnce) return;
-                else _notifiedOnce = true;
-            }
-
-            const embed = new MessageEmbed()
-                .setColor(0xff0000)
-                .setAuthor({ name: 'Now Playing', iconURL: this.client.user.displayAvatarURL({ dynamic: true }) })
-                .setThumbnail(`https://img.youtube.com/vi/${this.current.info.identifier}/default.jpg`)
-                .setURL(this.current.info.uri)
-                .setTitle(`**${this.current.info.title}**`)
-                .addField('⌛ Duration: ', `\`${this.client.util.humanizeTime(this.current.info.length)}\``, true)
-                .addField('🎵 Author: ', `\`${this.current.info.author}\``, true)
-                .setFooter({ text: '• Powered by Kubernetes!' })
-                .setTimestamp();
-            this.channel.send({ embeds: [embed] }).catch(() => null);
-        });
-        this.player.on('end', async () => {
-            if (this.repeat === 'one') this.queue.unshift(this.current);
-            if (this.repeat === 'all') this.queue.push(this.current);
-            if (![0, 1].includes(player.connection.state)) return;
-            this.play();
-        });
-
-        this.player.on('closed', async (payload) => {
-            // Catch if the queue is empty, then return instead of reconnecting.
-            if (!this.exists) return this.client.logger.debug(this.constructor.name, `Closed event found no queue, disconnecting from voice channel with WS Code: ${payload.code}.`);
-            await Wait(5000);
-            if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
-                await this.player.connection.reconnect();
-                await Wait(100);
-                await this.player.resume();
-                await this.player.connection.setDeaf(true);
-                if (![0, 1].includes(player.connection.state)) this.destroy();
-            }
-        });
+        this.player
+            .on('start', () => {
+                if (this.repeat === 'one' && this.queue.length < 1) {
+                    if (_notifiedOnce) return;
+                    else _notifiedOnce = true;
+                }
+                const embed = new MessageEmbed()
+                    .setColor(0xff0000)
+                    .setAuthor({ name: 'Now Playing', iconURL: this.client.user.displayAvatarURL({ dynamic: true }) })
+                    .setThumbnail(`https://img.youtube.com/vi/${this.current.info.identifier}/default.jpg`)
+                    .setURL(this.current.info.uri)
+                    .setTitle(`**${this.current.info.title}**`)
+                    .addField('⌛ Duration: ', `\`${this.client.util.humanizeTime(this.current.info.length)}\``, true)
+                    .addField('🎵 Author: ', `\`${this.current.info.author}\``, true)
+                    .setFooter({ text: '• Powered by Kubernetes!' })
+                    .setTimestamp();
+                this.channel.send({ embeds: [embed] }).catch(() => null);
+            })
+            .on('end', async () => {
+                if (this.repeat === 'one') this.queue.unshift(this.current);
+                if (this.repeat === 'all') this.queue.push(this.current);
+                if (![0, 1].includes(player.connection.state)) return;
+                this.play();
+            })
+            .on('closed', () => {
+                this.queue.length = 0;
+                this.destroy('Failure of Websocket or bot kicked from VC.');
+            })
+            .on('stuck', () => {
+                this.client.logger.log({ message: 'Track is stuck, repeating song.' });
+                if (this.repeat === 'one') this.queue.unshift(this.current);
+                if (this.repeat === 'all') this.queue.push(this.current);
+                if (![0, 1].includes(player.connection.state)) return;
+                this.play();
+            });
 
         // //TODO: NEED TO REWRITE THIS TO HANDLE THE NEW REPLAY SYSTEM
         // this.player.on('stuck', async (payload) => {
@@ -78,6 +76,7 @@ class RoxanneDispatcher {
     }
 
     destroy(reason) {
+        this.client.logger.playerError(reason);
         this.queue.length = 0;
         this.client.util.config.foreverMode ? null : this.player.connection.disconnect();
         this.client.queue.delete(this.guild.id);
