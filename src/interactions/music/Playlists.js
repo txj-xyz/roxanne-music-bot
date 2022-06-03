@@ -59,7 +59,7 @@ class PlaylistMenu extends RoxanneInteraction {
             client.interactions.commands.get('play')[playerType](interaction, link);
         }
 
-        const page = new MessageEmbed().setAuthor('Select a playlist from the drop down!');
+        const page = new MessageEmbed().setAuthor({ name: 'Select a playlist from the drop down!' });
         //prettier-ignore
         const row = new MessageActionRow().addComponents(
             new MessageSelectMenu()

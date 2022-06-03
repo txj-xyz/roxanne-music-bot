@@ -21,7 +21,7 @@ class MessageCreate extends RoxanneEvent {
         const [command, ...args] = message.content.split(' ');
 
         const helpEmbed = new MessageEmbed()
-            .setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
+            .setAuthor({ name: this.client.user.username, iconURL: this.client.user.displayAvatarURL() })
             .setTitle('• Help Menu')
             .setColor(this.client.color)
             .setDescription('Do `/help [command]` for a detailed help about that command')
@@ -41,7 +41,7 @@ class MessageCreate extends RoxanneEvent {
             )
             .addField('🔗 GIF Tutorial', '[Full Size Link](https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif)')
             .setImage('https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif')
-            .setFooter(`The Music Project • ${this.client.interactions.commands.size} commands loaded`);
+            .setFooter({ text: `The Music Project • ${this.client.interactions.commands.size} commands loaded` });
 
         const supportButton = new MessageActionRow().addComponents(
             [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(this.client.util.supportServer).setLabel('Support Server')],
@@ -83,7 +83,7 @@ class MessageCreate extends RoxanneEvent {
                     .addField('**Likes**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.diggCount)), true)
                     .addField('**Views**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.playCount)), true)
                     .addField('**Comments**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.commentCount)), true)
-                    .setFooter(`Uploaded: ${new Date(videoMeta.collector[0]?.createTime * 1000).toLocaleString()}`);
+                    .setFooter({ text: `Uploaded: ${new Date(videoMeta.collector[0]?.createTime * 1000).toLocaleString()}` });
                 await message.reply({ embeds: [videoMetaEmbed], files: [new MessageAttachment(videoMeta.collector[0]?.videoUrl, `tiktok.mp4`)] }).catch((error) => {
                     this.client.logger.error(error, 'Video too Large to send.');
                 });

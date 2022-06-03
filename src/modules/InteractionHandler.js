@@ -91,6 +91,13 @@ class InteractionHandler extends EventEmitter {
         const userVoiceChannelLimit = (await interaction.member.voice?.channel?.userLimit) ?? null;
         const userVoiceChannelUserCount = (await interaction.member.voice?.channel?.members?.size) ?? null;
         try {
+            // this is a v14 feature on the new v10 discord api
+            if (interaction.channel.type === 'GUILD_VOICE') {
+                await interaction.deferReply({ ephemeral: true });
+                await interaction.editReply('Text-in-voice channels are not yet supported.');
+                return;
+            }
+
             if (interaction.isCommand() || interaction.isContextMenu()) {
                 const command = this.commands.get(interaction.commandName);
                 const dispatcher = this.client.queue.get(interaction.guildId);
@@ -183,7 +190,7 @@ class InteractionHandler extends EventEmitter {
                 .setTitle('Something errored!')
                 .setDescription(`\`\`\`js\n ${error.toString()}\`\`\``)
                 .setTimestamp()
-                .setFooter(this.client.user.username, this.client.user.displayAvatarURL());
+                .setFooter({ text: this.client.user.username, iconURL: this.client.user.displayAvatarURL() });
             // TODO: CONVERT TO ERROR
             this.client.logger.log({
                 constructor: this.constructor.name,

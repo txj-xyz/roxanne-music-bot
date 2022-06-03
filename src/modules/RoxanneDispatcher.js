@@ -22,13 +22,13 @@ class RoxanneDispatcher {
 
             const embed = new MessageEmbed()
                 .setColor(0xff0000)
-                .setAuthor('Now Playing', this.client.user.displayAvatarURL({ dynamic: true }))
+                .setAuthor({ name: 'Now Playing', iconURL: this.client.user.displayAvatarURL({ dynamic: true }) })
                 .setThumbnail(`https://img.youtube.com/vi/${this.current.info.identifier}/default.jpg`)
                 .setURL(this.current.info.uri)
                 .setTitle(`**${this.current.info.title}**`)
                 .addField('⌛ Duration: ', `\`${this.client.util.humanizeTime(this.current.info.length)}\``, true)
                 .addField('🎵 Author: ', `\`${this.current.info.author}\``, true)
-                .setFooter('• Powered by Kubernetes!')
+                .setFooter({ text: '• Powered by Kubernetes!' })
                 .setTimestamp();
             this.channel.send({ embeds: [embed] }).catch(() => null);
         });
@@ -39,7 +39,7 @@ class RoxanneDispatcher {
             this.play();
         });
 
-        this.player.on(['closed', 'stuck'], async (payload) => {
+        this.player.on('closed', async (payload) => {
             // Catch if the queue is empty, then return instead of reconnecting.
             if (!this.exists) return this.client.logger.debug(this.constructor.name, `Closed event found no queue, disconnecting from voice channel with WS Code: ${payload.code}.`);
             await Wait(5000);
@@ -52,7 +52,7 @@ class RoxanneDispatcher {
             }
         });
 
-        // //TODO: NEED TO REWRITE THIS
+        // //TODO: NEED TO REWRITE THIS TO HANDLE THE NEW REPLAY SYSTEM
         // this.player.on('stuck', async (payload) => {
         //     // Catch if the queue is empty, then return instead of reconnecting.
         //     if (!this.exists) return this.client.logger.debug(this.constructor.name, `Closed event found no queue, disconnecting from voice channel with WS Code: ${payload.code}.`);
