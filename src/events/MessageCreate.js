@@ -45,7 +45,7 @@ class MessageCreate extends RoxanneEvent {
 
         const supportButton = new MessageActionRow().addComponents(
             [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(this.client.util.supportServer).setLabel('Support Server')],
-            [new MessageButton().setStyle('LINK').setURL(this.client.util.invite).setLabel('Invite me!')]
+            [new MessageButton().setStyle('LINK').setURL(this.client.util.config.inviteURL).setLabel('Invite me!')]
         );
 
         // Nickname util
@@ -72,7 +72,8 @@ class MessageCreate extends RoxanneEvent {
 
         // tiktok mesage event
         if (this.client.util.config.tiktokMessageEvent && message.content.includes('tiktok.com')) {
-            const tiktokLink = message.content.match(this.client.util.urlRegex)[0];
+            //prettier-ignore
+            const tiktokLink = message.content.match(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/)[0];
             try {
                 const resolvedLink = await this.client.util.unshortenLink(tiktokLink);
                 const videoMeta = await getVideoMeta(resolvedLink, {});
