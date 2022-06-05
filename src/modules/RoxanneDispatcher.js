@@ -49,20 +49,6 @@ class RoxanneDispatcher {
                 if (![0, 1].includes(player.connection.state)) return;
                 this.play();
             });
-
-        // //TODO: NEED TO REWRITE THIS TO HANDLE THE NEW REPLAY SYSTEM
-        // this.player.on('stuck', async (payload) => {
-        //     // Catch if the queue is empty, then return instead of reconnecting.
-        //     if (!this.exists) return this.client.logger.debug(this.constructor.name, `Closed event found no queue, disconnecting from voice channel with WS Code: ${payload.code}.`);
-        //     await Wait(5000);
-        //     if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
-        //         await this.player.connection.reconnect();
-        //         await Wait(100);
-        //         await this.player.resume();
-        //         await this.player.connection.setDeaf(true);
-        //         if (![0, 1].includes(player.connection.state)) this.destroy();
-        //     }
-        // });
     }
 
     get exists() {
