@@ -31,9 +31,9 @@ Channels    :: ${channels.reduce((sum, count) => sum + count)}
 Players     :: ${players.reduce((sum, count) => sum + count)}
 Memory      :: ${this.client.util.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0))}
 Ping        :: ${Math.round(Date.now() - pingTime)} MS
-Uptime      :: ${this.client.util.convertMS(client.uptime)}
+Uptime      :: ${this.client.util.convertMS(this.client.uptime)}
 CMDs Run    :: ${this.client.commandsRun}
-Music Nodes :: ${Array.from(client.shoukaku.nodes.keys()).join(', ')}
+Music Nodes :: ${Array.from(this.client.shoukaku.nodes.keys()).join(', ')}
 \`\`\``
             )
             .setTimestamp()
