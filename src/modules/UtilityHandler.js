@@ -7,14 +7,8 @@ class UtilityHandler {
     constructor(client) {
         this.client = client;
         this.config = config;
-        this.invite = this.config.inviteURL;
         this.supportServer = this.config.supportServer;
-        this.humanizeTime = this.humanizeTime;
-        this.convertMS = this.convertMS;
-        this.ytMeta = this.ytMeta;
         this.deleteMessage = this.deleteMessage;
-        // prettier-ignore
-        this.urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
         this.loadingEmbed = new MessageEmbed().setAuthor({ name: 'Loading.. Please wait :)' });
     }
 
