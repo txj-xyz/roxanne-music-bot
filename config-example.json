@@ -7,15 +7,14 @@
     "spotifyClientID": "String",
     "spotifySecret": "String",
     "youtube_key": "API v3 KEY",
-    "foreverMode": true,
     "tiktokMessageEvent": false,
     "helpMessageEvent": false,
     "guildMessageDisabled": ["534508796639182860", "918662128632733696"],
     "shoukakuOptions": {
         "moveOnDisconnect": true,
-        "resume": true,
-        "resumeKey": "resumableRoxanne",
-        "resumeTimeout": 45,
+        "resumable": true,
+        "resumableKey": "resumableRoxanne",
+        "resumableTimeout": 45,
         "reconnectInterval": 2000,
         "reconnectTries": 5,
         "restTimeout": 10000
