@@ -111,23 +111,6 @@ class InteractionHandler extends EventEmitter {
                     });
                 }
 
-                // manual checking for stop command acting as a `/leave` command override
-                if (interaction.commandName === 'stop' && this.client.util.config.foreverMode) {
-                    // const botVoice = (await interaction.guild.voiceStates.cache.get(this.client.user.id)) || null;
-
-                    this.client.logger.log({
-                        constructor: this.constructor.name,
-                        message: `Executing Command ${command.name}`,
-                        user: interaction.user.username,
-                        userID: interaction.user.id,
-                        uid: command.uid,
-                    });
-
-                    await command.run({ interaction });
-                    this.client.commandsRun++;
-                    return;
-                }
-
                 if (command.playerCheck?.dispatcher && !dispatcher) {
                     return interaction.reply({
                         content: 'Nothing is playing in this server!',
