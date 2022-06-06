@@ -4,8 +4,6 @@
     "webhookUrl": "https://discord.com/api/webhooks/id/token",
     "inviteURL": "https://google.com/",
     "supportServer": "https://google.com/",
-    "spotifyClientID": "String",
-    "spotifySecret": "String",
     "youtube_key": "API v3 KEY",
     "tiktokMessageEvent": false,
     "helpMessageEvent": false,
