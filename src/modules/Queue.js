@@ -10,9 +10,6 @@ class Queue extends Map {
     async handle(guild, member, channel, node, track, first) {
         const existing = this.get(guild.id);
         if (!existing) {
-            //24/7 mode checker
-            const botVoice = guild.voiceStates.cache.get(this.client.user.id);
-            //TODO: check voice user limit before joining.
             player = await node
                 .joinChannel({
                     guildId: guild.id,
@@ -31,12 +28,7 @@ class Queue extends Map {
                 guildID: guild.id,
             });
 
-            dispatcher = new RoxanneDispatcher({
-                client: this.client,
-                guild,
-                channel,
-                player,
-            });
+            dispatcher = new RoxanneDispatcher({ client: this.client, guild, channel, player });
 
             dispatcher.queue.push(track);
             this.set(guild.id, dispatcher);
