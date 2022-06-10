@@ -43,6 +43,12 @@ class RoxanneDispatcher {
                     message: JSON.stringify(payload, null, null),
                     errorPossible: `possible webhookd failure from lavalink ${payload.code ? payload.code : player.connection.state}`,
                 });
+                if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
+                    if (this.repeat === 'one') this.queue.unshift(this.current);
+                    if (this.repeat === 'all') this.queue.push(this.current);
+                    if (![0, 1].includes(player.connection.state)) return;
+                    this.play();
+                }
                 this.queue.length = 0;
                 this.destroy('Failure of Websocket or bot kicked from VC.');
             })
