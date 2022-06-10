@@ -3,6 +3,8 @@ const { MessageEmbed } = require('discord.js');
 const { Collection } = require('@discordjs/collection');
 const EventEmitter = require('events');
 
+// holy fuck i actually have brain cancer, this entire file needs to be rewriteen after new whitelists being done
+
 class InteractionHandler extends EventEmitter {
     constructor(client) {
         super();
