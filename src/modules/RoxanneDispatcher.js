@@ -43,11 +43,22 @@ class RoxanneDispatcher {
                     message: JSON.stringify(payload, null, null),
                     errorPossible: `possible webhookd failure from lavalink ${payload.code ? payload.code : player.connection.state}`,
                 });
-                if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
-                    if (this.repeat === 'one') this.queue.unshift(this.current);
-                    if (this.repeat === 'all') this.queue.push(this.current);
-                    if (![0, 1].includes(player.connection.state)) return;
-                    this.play();
+                try {
+                    this.client.logger.log({message: 'try block on 4014 error', payloadcode: payload.code})
+                    if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
+                        await this.player.connection.reconnect();
+                        await Wait(100);
+                        await this.player.resume();
+                        await this.player.connection.setDeaf(true);
+                        if (![0, 1].includes(player.connection.state)) this.destroy();
+                    }
+                } catch (error) {
+                    if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
+                        if (this.repeat === 'one') this.queue.unshift(this.current);
+                        if (this.repeat === 'all') this.queue.push(this.current);
+                        if (![0, 1].includes(player.connection.state)) return;
+                        this.play();
+                    }
                 }
                 this.queue.length = 0;
                 this.destroy('Failure of Websocket or bot kicked from VC.');
