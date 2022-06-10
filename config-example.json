@@ -9,12 +9,13 @@
     "helpMessageEvent": false,
     "guildMessageDisabled": ["534508796639182860", "918662128632733696"],
     "shoukakuOptions": {
-        "moveOnDisconnect": true,
-        "resumable": true,
-        "resumableKey": "resumableRoxanne",
-        "resumableTimeout": 45,
-        "reconnectInterval": 2000,
+        "resume": true,
+        "resumeKey": "resumableRoxanne",
+        "resumeByLibrary": true,
+        "resumeTimeout": 45,
         "reconnectTries": 5,
+        "reconnectInterval": 2000,
+        "moveOnDisconnect": true,
         "restTimeout": 10000
     },
     "lavalinkOptions": [
