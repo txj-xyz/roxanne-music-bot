@@ -38,7 +38,28 @@ class RoxanneDispatcher {
                 if (![0, 1].includes(player.connection.state)) return;
                 this.play();
             })
-            .on('closed', () => {
+            .on('closed', (payload) => {
+                this.client.logger.log({
+                    message: JSON.stringify(payload, null, null),
+                    errorPossible: `possible webhookd failure from lavalink ${payload.code ? payload.code : player.connection.state}`,
+                });
+                try {
+                    this.client.logger.log({message: 'try block on 4014 error', payloadcode: payload.code})
+                    if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
+                        await this.player.connection.reconnect();
+                        await Wait(100);
+                        await this.player.resume();
+                        await this.player.connection.setDeaf(true);
+                        if (![0, 1].includes(player.connection.state)) this.destroy();
+                    }
+                } catch (error) {
+                    if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
+                        if (this.repeat === 'one') this.queue.unshift(this.current);
+                        if (this.repeat === 'all') this.queue.push(this.current);
+                        if (![0, 1].includes(player.connection.state)) return;
+                        this.play();
+                    }
+                }
                 this.queue.length = 0;
                 this.destroy('Failure of Websocket or bot kicked from VC.');
             })
@@ -49,20 +70,6 @@ class RoxanneDispatcher {
                 if (![0, 1].includes(player.connection.state)) return;
                 this.play();
             });
-
-        // //TODO: NEED TO REWRITE THIS TO HANDLE THE NEW REPLAY SYSTEM
-        // this.player.on('stuck', async (payload) => {
-        //     // Catch if the queue is empty, then return instead of reconnecting.
-        //     if (!this.exists) return this.client.logger.debug(this.constructor.name, `Closed event found no queue, disconnecting from voice channel with WS Code: ${payload.code}.`);
-        //     await Wait(5000);
-        //     if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
-        //         await this.player.connection.reconnect();
-        //         await Wait(100);
-        //         await this.player.resume();
-        //         await this.player.connection.setDeaf(true);
-        //         if (![0, 1].includes(player.connection.state)) this.destroy();
-        //     }
-        // });
     }
 
     get exists() {
@@ -78,7 +85,7 @@ class RoxanneDispatcher {
     destroy(reason) {
         this.client.logger.playerError(reason);
         this.queue.length = 0;
-        this.client.util.config.foreverMode ? null : this.player.connection.disconnect();
+        this.player.connection.disconnect();
         this.client.queue.delete(this.guild.id);
         this.client.logger.debug(this.player.constructor.name, `Destroyed player & connection`);
         if (this.stopped) return;

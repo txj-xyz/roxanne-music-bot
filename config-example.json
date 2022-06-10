@@ -1,51 +1,41 @@
 {
-    "owners": ["user_id"],
-    "token": "token_string",
-    "webhookUrl": "https://discord.com/api/webhooks/id/token",
-    "inviteURL": "https://google.com/",
-    "supportServer": "https://google.com/",
-    "spotifyClientID": "String",
-    "spotifySecret": "String",
-    "youtube_key": "API v3 KEY",
-    "foreverMode": true,
+    "owners": ["UserID"],
+    "token": "",
+    "webhookUrl": "",
+    "inviteURL": "",
+    "supportServer": "",
+    "youtube_key": "",
+    "foreverMode": false,
     "tiktokMessageEvent": false,
     "helpMessageEvent": false,
-    "guildMessageDisabled": ["534508796639182860", "918662128632733696"],
+    "guildMessageDisabled": ["UserID"],
     "shoukakuOptions": {
-        "moveOnDisconnect": true,
         "resume": true,
         "resumeKey": "resumableRoxanne",
+        "resumeByLibrary": true,
         "resumeTimeout": 45,
-        "reconnectInterval": 2000,
         "reconnectTries": 5,
+        "reconnectInterval": 2000,
+        "moveOnDisconnect": true,
         "restTimeout": 10000
     },
-    "lavalinkOptions": [
+    "lavalinkOptions":
+    [
         {
-            "id": "lavalink-server-1",
-            "name": "lavalink-server-1",
-            "host": "lavalink-server.com",
-            "url": "lavalink-server.com:2335",
+            "id": "local-1",
+            "name": "local-1",
+            "host": "localhost",
+            "url": "localhost:2333",
             "port": 2335,
             "auth": "password",
             "password": "password",
             "secure": false
         },
         {
-            "id": "lavalink-server-2",
-            "name": "lavalink-server-2",
-            "host": "lavalink-server.com",
-            "url": "lavalink-server.com:2335",
-            "port": 2335,
-            "auth": "password",
-            "password": "password",
-            "secure": false
-        },
-        {
-            "id": "lavalink-server-3",
-            "name": "lavalink-server-3",
-            "host": "lavalink-server.com",
-            "url": "lavalink-server.com:2335",
+            "id": "local-2",
+            "name": "local-2",
+            "host": "localhost",
+            "url": "localhost:2334",
             "port": 2335,
             "auth": "password",
             "password": "password",
@@ -53,8 +43,8 @@
         }
     ],
     "slashReloader": {
-        "dev": false,
-        "clientId": "client_id",
-        "guildId": "guild_id"
+        "dev": true,
+        "clientId": "",
+        "guildId": ""
     }
 }

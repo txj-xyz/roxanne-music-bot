@@ -3,6 +3,8 @@ const { MessageEmbed } = require('discord.js');
 const { Collection } = require('@discordjs/collection');
 const EventEmitter = require('events');
 
+// holy fuck i actually have brain cancer, this entire file needs to be rewriteen after new whitelists being done
+
 class InteractionHandler extends EventEmitter {
     constructor(client) {
         super();
@@ -109,23 +111,6 @@ class InteractionHandler extends EventEmitter {
                         content: 'You are not in a voice channel!',
                         ephemeral: true,
                     });
-                }
-
-                // manual checking for stop command acting as a `/leave` command override
-                if (interaction.commandName === 'stop' && this.client.util.config.foreverMode) {
-                    // const botVoice = (await interaction.guild.voiceStates.cache.get(this.client.user.id)) || null;
-
-                    this.client.logger.log({
-                        constructor: this.constructor.name,
-                        message: `Executing Command ${command.name}`,
-                        user: interaction.user.username,
-                        userID: interaction.user.id,
-                        uid: command.uid,
-                    });
-
-                    await command.run({ interaction });
-                    this.client.commandsRun++;
-                    return;
                 }
 
                 if (command.playerCheck?.dispatcher && !dispatcher) {

@@ -9,15 +9,12 @@ console.log('• Loading the commands to refresh');
 // the current amount of commands to refresh
 const commands = [];
 // peseudo load the commands to get the interaction data
-for (const directory of readdirSync(`${__dirname}/interactions`, {
-    withFileTypes: true,
-})) {
+for (const directory of readdirSync(`${__dirname}/interactions`, { withFileTypes: true })) {
     if (!directory.isDirectory()) continue;
     for (const command of readdirSync(`${__dirname}/interactions/${directory.name}`, { withFileTypes: true })) {
         if (!command.isFile()) continue;
         const Interaction = require(`${__dirname}/interactions/${directory.name}/${command.name}`);
         commands.push(new Interaction({}).interactionData);
-        console.log(command);
     }
 }
 // stuffs are loaded, now lets log how many commands we have

@@ -14,7 +14,6 @@ class Roxanne extends Client {
         // create cache
         options.makeCache = (manager) => {
             switch (manager.name) {
-                // Disable Cache
                 case 'GuildEmojiManager':
                 case 'GuildBanManager':
                 case 'GuildInviteManager':
@@ -29,10 +28,10 @@ class Roxanne extends Client {
                     return new Collection();
             }
         };
-        // pass options
         super(options);
 
         this.color = 0x7e686c;
+        this.commandsRun = 0;
         this.util = new UtilityHandler(this);
         this.quitting = false;
         this.location = process.cwd();
@@ -40,7 +39,6 @@ class Roxanne extends Client {
         this.logger = new RoxanneLogger();
         this.shoukaku = new ShoukakuHandler(this);
         this.queue = new Queue(this);
-        this.commandsRun = 0;
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
         ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event) => process.once(event, this.exit.bind(this)));

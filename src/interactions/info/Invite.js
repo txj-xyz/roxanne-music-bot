@@ -14,7 +14,7 @@ class Invite extends RoxanneInteraction {
         await interaction.deferReply({ ephemeral: false });
 
         const buttons = new MessageActionRow().addComponents(
-            [new MessageButton().setStyle('LINK').setURL(this.client.util.invite).setLabel('Invite me here!')],
+            [new MessageButton().setStyle('LINK').setURL(this.client.util.config.inviteURL).setLabel('Invite me here!')],
             [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(this.client.util.supportServer).setLabel('Support Server')]
         );
         await interaction.editReply({

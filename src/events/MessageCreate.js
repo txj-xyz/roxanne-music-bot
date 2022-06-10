@@ -1,6 +1,7 @@
 const RoxanneEvent = require('../abstract/RoxanneEvent.js');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageAttachment } = require('discord.js');
 const { getVideoMeta } = require('tiktok-scraper');
+const { readdirSync } = require('fs');
 
 class MessageCreate extends RoxanneEvent {
     get name() {
@@ -45,11 +46,59 @@ class MessageCreate extends RoxanneEvent {
 
         const supportButton = new MessageActionRow().addComponents(
             [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(this.client.util.supportServer).setLabel('Support Server')],
-            [new MessageButton().setStyle('LINK').setURL(this.client.util.invite).setLabel('Invite me!')]
+            [new MessageButton().setStyle('LINK').setURL(this.client.util.config.inviteURL).setLabel('Invite me!')]
         );
 
+        // slash command handler
+        if (this.client.util.config.owners.includes(message.author.id) && message.content.startsWith(`<@${this.client.user.id}> build`)) {
+            if (message.content.match(/help/gi)) {
+                const buildUsage = [
+                    '`build` - Build Server Commands',
+                    '`build help` - Shows this message',
+                    '`build global` - Build Global Commands',
+                    '`build removeall` - Remove Global Commands',
+                    '`build guild removeall` - Remove Server Commands',
+                ];
+                return message.reply({ content: buildUsage.join('\n') });
+            }
+
+            if (message.content.match(/removeall/gi)) {
+                // remove only the guilds commands
+                if (message.content.match(/guild/gi))
+                    await message.guild.commands.set([]).catch((err) => {
+                        this.client.logger.error({ error: err.stack }, err.stack);
+                        message.react('❎');
+                    });
+                // remove all slash commands globally
+                else
+                    await this.client.application.commands.set([]).catch((err) => {
+                        this.client.logger.error({ error: err.stack }, err.stack);
+                        message.react('❎');
+                    });
+                return message.reply({ content: 'Done' });
+            }
+            let data = [];
+            for (const directory of readdirSync(`${this.client.location}/src/interactions`, { withFileTypes: true })) {
+                if (!directory.isDirectory()) continue;
+                for (const command of readdirSync(`${this.client.location}/src/interactions/${directory.name}`, { withFileTypes: true })) {
+                    if (!command.isFile()) continue;
+                    const Interaction = require(`${this.client.location}/src/interactions/${directory.name}/${command.name}`);
+                    data.push(new Interaction({}).interactionData);
+                }
+            }
+            if (message.content.match(/global/gi)) {
+                if (!this.client.application) return message.reply({ content: `There is no client.application?` }).catch(() => {});
+                let res = await this.client.application.commands.set(data).catch((e) => e);
+                if (res instanceof Error) return this.client.logger.error({ error: res.stack }, res.stack);
+                return message.reply({ content: `Deploying (**${data.length.toLocaleString()}**) slash commands, this could take up to 1 hour` }).catch(() => {});
+            }
+            let res = await message.guild.commands.set(data).catch((e) => e);
+            if (res instanceof Error) return this.client.logger.error({ error: res.stack }, res.stack).catch(() => {});
+            return message.reply({ content: `Deploying (**${data.length.toLocaleString()}**) slash commands` }).catch(() => {});
+        }
+
         // Nickname util
-        if (message.author.id.includes(this.client.util.config.owners[0]) && message.content.startsWith(`<@!${this.client.user.id}> nick`)) {
+        if (this.client.util.config.owners.includes(message.author.id) && message.content.startsWith(`<@${this.client.user.id}> nick`)) {
             try {
                 message.guild.me.setNickname(args.slice(1).join(' ') || null);
             } catch (error) {
@@ -71,8 +120,9 @@ class MessageCreate extends RoxanneEvent {
         }
 
         // tiktok mesage event
-        if (this.client.util.config.tiktokMessageEvent && message.content.includes('tiktok.com')) {
-            const tiktokLink = message.content.match(this.client.util.urlRegex)[0];
+        if (this.client.util.config.tiktokMessageEvent && message.content.match(/https:\/\/www\.tiktok\.com/g)) {
+            //prettier-ignore
+            const tiktokLink = message.content.match(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/)[0];
             try {
                 const resolvedLink = await this.client.util.unshortenLink(tiktokLink);
                 const videoMeta = await getVideoMeta(resolvedLink, {});
