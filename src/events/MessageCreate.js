@@ -120,7 +120,7 @@ class MessageCreate extends RoxanneEvent {
         }
 
         // tiktok mesage event
-        if (this.client.util.config.tiktokMessageEvent && message.content.includes('tiktok.com')) {
+        if (this.client.util.config.tiktokMessageEvent && message.content.match(/https:\/\/www\.tiktok\.com/g)) {
             //prettier-ignore
             const tiktokLink = message.content.match(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/)[0];
             try {
