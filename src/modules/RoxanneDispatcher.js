@@ -38,7 +38,11 @@ class RoxanneDispatcher {
                 if (![0, 1].includes(player.connection.state)) return;
                 this.play();
             })
-            .on('closed', () => {
+            .on('closed', (payload) => {
+                this.client.logger.log({
+                    message: JSON.stringify(payload, null, null),
+                    errorPossible: `possible webhookd failure from lavalink ${payload.code ? payload.code : player.connection.state}`,
+                });
                 this.queue.length = 0;
                 this.destroy('Failure of Websocket or bot kicked from VC.');
             })
