@@ -1,17 +1,18 @@
 // const { readdirSync } = require('node:fs');
 const { Collection } = require('discord.js');
 const { EventEmitter } = require('node:events');
+const InteractionHandler = require('./InteractionHandler');
 
-class ModalHandler extends EventEmitter {
+class ModalHandler extends InteractionHandler {
     constructor(client) {
-        super();
+        super(client);
         this.client = client;
         this.dispatcher = null;
         this.built = false;
         this.commands = new Collection();
-        // process.on('uncaughtException', (err) => client.logger.error(err));
+        process.on('uncaughtException', (err) => client.logger.error(err));
         this.on('error', (error) => client.logger.error(error));
-        this.client.on('interactionCreate', (interaction) => {
+        this.on('ModalSubmit', (interaction) => {
             if (interaction.isModalSubmit()) {
                 this.exec(interaction);
                 this.dispatcher = this.client.queue.get(interaction.guildId) ?? null;
@@ -34,9 +35,9 @@ class ModalHandler extends EventEmitter {
 
     static async checkAllVoiceRelated(interaction, command, dispatcher) {
         let passedCheck = false;
-        const userVoiceJoinable = (await interaction.member.voice?.channel?.joinable) ?? (passedCheck = false);
-        const userVoiceChannelLimit = (await interaction.member.voice?.channel?.userLimit) ?? (passedCheck = false);
-        const userVoiceChannelUserCount = (await interaction.member.voice?.channel?.members?.size) ?? (passedCheck = false);
+        const userVoiceJoinable = interaction.member.voice?.channel?.joinable ?? (passedCheck = false);
+        const userVoiceChannelLimit = interaction.member.voice?.channel?.userLimit ?? (passedCheck = false);
+        const userVoiceChannelUserCount = interaction.member.voice?.channel?.members?.size ?? (passedCheck = false);
 
         if (command.playerCheck?.voice && !interaction.member.voice.channelId) {
             interaction.reply({ content: 'You are not in a voice channel!', ephemeral: true });
