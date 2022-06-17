@@ -12,7 +12,10 @@ class InteractionHandler extends EventEmitter {
         this.commands = new Collection();
         this.built = false;
         this.on('error', (error) => client.logger.error(error));
-        this.client.on('interactionCreate', (interaction) => this.exec(interaction));
+        this.client.on('interactionCreate', (interaction) => {
+            if (interaction.isModalSubmit()) return;
+            this.exec(interaction);
+        });
     }
 
     static checkPermission(permissions, interaction, client) {
@@ -98,30 +101,31 @@ class InteractionHandler extends EventEmitter {
                 const dispatcher = this.client.queue.get(interaction.guildId);
                 if (!command) return;
                 // no perms check before run
-                if (command.permissions && !InteractionHandler.checkPermission(command.permissions, interaction, this.client)) {
-                    return interaction.reply({
-                        content: "You don't have the required permissions to use this command!",
-                        ephemeral: true,
-                    });
-                }
-
-                // player related stuff
-                if (command.playerCheck?.voice && !interaction.member.voice.channelId) {
-                    return interaction.reply({
-                        content: 'You are not in a voice channel!',
-                        ephemeral: true,
-                    });
-                }
-
-                if (command.playerCheck?.dispatcher && !dispatcher) {
-                    return interaction.reply({
-                        content: 'Nothing is playing in this server!',
-                        ephemeral: true,
-                    });
-                }
 
                 // check if the channel is joinable before continuing logic flow
                 if (command.category === 'Music' || (interaction.isContextMenu() && interaction.commandName === 'Add to Queue!')) {
+                    if (command.permissions && !InteractionHandler.checkPermission(command.permissions, interaction, this.client)) {
+                        return interaction.reply({
+                            content: "You don't have the required permissions to use this command!",
+                            ephemeral: true,
+                        });
+                    }
+
+                    // player related stuff
+                    if (command.playerCheck?.voice && !interaction.member.voice.channelId) {
+                        return interaction.reply({
+                            content: 'You are not in a voice channel!',
+                            ephemeral: true,
+                        });
+                    }
+
+                    if (command.playerCheck?.dispatcher && !dispatcher) {
+                        return interaction.reply({
+                            content: 'Nothing is playing in this server!',
+                            ephemeral: true,
+                        });
+                    }
+
                     if (!dispatcher && !userVoiceJoinable) {
                         return interaction.reply({
                             content: "I don't have the required permissions to join that channel!",
@@ -136,13 +140,13 @@ class InteractionHandler extends EventEmitter {
                             ephemeral: true,
                         });
                     }
-                }
 
-                if (command.playerCheck?.channel && dispatcher.player.connection.channelId !== interaction.member.voice.channelId) {
-                    return interaction.reply({
-                        content: "You are not in the same voice channel I'm currently connected to!",
-                        ephemeral: true,
-                    });
+                    if (command.playerCheck?.channel && dispatcher.player.connection.channelId !== interaction.member.voice.channelId) {
+                        return interaction.reply({
+                            content: "You are not in the same voice channel I'm currently connected to!",
+                            ephemeral: true,
+                        });
+                    }
                 }
 
                 // general interaction commands
