@@ -173,6 +173,25 @@ class Play extends RoxanneInteraction {
 
             return;
         }
+
+        // Single search request
+        const search = await node.rest.resolve(`ytsearch:${query}`);
+        if (!search?.tracks.length) return interaction.editReply("I didn't find anything on the query you provided!");
+        const track = search.tracks.shift();
+        const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
+
+        // Log song searching query request
+        this.client.logger.log({
+            constructor: this.constructor.name,
+            message: 'Handling new single query Queue request',
+            query: query,
+            node: node.name,
+            track: track.info,
+            guild: interaction.guild.name,
+            guildID: interaction.guild.id,
+        });
+        await interaction.reply(`Added the track \`${track.info.title}\` in queue!`).catch(() => null);
+        dispatcher?.play();
     }
 }
 module.exports = Play;
