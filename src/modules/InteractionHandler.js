@@ -13,8 +13,7 @@ class InteractionHandler extends EventEmitter {
         this.built = false;
         this.on('error', (error) => client.logger.error(error));
         this.client.on('interactionCreate', (interaction) => {
-            if (interaction.isModalSubmit()) return;
-            this.exec(interaction);
+            interaction.isModalSubmit() ? this.emit('ModalSubmit', interaction) : this.exec(interaction);
         });
     }
 
