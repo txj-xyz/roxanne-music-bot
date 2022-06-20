@@ -50,9 +50,11 @@ class RoxanneDispatcher {
                         await Wait(100);
                         await this.player.resume();
                         await this.player.connection.setDeaf(true);
-                        if (![0, 1].includes(player.connection.state)) this.destroy();
+                        if (![0, 1].includes(player.connection.state)) return;
+                        this.play();
                     }
                 } catch (error) {
+                    this.client.logger.log({ message: 'catch block on 4014 error', payloadcode: payload.code, error: error });
                     if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
                         if (this.repeat === 'one') this.queue.unshift(this.current);
                         if (this.repeat === 'all') this.queue.push(this.current);
