@@ -44,7 +44,7 @@ class RoxanneDispatcher {
                     errorPossible: `possible webhook failure from lavalink ${payload.code ? payload.code : player.connection.state}`,
                 });
                 this.client.logger.log({ message: 'try block on 4014 error', payloadcode: payload.code });
-                if (payload.code === 4014 && ![0, 1].includes(player.connection.state)) {
+                if (payload.code === 4014) {
                     this.queue.length = 0;
                     this.destroy('Failure of Websocket or bot kicked from VC.');
                 }
