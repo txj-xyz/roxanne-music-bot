@@ -51,10 +51,8 @@ class RoxanneDispatcher {
             })
             .on('stuck', () => {
                 this.client.logger.log({ message: 'Track is stuck, repeating song.' });
-                if (this.repeat === 'one') this.queue.unshift(this.current);
-                if (this.repeat === 'all') this.queue.push(this.current);
-                if (![0, 1].includes(player.connection.state)) return;
-                this.play();
+                this.queue.length = 0;
+                this.destroy('Failure of Websocket or bot kicked from VC.');
             });
     }
 
