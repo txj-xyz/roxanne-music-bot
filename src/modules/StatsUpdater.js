@@ -47,7 +47,7 @@ class StatsUpdater {
             await playerChannel.edit({ name: `Players: ${stats.players}` });
             this.client.logger.debug(this.constructor.name, `Set '${stats}' Successfully`);
         } catch (error) {
-            throw new Error('Failed updating stats channels, please check config and code.');
+            this.client.logger.error('Failed updating stats channels, please check config and code.');
         }
     }
 }
