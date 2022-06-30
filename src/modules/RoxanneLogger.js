@@ -50,7 +50,7 @@ class RoxanneLogger {
         console.log(`[Cluster ${this.id}] [${message.constructor}]`.debug, colors.info(typeof message === 'object' ? JSON.stringify(message) : message));
     }
 
-    error(error, message = 'Error detected, please check console') {
+    error(error, message = error) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed(message)] }) : void 0;
         console.error(`[ERROR] [Cluster ${this.id}] ${typeof error === 'object' ? JSON.stringify(error) : error}`.error);
     }
