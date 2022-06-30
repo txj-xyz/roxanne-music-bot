@@ -33,9 +33,13 @@ class StatsUpdater {
         const userChannel = await guild.channels.cache.get(usersChannel);
         const guildChannel = await guild.channels.cache.get(guildsChannel);
         const playerChannel = await guild.channels.cache.get(playersChannel);
-        await userChannel.edit({ name: `Users: ${stats.users}` });
-        await guildChannel.edit({ name: `Guilds: ${stats.guilds}` });
-        await playerChannel.edit({ name: `Players: ${stats.players}` });
+        try {
+            await userChannel.edit({ name: `Users: ${stats.users}` });
+            await guildChannel.edit({ name: `Guilds: ${stats.guilds}` });
+            await playerChannel.edit({ name: `Players: ${stats.players}` });
+        } catch (error) {
+            throw new Error('Failed updating stats channels, please check config and code.');
+        }
     }
 }
 
