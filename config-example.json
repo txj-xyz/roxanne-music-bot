@@ -9,6 +9,12 @@
     "tiktokMessageEvent": false,
     "helpMessageEvent": false,
     "guildMessageDisabled": ["UserID"],
+    "statsUpdater": {
+        "guildID": "",
+        "usersChannel": "ChannelID",
+        "guildsChannel": "ChannelID",
+        "playersChannel": "ChannelID"
+    },
     "shoukakuOptions": {
         "resume": true,
         "resumeKey": "resumableRoxanne",
