@@ -2,7 +2,7 @@ class StatsUpdater {
     constructor(client) {
         this.client = client;
         this.statsSettings = this.client.util.config.statsUpdater;
-        if (!this.statsSettings.enabled) return this.client.logger.warn(this.constructor.name, `Disabled`);
+        if (!this.statsSettings.enabled) return this.client.logger.warn(this.constructor.name, 'disabled');
 
         this.client.logger.debug(this.constructor.name, `Loaded StatsUpdater Successfully`);
         // Initial set
