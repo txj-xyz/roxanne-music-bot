@@ -8,6 +8,7 @@ const Queue = require('./modules/Queue.js');
 const InteractionHandler = require('./modules/InteractionHandler.js');
 const EventHandler = require('./modules/EventHandler.js');
 const UtilityHandler = require('./modules/UtilityHandler.js');
+const StatsUpdater = require('./modules/StatsUpdater');
 
 class Roxanne extends Client {
     constructor(options) {
@@ -41,6 +42,7 @@ class Roxanne extends Client {
         this.queue = new Queue(this);
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
+        new StatsUpdater(this);
         ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event) => process.once(event, this.exit.bind(this)));
     }
 
