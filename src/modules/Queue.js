@@ -21,20 +21,12 @@ class Queue extends Map {
                     return this.client.logger.error(`QueueHandlerError`, error);
                 });
 
-            this.client.logger.log({
-                constructor: this.constructor.name,
-                message: 'New player connection',
-                guild: guild.name,
-                guildID: guild.id,
-            });
-
             dispatcher = new RoxanneDispatcher({ client: this.client, guild, channel, player });
-
             dispatcher.queue.push(track);
             this.set(guild.id, dispatcher);
             this.client.logger.log({
                 constructor: this.constructor.name,
-                message: 'New player dispatcher',
+                message: 'New player connection',
                 guild: guild.name,
                 guildID: guild.id,
             });

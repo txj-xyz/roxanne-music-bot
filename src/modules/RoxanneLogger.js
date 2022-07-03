@@ -12,11 +12,13 @@ colors.setTheme({
 
 class RoxanneLogger {
     constructor() {
-        this.webhook = new WebhookClient({ url: webhookUrl });
-        this.webhook.send('Health check initialized').catch((err) => {
+        if (!webhookUrl) {
             this.webhook = null;
-            console.log(`[ERROR] [Process ${process.pid}] [Cluster ${this.id}] Failed to initialize webhook, invalid URI, ${err.toString()}`.error);
-        });
+            this.error(`[RoxanneLogger] Failed to initialize WebhookClient, no URL set in config`.error);
+            return;
+        }
+        this.webhook = new WebhookClient({ url: webhookUrl });
+        this.webhook.send('Health check initialized').catch(console.error);
     }
 
     get id() {
@@ -35,28 +37,27 @@ class RoxanneLogger {
     }
 
     debug(handler, message) {
-        console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${handler}] ${message}`.debug);
+        console.log(`[Cluster ${this.id}] [${handler}]`.debug, colors.info(message));
+    }
+
+    warn(handler, message) {
+        this.webhook ? this.webhook.send({ embeds: [this.logEmbed(message)] }) : void 0;
+        console.log(`[Cluster ${this.id}] [${handler}] ${typeof message === 'object' ? JSON.stringify(message) : message}`.warn);
     }
 
     log(message) {
-        if (this.webhook) {
-            this.webhook.send({ embeds: [this.logEmbed(message)] }).catch(console.error);
-        }
-        console.log(`[Process ${process.pid}] [Cluster ${this.id}] [${message.constructor}] `.debug, colors.info(JSON.stringify(message, null, 1)));
+        this.webhook ? this.webhook.send({ embeds: [this.logEmbed(message)] }) : void 0;
+        console.log(`[Cluster ${this.id}] [${message.constructor}]`.debug, colors.info(typeof message === 'object' ? JSON.stringify(message) : message));
     }
 
-    error(error, message = 'Error detected, please check console') {
-        if (this.webhook) {
-            this.webhook.send({ embeds: [this.logEmbed(message)] }).catch(console.error);
-        }
-        console.error(`[ERROR] [Process ${process.pid}] [Cluster ${this.id}] `.error, colors.error(error));
+    error(error, message = error) {
+        this.webhook ? this.webhook.send({ embeds: [this.logEmbed(message)] }) : void 0;
+        console.error(`[ERROR] [Cluster ${this.id}] ${typeof error === 'object' ? JSON.stringify(error) : error}`.error);
     }
 
     playerError(error) {
-        if (this.webhook) {
-            this.webhook.send({ embeds: [this.logEmbed({ reason: error })] }).catch(console.error);
-        }
-        console.error(`[ERROR] [Process ${process.pid}] [Cluster ${this.id}] `.error, colors.error(error));
+        this.webhook ? this.webhook.send({ embeds: [this.logEmbed({ reason: error })] }) : void 0;
+        console.error(`[ERROR] [Cluster ${this.id}] `.error, colors.error(error));
     }
 }
 

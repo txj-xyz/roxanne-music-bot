@@ -2,8 +2,15 @@ class StatsUpdater {
     constructor(client) {
         this.client = client;
         this.statsSettings = this.client.util.config.statsUpdater;
-        //prettier-ignore
-        setTimeout(async () => { this.set(this.statsSettings, await this.gather()); }, 5000);
+        if (!this.statsSettings.enabled) return this.client.logger.warn(this.constructor.name, 'disabled');
+
+        this.client.logger.debug(this.constructor.name, `Loaded StatsUpdater Successfully`);
+        // Initial set
+        setTimeout(async () => {
+            this.set(this.statsSettings, await this.gather());
+        }, 5000);
+
+        // Set every 10m
         setInterval(async () => {
             const stats = await this.gather();
             this.set(this.statsSettings, stats);
@@ -24,6 +31,7 @@ class StatsUpdater {
             players: players.reduce((sum, count) => sum + count),
         };
         // console.log(results);
+        this.client.logger.debug(this.constructor.name, `Gathered '${results}' Successfully`);
         return results;
     }
 
@@ -33,9 +41,14 @@ class StatsUpdater {
         const userChannel = await guild.channels.cache.get(usersChannel);
         const guildChannel = await guild.channels.cache.get(guildsChannel);
         const playerChannel = await guild.channels.cache.get(playersChannel);
-        await userChannel.edit({ name: `Users: ${stats.users}` });
-        await guildChannel.edit({ name: `Guilds: ${stats.guilds}` });
-        await playerChannel.edit({ name: `Players: ${stats.players}` });
+        try {
+            await userChannel.edit({ name: `Users: ${stats.users.toLocaleString()}` });
+            await guildChannel.edit({ name: `Guilds: ${stats.guilds.toLocaleString()}` });
+            await playerChannel.edit({ name: `Players: ${stats.players.toLocaleString()}` });
+            this.client.logger.debug(this.constructor.name, `Set '${stats}' Successfully`);
+        } catch (error) {
+            this.client.logger.error('Failed updating stats channels, please check config and code.');
+        }
     }
 }
 

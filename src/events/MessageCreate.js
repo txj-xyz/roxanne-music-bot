@@ -120,9 +120,8 @@ class MessageCreate extends RoxanneEvent {
         }
 
         // tiktok mesage event
-        if (this.client.util.config.tiktokMessageEvent && message.content.match(/https:\/\/www\.tiktok\.com/g)) {
-            //prettier-ignore
-            const tiktokLink = message.content.match(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/)[0];
+        if (this.client.util.config.tiktokMessageEvent && message.content.match(/https:\/\/(www.|vt.)tiktok\.com/g)) {
+            const tiktokLink = message.content.match(/(http|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/g)[0];
             try {
                 const resolvedLink = await this.client.util.unshortenLink(tiktokLink);
                 const videoMeta = await getVideoMeta(resolvedLink, {});
