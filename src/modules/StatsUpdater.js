@@ -42,9 +42,9 @@ class StatsUpdater {
         const guildChannel = await guild.channels.cache.get(guildsChannel);
         const playerChannel = await guild.channels.cache.get(playersChannel);
         try {
-            await userChannel.edit({ name: `Users: ${stats.users}` });
-            await guildChannel.edit({ name: `Guilds: ${stats.guilds}` });
-            await playerChannel.edit({ name: `Players: ${stats.players}` });
+            await userChannel.edit({ name: `Users: ${stats.users.toLocaleString()}` });
+            await guildChannel.edit({ name: `Guilds: ${stats.guilds.toLocaleString()}` });
+            await playerChannel.edit({ name: `Players: ${stats.players.toLocaleString()}` });
             this.client.logger.debug(this.constructor.name, `Set '${stats}' Successfully`);
         } catch (error) {
             this.client.logger.error('Failed updating stats channels, please check config and code.');
