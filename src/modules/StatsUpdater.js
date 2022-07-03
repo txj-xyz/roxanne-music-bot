@@ -31,7 +31,7 @@ class StatsUpdater {
             players: players.reduce((sum, count) => sum + count),
         };
         // console.log(results);
-        this.client.logger.debug(this.constructor.name, `Gathered '${results}' Successfully`);
+        this.client.logger.debug(this.constructor.name, `Gathered '${JSON.stringify(results)}' Successfully`);
         return results;
     }
 
@@ -45,7 +45,7 @@ class StatsUpdater {
             await userChannel.edit({ name: `Users: ${stats.users.toLocaleString()}` });
             await guildChannel.edit({ name: `Guilds: ${stats.guilds.toLocaleString()}` });
             await playerChannel.edit({ name: `Players: ${stats.players.toLocaleString()}` });
-            this.client.logger.debug(this.constructor.name, `Set '${stats}' Successfully`);
+            this.client.logger.debug(this.constructor.name, `Set '${JSON.stringify(stats)}' Successfully`);
         } catch (error) {
             this.client.logger.error('Failed updating stats channels, please check config and code.');
         }
