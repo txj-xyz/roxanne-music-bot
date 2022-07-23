@@ -42,6 +42,11 @@ class Roxanne extends Client {
         this.queue = new Queue(this);
         this.interactions = new InteractionHandler(this).build();
         this.events = new EventHandler(this).build();
+
+        process.on('unhandledRejection', (err) => {
+            this.logger.error(err, `${err.toString()} CHECK CONSOLE.`);
+        });
+
         new StatsUpdater(this);
         ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event) => process.once(event, this.exit.bind(this)));
     }
