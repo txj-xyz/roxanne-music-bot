@@ -1,4 +1,4 @@
-const { Constants, Intents, Util } = require('discord.js');
+const { Intents } = require('discord.js');
 const { Indomitable } = require('indomitable');
 const { join } = require('path');
 const { token } = require('./config.json');
@@ -23,11 +23,13 @@ const customClientOptions = {
 };
 
 const sharderOptions = {
-    clientOptions: Util.mergeDefault(Constants.DefaultOptions, customClientOptions),
+    clientOptions: { ...customClientOptions },
     client: RoxanneClient,
     autoRestart: true,
     token,
 };
+
+console.log(Constants.DefaultOptions);
 
 const manager = new Indomitable({ ...sharderOptions, clusterCount: 1 }).on('error', console.error).on('debug', (message) => console.log(colors.warn(`[ClusterHandler] [Main] ${message}`)));
 
