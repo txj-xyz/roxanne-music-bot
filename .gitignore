@@ -4,7 +4,7 @@
 .idea
 .vscode
 /slash-reloader-config.json
-config.json
+src/config/config.json
 /lavalink-server.json
 /lavasfy-servers.json
 /misc.json
