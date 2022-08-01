@@ -1,8 +1,7 @@
 import { Intents } from 'discord.js';
 import { Indomitable } from 'indomitable';
-import { join } from 'path';
-import { token } from 'config.json';
-import colors from '@colors/colors';
+import { token } from './config.json';
+const colors = require('@colors/colors');
 
 colors.setTheme({
     info: 'green',

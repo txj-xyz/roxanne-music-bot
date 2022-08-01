@@ -1,22 +1,35 @@
 {
     "compilerOptions": {
-        "target": "es6",
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "resolveJsonModule": true,
+        "target": "ESNext",
         "module": "commonjs",
-        "outDir": "./dist",
+        "rootDir": "./src/",
+        "outDir": "./dist/",
         "strict": true,
-        "baseUrl": "src",
-        "paths": {
-            "@/*": [
-                "*"
-            ]
-        }
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "experimentalDecorators": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "forceConsistentCasingInFileNames": true,
+        "removeComments": true,
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "sourceMap": false,
+        "baseUrl": "./"
     },
+    "files": [
+        "src/*.ts",
+        "src/**/*.ts"
+    ],
     "include": [
         "./index.ts",
-        "./config.json",
-        "./src/**/*"
-    ]
-}
+        "./**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ],
+} 

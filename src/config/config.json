@@ -1,0 +1,57 @@
+{
+    "owners": ["918604028898861116"],
+    "token": "OTE5OTgwNTkwNjUxMDQ4MDE4.YbdssQ.YOvIKU2Q6hHHud-qEZHCXPbz8hk",
+    "webhookUrl": "",
+    "inviteURL": "https://discord.com/oauth2/authorize?client_id=919980590651048018&permissions=414518209792&scope=applications.commands%20bot",
+    "supportServer": "https://discord.gg/GJanE63MGj",
+    "youtube_key": "AIzaSyDv4qHkIM7aYDEzEn6o2NSpQW6iyG0aw9c",
+    "foreverMode": false,
+    "tiktokMessageEvent": true,
+    "helpMessageEvent": false,
+    "guildMessageDisabled": [],
+    "statsUpdater": {
+        "enabled": false,
+        "guildID": "918662128632733696",
+        "usersChannel": "",
+        "guildsChannel": "991849482700456016",
+        "playersChannel": "991849354367336490"
+    },
+    "shoukakuOptions": {
+        "resume": true,
+        "resumeKey": "resumableRoxanne",
+        "resumeByLibrary": true,
+        "resumeTimeout": 45,
+        "reconnectTries": 5,
+        "reconnectInterval": 2000,
+        "moveOnDisconnect": true,
+        "restTimeout": 10000
+    },
+    "lavalinkOptions":
+    [
+        {
+            "id": "local-1",
+            "name": "local-1",
+            "host": "localhost",
+            "url": "localhost:2333",
+            "port": 2335,
+            "auth": "youshallnotpass",
+            "password": "youshallnotpass",
+            "secure": false
+        },
+        {
+            "id": "local-2",
+            "name": "local-2",
+            "host": "localhost",
+            "url": "localhost:2334",
+            "port": 2335,
+            "auth": "youshallnotpass",
+            "password": "youshallnotpass",
+            "secure": false
+        }
+    ],
+    "slashReloader": {
+        "dev": true,
+        "clientId": "919980590651048018",
+        "guildId": "918662128632733696"
+    }
+}

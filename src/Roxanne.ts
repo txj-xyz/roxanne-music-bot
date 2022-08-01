@@ -1,14 +1,14 @@
-const { Client, LimitedCollection } = require('discord.js');
-const { Cheshire } = require('cheshire');
-const { Collection } = require('@discordjs/collection');
-const { token } = require('../config.json');
-const RoxanneLogger = require('./modules/RoxanneLogger.js');
-const ShoukakuHandler = require('./modules/ShoukakuHandler.js');
-const Queue = require('./modules/Queue.js');
-const InteractionHandler = require('./modules/InteractionHandler.js');
-const EventHandler = require('./modules/EventHandler.js');
-const UtilityHandler = require('./modules/UtilityHandler.js');
-const StatsUpdater = require('./modules/StatsUpdater');
+import { Client, LimitedCollection } from 'discord.js';
+import { Cheshire } from 'cheshire';
+import { Collection } from '@discordjs/collection';
+import { token } from '../config.json';
+import RoxanneLogger from './modules/RoxanneLogger.js';
+import ShoukakuHandler from './modules/ShoukakuHandler.js';
+import Queue from './modules/Queue.js';
+import InteractionHandler from './modules/InteractionHandler.js';
+import EventHandler from './modules/EventHandler.js';
+import UtilityHandler from './modules/UtilityHandler.js';
+import StatsUpdater from './modules/StatsUpdater';
 
 class Roxanne extends Client {
     constructor(options) {
