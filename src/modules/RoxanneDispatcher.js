@@ -40,19 +40,19 @@ class RoxanneDispatcher {
             })
             .on('closed', async (payload) => {
                 this.client.logger.log({
-                    message: JSON.stringify(payload, null, null),
+                    message: payload,
                     errorPossible: `possible webhook failure from lavalink ${payload.code ? payload.code : player.connection.state}`,
                 });
-                this.client.logger.log({ message: 'try block on 4014 error', payloadcode: payload.code });
                 if (payload.code === 4014) {
-                    this.queue.length = 0;
-                    this.destroy('Failure of Websocket or bot kicked from VC.');
+                    this.queue.unshift(this.current);
+                    this.play();
                 }
             })
             .on('stuck', () => {
                 this.client.logger.log({ message: 'Track is stuck, repeating song.' });
-                this.queue.length = 0;
-                this.destroy('Failure of Websocket or bot kicked from VC.');
+                this.queue.unshift(this.current);
+                this.play();
+                // this.destroy('Failure of Websocket or bot kicked from VC.');
             });
     }
 
