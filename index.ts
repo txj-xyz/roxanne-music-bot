@@ -1,8 +1,8 @@
-const { Intents } = require('discord.js');
-const { Indomitable } = require('indomitable');
-const { join } = require('path');
-const { token } = require('./config.json');
-const colors = require('@colors/colors');
+import { Intents } from 'discord.js';
+import { Indomitable } from 'indomitable';
+import { join } from 'path';
+import { token } from 'config.json';
+import colors from '@colors/colors';
 
 colors.setTheme({
     info: 'green',
@@ -13,7 +13,7 @@ colors.setTheme({
 
 const { GUILDS, GUILD_MEMBERS, GUILD_BANS, GUILD_VOICE_STATES, GUILD_MESSAGES, GUILD_MESSAGE_REACTIONS } = Intents.FLAGS;
 
-const RoxanneClient = require('./src/Roxanne.js');
+import RoxanneClient from './src/Roxanne.js';
 
 // cache settings on client file
 const customClientOptions = {
@@ -29,8 +29,8 @@ const sharderOptions = {
     token,
 };
 
-console.log(Constants.DefaultOptions);
-
-const manager = new Indomitable({ ...sharderOptions, clusterCount: 1 }).on('error', console.error).on('debug', (message) => console.log(colors.warn(`[ClusterHandler] [Main] ${message}`)));
+const manager = new Indomitable({ ...sharderOptions, clusterCount: 1 })
+    .on('error', console.error)
+    .on('debug', (message: String) => console.log(colors.warn(`[ClusterHandler] [Main] ${message}`)));
 
 manager.spawn();

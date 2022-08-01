@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "module": "commonjs",
+        "outDir": "./dist",
+        "strict": true,
+        "baseUrl": "src",
+        "paths": {
+            "@/*": [
+                "*"
+            ]
+        }
+    },
+    "include": [
+        "./index.ts",
+        "./config.json",
+        "./src/**/*"
+    ]
+}
