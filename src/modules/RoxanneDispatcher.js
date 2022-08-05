@@ -39,25 +39,31 @@ class RoxanneDispatcher {
                 this.play();
             })
             .on('closed', async (payload) => {
-                this.client.logger.log({
-                    message: JSON.stringify(payload, null, null),
-                    errorPossible: `possible webhook failure from lavalink ${payload.code ? payload.code : player.connection.state}`,
-                });
-                this.client.logger.log({ message: 'try block on 4014 error', payloadcode: payload.code });
+                this.client.logger.log(this.constructor.name, { message: payload, errorPossible: `possible webhook failure from lavalink ${payload.code ? payload.code : player.connection.state}` });
                 if (payload.code === 4014) {
-                    this.queue.length = 0;
-                    this.destroy('Failure of Websocket or bot kicked from VC.');
+                    // this.queue.unshift(this.current);
+                    this.queue.unshift(this.current);
+                    this.play();
+                    this.player.seekTo(this.info.position);
                 }
             })
             .on('stuck', () => {
-                this.client.logger.log({ message: 'Track is stuck, repeating song.' });
-                this.queue.length = 0;
-                this.destroy('Failure of Websocket or bot kicked from VC.');
+                this.client.logger.log(this.constructor.name, { message: 'Track is stuck, repeating song.' });
+                this.queue.unshift(this.current);
+                this.play();
+                // this.destroy('Failure of Websocket or bot kicked from VC.');
             });
     }
 
     get exists() {
         return this.client.queue.has(this.guild.id);
+    }
+
+    get info() {
+        if (this.exists) {
+            return { track: this.current.track, position: this.current.info.position };
+        }
+        return void 0;
     }
 
     play() {

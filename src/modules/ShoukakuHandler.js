@@ -22,7 +22,6 @@ class ShoukakuHandler extends Shoukaku {
                 message: `Lavalink Node: ${name} closed with code ${code}`,
                 ws: code,
                 reason: reason || null,
-                resumed: resumed,
             });
         });
         this.on('disconnect', (name, players, moved) => {

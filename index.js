@@ -1,7 +1,15 @@
-const { Constants, Intents, Util } = require('discord.js');
-const { ShardingManager } = require('kurasuta');
+const { Intents } = require('discord.js');
+const { Indomitable } = require('indomitable');
 const { join } = require('path');
 const { token } = require('./config.json');
+const colors = require('@colors/colors');
+
+colors.setTheme({
+    info: 'green',
+    warn: 'yellow',
+    debug: 'blue',
+    error: 'red',
+});
 
 const { GUILDS, GUILD_MEMBERS, GUILD_BANS, GUILD_VOICE_STATES, GUILD_MESSAGES, GUILD_MESSAGE_REACTIONS } = Intents.FLAGS;
 
@@ -15,10 +23,12 @@ const customClientOptions = {
 };
 
 const sharderOptions = {
-    clientOptions: Util.mergeDefault(Constants.DefaultOptions, customClientOptions),
+    clientOptions: { ...customClientOptions },
     client: RoxanneClient,
-    timeout: 90000,
+    autoRestart: true,
     token,
 };
 
-new ShardingManager(join(__dirname, '/src/RoxanneBaseCluster.js'), sharderOptions).spawn();
+const manager = new Indomitable({ ...sharderOptions, clusterCount: 1 }).on('error', console.error).on('debug', (message) => console.log(colors.warn(`[ClusterHandler] [Main] ${message}`)));
+
+manager.spawn();

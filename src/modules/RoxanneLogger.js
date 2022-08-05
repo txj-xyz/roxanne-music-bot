@@ -37,27 +37,27 @@ class RoxanneLogger {
     }
 
     debug(handler, message) {
-        console.log(`[Cluster ${this.id}] [${handler}]`.debug, colors.info(message));
+        console.log(`[${handler}]`.debug, colors.info(message));
     }
 
     warn(handler, message) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed(message)] }) : void 0;
-        console.log(`[Cluster ${this.id}] [${handler}] ${typeof message === 'object' ? JSON.stringify(message) : message}`.warn);
+        console.log(`[${handler}] ${message}`.warn);
     }
 
     log(message) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed(message)] }) : void 0;
-        console.log(`[Cluster ${this.id}] [${message.constructor}]`.debug, colors.info(typeof message === 'object' ? JSON.stringify(message) : message));
+        console.log(`[${message.constructor}]`.debug, colors.info(message));
     }
 
     error(error, webHookMessage = error) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed(webHookMessage)] }) : void 0;
-        console.error(`[ERROR] [Cluster ${this.id}] ${typeof error === 'object' ? JSON.stringify(error) : error}`.error);
+        console.error(`[ERROR] ${error}`.error);
     }
 
     playerError(error) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed({ reason: error })] }) : void 0;
-        console.error(`[ERROR] [Cluster ${this.id}] `.error, colors.error(error));
+        console.error(`[ERROR] `.error, colors.error(error));
     }
 }
 
