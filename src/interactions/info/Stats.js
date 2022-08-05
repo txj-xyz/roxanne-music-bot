@@ -13,8 +13,7 @@ class Stats extends RoxanneInteraction {
     async run({ interaction }) {
         const pingTime = Date.now();
         await interaction.deferReply();
-        const [guilds, channels, memory, players] = await Promise.all([
-            this.client.shard.broadcastEval('this.guilds.cache.size'),
+        const [channels, memory, players] = await Promise.all([
             this.client.shard.broadcastEval('this.channels.cache.size'),
             this.client.shard.broadcastEval('process.memoryUsage()'),
             this.client.shard.broadcastEval('this.queue.size'),
