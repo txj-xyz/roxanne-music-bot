@@ -13,21 +13,19 @@ class Stats extends RoxanneInteraction {
     async run({ interaction }) {
         const pingTime = Date.now();
         await interaction.deferReply();
-        const [channels, memory, players] = await Promise.all([
-            this.client.shard.broadcastEval('this.channels.cache.size'),
-            this.client.shard.broadcastEval('process.memoryUsage()'),
-            this.client.shard.broadcastEval('this.queue.size'),
-        ]);
 
         const embed = new MessageEmbed()
             .setColor(this.client.color)
             .setTitle('Status')
+            guilds: this.client.guilds.cache.size,
+            users: this.client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c),
+            players: this.client.queue.size,
             .setDescription(
                 `\`\`\`ml\n
-Guilds      :: ${guilds.reduce((sum, count) => sum + count)}
+Guilds      :: ${this.client.guilds.cache.size}
 User Count  :: ${this.client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c)}
-Channels    :: ${channels.reduce((sum, count) => sum + count)}
-Players     :: ${players.reduce((sum, count) => sum + count)}
+Channels    :: ${this.client.channels.cache.size}
+Players     :: ${this.client.queue.size}
 Memory      :: ${this.client.util.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0))}
 Ping        :: ${Math.round(Date.now() - pingTime)} MS
 Uptime      :: ${this.client.util.convertMS(this.client.uptime)}
