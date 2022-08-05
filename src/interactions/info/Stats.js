@@ -17,13 +17,16 @@ class Stats extends RoxanneInteraction {
         const embed = new MessageEmbed()
             .setColor(this.client.color)
             .setTitle('Status')
+            guilds: this.client.guilds.cache.size,
+            users: this.client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c),
+            players: this.client.queue.size,
             .setDescription(
                 `\`\`\`ml\n
 Guilds      :: ${this.client.guilds.cache.size}
 User Count  :: ${this.client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c)}
 Channels    :: ${this.client.channels.cache.size}
 Players     :: ${this.client.queue.size}
-Memory      :: ${this.client.util.convertBytes(memory.reduce((sum, memory) => sum + memory.rss, 0))}
+Memory      :: ${this.client.util.convertBytes(process.memoryUsage().rss)}
 Ping        :: ${Math.round(Date.now() - pingTime)} MS
 Uptime      :: ${this.client.util.convertMS(this.client.uptime)}
 CMDs Run    :: ${this.client.commandsRun}
