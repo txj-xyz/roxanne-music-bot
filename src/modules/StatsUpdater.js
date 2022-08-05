@@ -19,14 +19,13 @@ class StatsUpdater {
 
     async gather() {
         //prettier-ignore
-        const [guilds, players] = await Promise.all([
-            this.client.shard.broadcastEval('this.guilds.cache.size'),
+        const [players] = await Promise.all([
             this.client.shard.broadcastEval('this.queue.size'),
         ]);
 
         // guild.channels.cache.get(usersChannel).edit({ name: 'Users: 420' });
         const results = {
-            guilds: guilds.reduce((sum, count) => sum + count),
+            guilds: this.client.guilds.cache.reduce((sum, count) => sum + count),
             users: this.client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c),
             players: players.reduce((sum, count) => sum + count),
         };
