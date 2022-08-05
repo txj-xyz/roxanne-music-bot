@@ -19,13 +19,11 @@ class StatsUpdater {
 
     async gather() {
         //prettier-ignore
-        const [guilds, players] = [ this.client.guilds.cache, this.client.queue.size, ];
-
         // guild.channels.cache.get(usersChannel).edit({ name: 'Users: 420' });
         const results = {
-            guilds: this.client.guilds.cache.reduce((sum, count) => sum + count),
+            guilds: this.client.guilds.cache.size,
             users: this.client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c),
-            players: players.reduce((sum, count) => sum + count),
+            players: this.client.queue.size,
         };
         // console.log(results);
         this.client.logger.debug(this.constructor.name, `Gathered '${JSON.stringify(results)}' Successfully`);
