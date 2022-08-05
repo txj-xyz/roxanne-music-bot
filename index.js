@@ -29,8 +29,6 @@ const sharderOptions = {
     token,
 };
 
-console.log(Constants.DefaultOptions);
-
 const manager = new Indomitable({ ...sharderOptions, clusterCount: 1 }).on('error', console.error).on('debug', (message) => console.log(colors.warn(`[ClusterHandler] [Main] ${message}`)));
 
 manager.spawn();
