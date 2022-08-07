@@ -39,7 +39,7 @@ class RoxanneDispatcher {
                 this.play();
             })
             .on('closed', async (payload) => {
-                this.client.logger.log(this.constructor.name, { message: payload, errorPossible: `possible webhook failure from lavalink ${payload.code ? payload.code : player.connection.state}` });
+                this.client.logger.log({ message: payload, errorPossible: `possible webhook failure from lavalink ${payload.code ? payload.code : player.connection.state}` });
                 if (payload.code === 4014) {
                     // this.queue.unshift(this.current);
                     this.queue.unshift(this.current);
@@ -48,7 +48,7 @@ class RoxanneDispatcher {
                 }
             })
             .on('stuck', () => {
-                this.client.logger.log(this.constructor.name, { message: 'Track is stuck, repeating song.' });
+                this.client.logger.log('Track is stuck, repeating song.');
                 this.queue.unshift(this.current);
                 this.play();
                 // this.destroy('Failure of Websocket or bot kicked from VC.');
