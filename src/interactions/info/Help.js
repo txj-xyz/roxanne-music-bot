@@ -55,8 +55,8 @@ class Help extends RoxanneInteraction {
                         .map((cmd) => `\`/${cmd.name}`)
                         .join('`, ')}\``
                 )
-                .addField('🔗 GIF Tutorial', '[Full Size Link](https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif)')
-                .setImage('https://cdn.discordapp.com/attachments/849007348945256458/918183844191014922/r9ChfTujzBcwpE9Ks5y8.gif')
+                .addField('🔗 GIF Tutorial', '[Full Size Link](https://i.imgur.com/yM1Q2eB.gif)')
+                .setImage('https://i.imgur.com/yM1Q2eB.gif')
                 .setFooter({ text: `The Music Project • ${this.client.interactions.commands.size} commands loaded` });
             return interaction.reply({
                 embeds: [embed],
