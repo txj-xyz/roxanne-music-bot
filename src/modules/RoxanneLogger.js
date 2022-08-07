@@ -37,27 +37,27 @@ class RoxanneLogger {
     }
 
     debug(handler, message) {
-        console.log(`[${handler}]`.debug, colors.info(message));
+        console.log(handler ?? null, message);
     }
 
     warn(handler, message) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed(message)] }) : void 0;
-        console.log(`[${handler}] ${message}`.warn);
+        console.log(handler ?? null, message);
     }
 
     log(message) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed(message)] }) : void 0;
-        console.log(`[${message.constructor}]`.debug, colors.info(message));
+        console.log(message);
     }
 
     error(error, webHookMessage = error) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed(webHookMessage)] }) : void 0;
-        console.error(`[ERROR] ${error}`.error);
+        console.log(error);
     }
 
     playerError(error) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed({ reason: error })] }) : void 0;
-        console.error(`[ERROR] `.error, colors.error(error));
+        console.log(error);
     }
 }
 
