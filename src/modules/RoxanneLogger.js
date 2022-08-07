@@ -30,34 +30,34 @@ class RoxanneLogger {
             //prettier-ignore
             return new MessageEmbed()
             .setDescription(`\`\`\`json\n${JSON.stringify(message, null, 2)}\n\`\`\``)
-            .setFooter({text: `PID: ${process.pid} - Cluster ID: ${this.id}`});
+            .setFooter({text: `PID: ${process.pid}`});
         } catch (error) {
             return new MessageEmbed().setDescription(`Log parsing error\n\`\`\`js\n${error.toString()}\n\`\`\``);
         }
     }
 
     debug(handler, message) {
-        console.log(`[${handler}]`.debug, colors.info(message));
+        console.log(handler ?? null, message);
     }
 
     warn(handler, message) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed(message)] }) : void 0;
-        console.log(`[${handler}] ${message}`.warn);
+        console.log(handler ?? null, message);
     }
 
     log(message) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed(message)] }) : void 0;
-        console.log(`[${message.constructor}]`.debug, colors.info(message));
+        console.log(message);
     }
 
     error(error, webHookMessage = error) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed(webHookMessage)] }) : void 0;
-        console.error(`[ERROR] ${error}`.error);
+        console.log(error);
     }
 
     playerError(error) {
         this.webhook ? this.webhook.send({ embeds: [this.logEmbed({ reason: error })] }) : void 0;
-        console.error(`[ERROR] `.error, colors.error(error));
+        console.log(error);
     }
 }
 
