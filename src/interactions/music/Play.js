@@ -61,7 +61,9 @@ class Play extends RoxanneInteraction {
 
             const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
             if (playlist) {
-                for (const track of tracks) await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
+                for (const track of tracks) {
+                    await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
+                }
 
                 // Log playlist request
                 this.client.logger.log({
@@ -103,7 +105,7 @@ class Play extends RoxanneInteraction {
         dispatcher?.play();
     }
 
-    async buttonPlaylistQuery(interaction, query, radio = false) {
+    async contextQuery(interaction, query, radio = false) {
         const node = await this.client.shoukaku.getNode();
         // YouTube Playlist integration for select menus
         if (this.client.util.checkURL(query)) {
