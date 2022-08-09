@@ -45,7 +45,7 @@ class Roxanne extends Client {
         this.events = new EventHandler(this).build();
 
         process.on('unhandledRejection', (err) => {
-            console.log(err);
+            console.log('unhandledRejection', err);
             this.logger.error(err, `${err.toString()} CHECK CONSOLE.`);
         });
 
