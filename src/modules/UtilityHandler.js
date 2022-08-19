@@ -1,15 +1,17 @@
 const axios = require('axios');
 const unshortener = require('unshorten.it');
 const config = require('../../config.json');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 class UtilityHandler {
     constructor(client) {
         this.client = client;
         this.config = config;
+        this.random = (array) => array[Math.floor(Math.random() * array.length)];
         this.supportServer = this.config.supportServer;
         this.deleteMessage = this.deleteMessage;
-        this.loadingEmbed = new MessageEmbed().setAuthor({ name: 'Loading.. Please wait :)' });
+        this.loadingEmbed = new EmbedBuilder().setAuthor({ name: 'Loading...' });
+        this.loadingText = '<a:Typing:598682375303593985> **Loading...**';
     }
 
     deleteMessage(interaction, id) {

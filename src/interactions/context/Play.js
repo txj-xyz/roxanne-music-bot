@@ -31,7 +31,7 @@ class PlayContext extends RoxanneContext {
 
         // Enable new play request
         async function play(interaction, link) {
-            _client.interactions.commands.get('play')['buttonPlaylistQuery'](interaction, link);
+            _client.interactions.commands.get('play')['contextQuery'](interaction, link);
         }
 
         let embedMatchString;

@@ -1,6 +1,6 @@
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
-const { MessageEmbed, MessageButton } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { PagesBuilder } = require('discord.js-pages');
 
 class Search extends RoxanneInteraction {
@@ -52,13 +52,13 @@ class Search extends RoxanneInteraction {
         const mappedSearch = [];
         const searchPageButtonList = [
             {
-                stop: new MessageButton().setEmoji('❌').setLabel('Cancel').setStyle('DANGER'),
+                stop: new ButtonBuilder().setEmoji('❌').setLabel('Cancel').setStyle(ButtonStyle.Danger),
             },
             {
-                back: new MessageButton().setEmoji('⬅️').setStyle('SECONDARY'),
+                back: new ButtonBuilder().setEmoji('⬅️').setStyle(ButtonStyle.Secondary),
             },
             {
-                next: new MessageButton().setEmoji('➡️').setStyle('SECONDARY'),
+                next: new ButtonBuilder().setEmoji('➡️').setStyle(ButtonStyle.Secondary),
             },
         ];
         await interaction.deferReply();
@@ -99,17 +99,43 @@ class Search extends RoxanneInteraction {
             q.tracks
                 .map((r) => {
                     pages.push(
-                        new MessageEmbed()
+                        new EmbedBuilder()
                             // .setThumbnail(`https://img.youtube.com/vi/${c.identifier}/default.jpg`)
                             .setImage(`https://img.youtube.com/vi/${r.identifier}/hqdefault.jpg`)
                             .setURL(r.url)
                             .setTitle(`**${r.title}**`)
-                            .addField('⌛ Duration: ', `**\`${this.client.util.humanizeTime(r.length)}\`**`, true)
-                            .addField('🎵 Author: ', `**\`${r.author}\`**`, true)
-                            .addField('🖥️ Video ID', `**\`${r.identifier}\`**`, true)
-                            .addField('👍 Likes', `**\`${r.likes_count}\`**`, true)
-                            .addField('🛰️ Upload Date', `**\`${r.upload_date}\`**`, true)
-                            .addField('👀 Views', `**\`${r.view_count?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\`**`, true)
+                            .addFields([
+                                {
+                                    name: '⌛ Duration: ',
+                                    value: `**\`${this.client.util.humanizeTime(r.length)}\`**`,
+                                    inline: true,
+                                },
+                                {
+                                    name: '🎵 Author: ',
+                                    value: `**\`${r.author}\`**`,
+                                    inline: true,
+                                },
+                                {
+                                    name: '🖥️ Video ID',
+                                    value: `**\`${r.identifier}\`**`,
+                                    inline: true,
+                                },
+                                {
+                                    name: '👍 Likes',
+                                    value: `**\`${r.likes_count}\`**`,
+                                    inline: true,
+                                },
+                                {
+                                    name: '🛰️ Upload Date',
+                                    value: `**\`${r.upload_date}\`**`,
+                                    inline: true,
+                                },
+                                {
+                                    name: '👀 Views',
+                                    value: `**\`${r.view_count?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\`**`,
+                                    inline: true,
+                                },
+                            ])
                             .setTimestamp()
                     );
                 })
@@ -129,7 +155,7 @@ class Search extends RoxanneInteraction {
             .setListenTimeout(60 * 1000)
             .setListenEndMethod('edit')
             .setDefaultButtons(searchPageButtonList)
-            .addComponents([new MessageButton().setCustomId('custom').setEmoji('✅').setLabel('Confirm').setStyle('SUCCESS')])
+            .addComponents([new ButtonBuilder().setCustomId('custom').setEmoji('✅').setLabel('Confirm').setStyle(ButtonStyle.Primary)])
             .setTriggers([
                 {
                     name: 'custom',

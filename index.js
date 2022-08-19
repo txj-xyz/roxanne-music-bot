@@ -1,4 +1,4 @@
-const { Intents } = require('discord.js');
+const { GatewayIntentBits } = require('discord.js');
 const { Indomitable } = require('indomitable');
 const { join } = require('path');
 const { token } = require('./config.json');
@@ -11,7 +11,7 @@ colors.setTheme({
     error: 'red',
 });
 
-const { GUILDS, GUILD_MEMBERS, GUILD_BANS, GUILD_VOICE_STATES, GUILD_MESSAGES, GUILD_MESSAGE_REACTIONS } = Intents.FLAGS;
+const { Guilds, GuildMembers, GuildBans, GuildVoiceStates, GuildMessages, GuildMessageReactions } = GatewayIntentBits;
 
 const RoxanneClient = require('./src/Roxanne.js');
 
@@ -19,7 +19,7 @@ const RoxanneClient = require('./src/Roxanne.js');
 const customClientOptions = {
     disableMentions: 'everyone',
     restRequestTimeout: 30000,
-    intents: [GUILDS, GUILD_MEMBERS, GUILD_BANS, GUILD_VOICE_STATES, GUILD_MESSAGES, GUILD_MESSAGE_REACTIONS],
+    intents: [Guilds, GuildMembers, GuildBans, GuildVoiceStates, GuildMessages, GuildMessageReactions],
 };
 
 const sharderOptions = {

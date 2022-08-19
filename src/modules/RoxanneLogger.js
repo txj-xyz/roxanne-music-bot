@@ -1,6 +1,6 @@
 const { isMaster } = require('cluster');
 const { webhookUrl } = require('../../config.json');
-const { WebhookClient, MessageEmbed } = require('discord.js');
+const { WebhookClient, EmbedBuilder } = require('discord.js');
 const colors = require('@colors/colors');
 
 colors.setTheme({
@@ -28,11 +28,11 @@ class RoxanneLogger {
     logEmbed(message) {
         try {
             //prettier-ignore
-            return new MessageEmbed()
+            return new EmbedBuilder()
             .setDescription(`\`\`\`json\n${JSON.stringify(message, null, 2)}\n\`\`\``)
             .setFooter({text: `PID: ${process.pid}`});
         } catch (error) {
-            return new MessageEmbed().setDescription(`Log parsing error\n\`\`\`js\n${error.toString()}\n\`\`\``);
+            return new EmbedBuilder().setDescription(`Log parsing error\n\`\`\`js\n${error.toString()}\n\`\`\``);
         }
     }
 

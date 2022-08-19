@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { inspect } = require('util');
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
@@ -41,7 +41,7 @@ class Eval extends RoxanneInteraction {
         } catch (error) {
             res = inspect(error, { depth: 0 });
         }
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(this.client.color)
             .setTitle('Eval Results')
             .setDescription(`\`\`\`js\n${Eval.trim(res, 4000)}\`\`\``)

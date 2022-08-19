@@ -1,6 +1,6 @@
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const RoxanneDispatcher = require('../../modules/RoxanneDispatcher.js');
-const { MessageEmbed, MessageButton } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { PagesBuilder } = require('discord.js-pages'); // https://mrzillagold.github.io/discord.js-pages/modules.html
 
 class Queue extends RoxanneInteraction {
@@ -31,13 +31,13 @@ class Queue extends RoxanneInteraction {
     async run({ interaction, dispatcher }) {
         const pageButtonList = [
             {
-                back: new MessageButton().setEmoji('👈').setLabel('Back').setStyle('DANGER'),
+                back: new ButtonBuilder().setEmoji('👈').setLabel('Back').setStyle(ButtonStyle.Danger),
             },
             {
-                stop: new MessageButton().setLabel('Cancel').setStyle('SECONDARY'),
+                stop: new ButtonBuilder().setLabel('Cancel').setStyle(ButtonStyle.Secondary),
             },
             {
-                next: new MessageButton().setEmoji('👉').setLabel('Next').setStyle('SUCCESS'),
+                next: new ButtonBuilder().setEmoji('👉').setLabel('Next').setStyle(ButtonStyle.Primary),
             },
         ];
         if (dispatcher.queue.length > 0) {
@@ -64,12 +64,12 @@ class Queue extends RoxanneInteraction {
 
             for (const q of chunked) {
                 pages.push(
-                    new MessageEmbed()
+                    new EmbedBuilder()
                         .setAuthor({ name: 'Now Playing', iconURL: this.client.user.displayAvatarURL({ dynamic: true }) })
                         .setURL(dispatcher.current.info.uri)
                         .setTitle(`**${dispatcher.current.info.title}**`)
                         .setThumbnail(`https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`)
-                        .setDescription(`👉 **Queue List**\n\n${q.tracks.map((c) => `**${c.queue_id}.)** [(${this.client.util.humanizeTime(c.length)}) - ${c.title}](${c.url})`).join('\n')}`)
+                        .setDescription(`👉 **Queue List**\n\n${q.tracks.map((c) => `**${c.queue / q_id}.)** [(${this.client.util.humanizeTime(c.length)}) - ${c.title}](${c.url})`).join('\n')}`)
                 );
             }
             new PagesBuilder(interaction)
@@ -82,14 +82,24 @@ class Queue extends RoxanneInteraction {
                 .build();
         } else {
             await interaction.deferReply();
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setAuthor({ name: 'Now Playing', iconURL: this.client.user.displayAvatarURL({ dynamic: true }) })
                 .setThumbnail(`https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`)
                 .setURL(dispatcher.current.info.uri)
                 .setColor(this.client.color)
                 .setTitle(`**${dispatcher.current.info.title}**`)
-                .addField('⌛ Duration: ', `\`${this.client.util.humanizeTime(dispatcher.current.info.length)}\``, true)
-                .addField('🎵 Author: ', `\`${dispatcher.current.info.author}\``, true)
+                .addFields([
+                    {
+                        name: '⌛ Duration: ',
+                        value: `\`${this.client.util.humanizeTime(dispatcher.current.info.length)}\``,
+                        inline: true,
+                    },
+                    {
+                        name: '🎵 Author: ',
+                        value: `\`${dispatcher.current.info.author}\``,
+                        inline: true,
+                    },
+                ])
                 .setFooter({ text: `• ${dispatcher.queue.length} total songs in queue` })
                 .setTimestamp();
             await interaction.editReply({ embeds: [embed] });

@@ -1,4 +1,5 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
+const { trend } = require('tiktok-scraper');
 const Wait = require('util').promisify(setTimeout);
 
 class RoxanneDispatcher {
@@ -20,14 +21,24 @@ class RoxanneDispatcher {
                     if (_notifiedOnce) return;
                     else _notifiedOnce = true;
                 }
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setColor(0xff0000)
                     .setAuthor({ name: 'Now Playing', iconURL: this.client.user.displayAvatarURL({ dynamic: true }) })
                     .setThumbnail(`https://img.youtube.com/vi/${this.current.info.identifier}/default.jpg`)
                     .setURL(this.current.info.uri)
                     .setTitle(`**${this.current.info.title}**`)
-                    .addField('⌛ Duration: ', `\`${this.client.util.humanizeTime(this.current.info.length)}\``, true)
-                    .addField('🎵 Author: ', `\`${this.current.info.author}\``, true)
+                    .addFields([
+                        {
+                            name: '⌛ Duration: ',
+                            value: `\`${this.client.util.humanizeTime(this.current.info.length)}\``,
+                            inline: true,
+                        },
+                        {
+                            name: '🎵 Author: ',
+                            value: `\`${this.current.info.author}\``,
+                            inline: true,
+                        },
+                    ])
                     .setFooter({ text: '• Powered by Kubernetes!' })
                     .setTimestamp();
                 this.channel.send({ embeds: [embed] }).catch(() => null);
@@ -77,7 +88,7 @@ class RoxanneDispatcher {
         this.queue.length = 0;
         this.player.connection.disconnect();
         this.client.queue.delete(this.guild.id);
-        this.client.logger.debug(this.player.constructor.name, `Destroyed player & connection`);
+        this.client.logger.debug(`Destroyed player & connection`);
         if (this.stopped) return;
         this.channel.send('No more songs in queue, feel free to queue more songs!').catch(() => null);
     }

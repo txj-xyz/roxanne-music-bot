@@ -1,5 +1,5 @@
 const RoxanneEvent = require('../abstract/RoxanneEvent.js');
-const { MessageEmbed, MessageActionRow, MessageButton, MessageAttachment } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, MessageAttachment, ButtonStyle } = require('discord.js');
 const { getVideoMeta } = require('tiktok-scraper');
 const { readdirSync } = require('fs');
 
@@ -21,32 +21,36 @@ class MessageCreate extends RoxanneEvent {
         if (this.client.util.config.guildMessageDisabled.includes(message.guild.id)) return;
         const [command, ...args] = message.content.split(' ');
 
-        const helpEmbed = new MessageEmbed()
+        const helpEmbed = new EmbedBuilder()
             .setAuthor({ name: this.client.user.username, iconURL: this.client.user.displayAvatarURL() })
             .setTitle('• Help Menu')
             .setColor(this.client.color)
             .setDescription('Do `/help [command]` for a detailed help about that command')
-            .addField(
-                '❓ Info',
-                `${this.client.interactions.commands
-                    .filter((cmd) => cmd.category === 'Info')
-                    .map((cmd) => `\`/${cmd.name}`)
-                    .join('`, ')}\``
-            )
-            .addField(
-                '🎵 Music',
-                `${this.client.interactions.commands
-                    .filter((cmd) => cmd.category === 'Music')
-                    .map((cmd) => `\`/${cmd.name}`)
-                    .join('`, ')}\``
-            )
-            .addField('🔗 GIF Tutorial', '[Full Size Link](https://i.imgur.com/yM1Q2eB.gif)')
+            .addFields([
+                {
+                    name: '❓ Info',
+                    value: `${this.client.interactions.commands
+                        .filter((cmd) => cmd.category === 'Info')
+                        .map((cmd) => `\`/${cmd.name}`)
+                        .join('`, ')}\``,
+                },
+            ])
+            .addFields([
+                {
+                    name: '🎵 Music',
+                    value: `${this.client.interactions.commands
+                        .filter((cmd) => cmd.category === 'Music')
+                        .map((cmd) => `\`/${cmd.name}`)
+                        .join('`, ')}\``,
+                },
+            ])
+            .addFields([{ name: '🔗 GIF Tutorial', value: '[Full Size Link](https://i.imgur.com/yM1Q2eB.gif)' }])
             .setImage('https://i.imgur.com/yM1Q2eB.gif')
             .setFooter({ text: `The Music Project • ${this.client.interactions.commands.size} commands loaded` });
 
-        const supportButton = new MessageActionRow().addComponents(
-            [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(this.client.util.supportServer).setLabel('Support Server')],
-            [new MessageButton().setStyle('LINK').setURL(this.client.util.config.inviteURL).setLabel('Invite me!')]
+        const supportButton = new ActionRowBuilder().addComponents(
+            [new ButtonBuilder().setEmoji('❓').setStyle(ButtonStyle.Link).setURL(this.client.util.supportServer).setLabel('Support Server')],
+            [new ButtonBuilder().setStyle(ButtonStyle.Link).setURL(this.client.util.config.inviteURL).setLabel('Invite me!')]
         );
 
         // slash command handler
@@ -125,13 +129,27 @@ class MessageCreate extends RoxanneEvent {
             try {
                 const resolvedLink = await this.client.util.unshortenLink(tiktokLink);
                 const videoMeta = await getVideoMeta(resolvedLink, {});
-                const videoMetaEmbed = new MessageEmbed()
+                const videoMetaEmbed = new EmbedBuilder()
                     .setColor(this.client.color)
                     .setURL(resolvedLink)
                     .setTitle(`"${videoMeta.collector[0]?.text.substring(0, 254)}"`, null, resolvedLink)
-                    .addField('**Likes**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.diggCount)), true)
-                    .addField('**Views**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.playCount)), true)
-                    .addField('**Comments**', String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.commentCount)), true)
+                    .addFields([
+                        {
+                            name: '**Likes**',
+                            value: String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.diggCount)),
+                            inline: true,
+                        },
+                        {
+                            name: '**Views**',
+                            value: String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.diggCount)),
+                            inline: true,
+                        },
+                        {
+                            name: '**Comments**',
+                            value: String(this.client.util.convertNumToInternational(videoMeta.collector[0]?.commentCount)),
+                            inline: true,
+                        },
+                    ])
                     .setFooter({ text: `Uploaded: ${new Date(videoMeta.collector[0]?.createTime * 1000).toLocaleString()}` });
                 await message.reply({ embeds: [videoMetaEmbed], files: [new MessageAttachment(videoMeta.collector[0]?.videoUrl, `tiktok.mp4`)] }).catch((error) => {
                     this.client.logger.error(error, 'Video too Large to send.');

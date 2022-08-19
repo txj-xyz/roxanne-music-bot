@@ -37,6 +37,7 @@ class Play extends RoxanneInteraction {
             query.includes('/shorts/') ? (query = query.replace('/shorts/', '/watch?v=')) : (query = query);
 
             const result = await node.rest.resolve(query);
+            console.log(result);
             if (!result) return await interaction.editReply("I didn't find anything on the query you provided!");
             const { loadType, tracks } = result;
             const track = tracks.shift();
@@ -61,7 +62,9 @@ class Play extends RoxanneInteraction {
 
             const dispatcher = await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
             if (playlist) {
-                for (const track of tracks) await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
+                for (const track of tracks) {
+                    await this.client.queue.handle(interaction.guild, interaction.member, interaction.channel, node, track);
+                }
 
                 // Log playlist request
                 this.client.logger.log({
@@ -103,7 +106,7 @@ class Play extends RoxanneInteraction {
         dispatcher?.play();
     }
 
-    async buttonPlaylistQuery(interaction, query, radio = false) {
+    async contextQuery(interaction, query, radio = false) {
         const node = await this.client.shoukaku.getNode();
         // YouTube Playlist integration for select menus
         if (this.client.util.checkURL(query)) {

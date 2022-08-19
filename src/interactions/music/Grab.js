@@ -1,6 +1,6 @@
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const RoxanneDispatcher = require('../../modules/RoxanneDispatcher.js');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 class Grab extends RoxanneInteraction {
     get name() {
@@ -16,16 +16,34 @@ class Grab extends RoxanneInteraction {
 
         const dispatcher = this.client.queue.get(interaction.guild.id) || undefined;
         if (!dispatcher) return await interaction.editReply('There is nothing playing at the moment.');
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setAuthor({ name: 'Song saved', iconURL: this.client.user.displayAvatarURL({ dynamic: true }) })
             .setThumbnail(`https://img.youtube.com/vi/${dispatcher.current.info.identifier}/default.jpg`)
             .setURL(dispatcher.current.info.uri)
             .setColor(this.client.color)
             .setTitle(`**${dispatcher.current.info.title}**`)
-            .addField('⌛ Duration: ', `\`${this.client.util.humanizeTime(dispatcher.current.info.length)}\``, true)
-            .addField('🎵 Author: ', `\`${dispatcher.current.info.author}\``, true)
-            .addField('▶ Play it:', `\`/play query:${dispatcher.current.info.uri}\``)
-            .addField('🔎 Saved in:', `<#${interaction.channelId}>`)
+            .addFields([
+                {
+                    name: '⌛ Duration: ',
+                    value: `\`${this.client.util.humanizeTime(dispatcher.current.info.length)}\``,
+                    inline: true,
+                },
+                {
+                    name: '🎵 Author: ',
+                    value: `\`${dispatcher.current.info.author}\``,
+                    inline: true,
+                },
+                {
+                    name: '▶ Play it:',
+                    value: `\`/play query:${dispatcher.current.info.uri}\``,
+                    inline: true,
+                },
+                {
+                    name: '🔎 Saved in:',
+                    value: `<#${interaction.channelId}>`,
+                    inline: true,
+                },
+            ])
             .setTimestamp();
 
         // Open DM Channel with user

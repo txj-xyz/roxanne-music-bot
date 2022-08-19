@@ -1,5 +1,5 @@
 const { readdirSync } = require('fs');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, InteractionType } = require('discord.js');
 const { Collection } = require('@discordjs/collection');
 const EventEmitter = require('events');
 
@@ -93,7 +93,7 @@ class InteractionHandler extends EventEmitter {
         const userVoiceChannelLimit = (await interaction.member.voice?.channel?.userLimit) ?? null;
         const userVoiceChannelUserCount = (await interaction.member.voice?.channel?.members?.size) ?? null;
         try {
-            if (interaction.isCommand() || interaction.isContextMenu()) {
+            if (interaction.isCommand() || interaction.isContextMenuCommand()) {
                 const command = this.commands.get(interaction.commandName);
                 const dispatcher = this.client.queue.get(interaction.guildId);
                 if (!command) return;
@@ -121,7 +121,7 @@ class InteractionHandler extends EventEmitter {
                 }
 
                 // check if the channel is joinable before continuing logic flow
-                if (command.category === 'Music' || (interaction.isContextMenu() && interaction.commandName === 'Add to Queue!')) {
+                if (command.category === 'Music' || (interaction.isContextMenuCommand() && interaction.commandName === 'Add to Queue!')) {
                     if (!dispatcher && !userVoiceJoinable) {
                         return interaction.reply({
                             content: "I don't have the required permissions to join that channel!",
@@ -151,7 +151,7 @@ class InteractionHandler extends EventEmitter {
                     message: `Executing Command ${command.name}`,
                     commandName: command.name,
                     uid: command.uid,
-                    type: interaction.isContextMenu() ? 'ContextMenu' : 'Interaction',
+                    type: interaction.isContextMenuCommand() ? 'ContextMenu' : 'Interaction',
                     user: `${interaction.user.username}#${interaction.user.discriminator}`,
                     userID: interaction.user.id,
                     guild: interaction.guild.name,
@@ -163,7 +163,7 @@ class InteractionHandler extends EventEmitter {
                 this.client.commandsRun++;
             }
         } catch (error) {
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setColor(0xff99cc)
                 .setTitle('Something errored!')
                 .setDescription(`\`\`\`js\n ${error.toString()}\`\`\``)

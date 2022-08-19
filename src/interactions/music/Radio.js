@@ -1,6 +1,6 @@
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const { PagesBuilder } = require('discord.js-pages');
-const { Client, MessageActionRow, MessageEmbed, MessageSelectMenu } = require('discord.js');
+const { Client, ActionRowBuilder, EmbedBuilder, SelectMenuBuilder } = require('discord.js');
 
 class RadioMenu extends RoxanneInteraction {
     get name() {
@@ -20,7 +20,7 @@ class RadioMenu extends RoxanneInteraction {
             label: 'Lofi hip-hop',
             description: 'Beats to relax/study to',
             value: 'lofi_radio',
-            type: 'buttonPlaylistQuery',
+            type: 'contextQuery',
             radio: true,
             link: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
         },
@@ -28,7 +28,7 @@ class RadioMenu extends RoxanneInteraction {
             label: 'Coffee Shop lofi beats',
             description: 'lofi hip-hop beats',
             value: 'coffee_lofi_radio',
-            type: 'buttonPlaylistQuery',
+            type: 'contextQuery',
             radio: true,
             link: 'https://www.youtube.com/watch?v=-5KAN9_CzSA',
         },
@@ -36,7 +36,7 @@ class RadioMenu extends RoxanneInteraction {
             label: 'The Good Life Radio',
             description: 'House, Chillout, Study, Gym, Happy Music',
             value: 'good_life_radio',
-            type: 'buttonPlaylistQuery',
+            type: 'contextQuery',
             radio: true,
             link: 'https://www.youtube.com/watch?v=36YnV9STBqc',
         },
@@ -44,7 +44,7 @@ class RadioMenu extends RoxanneInteraction {
             label: 'Drum & Bass Liquid / Chill',
             description: 'Non-Stop Liquid - To Chill / Relax Too',
             value: 'dnb_radio',
-            type: 'buttonPlaylistQuery',
+            type: 'contextQuery',
             radio: true,
             link: 'https://youtu.be/Rf4jJzziJko',
         },
@@ -52,7 +52,7 @@ class RadioMenu extends RoxanneInteraction {
             label: 'Chill Radio 24/7',
             description: 'by the bootleg boy 2',
             value: 'chill_radio',
-            type: 'buttonPlaylistQuery',
+            type: 'contextQuery',
             radio: true,
             link: 'https://www.youtube.com/watch?v=21qNxnCS8WU',
         },
@@ -60,7 +60,7 @@ class RadioMenu extends RoxanneInteraction {
             label: 'Rap Live Radio 24/7',
             description: 'Hip-Hop & Popular Rap Music tons of artists!',
             value: 'rap_radio',
-            type: 'buttonPlaylistQuery',
+            type: 'contextQuery',
             radio: true,
             link: 'https://www.youtube.com/watch?v=05689ErDUdM',
         },
@@ -76,10 +76,10 @@ class RadioMenu extends RoxanneInteraction {
             return await interaction.reply({ content: '**Human, Please stop the player or wait for the queue to finish before using this command.**', ephemeral: true });
         }
 
-        const page = new MessageEmbed().setAuthor({ name: 'Live Radio Stations!' }).setDescription('Select a stream from the drop down!');
+        const page = new EmbedBuilder().setAuthor({ name: 'Live Radio Stations!' }).setDescription('Select a stream from the drop down!');
         //prettier-ignore
-        const row = new MessageActionRow().addComponents(
-            new MessageSelectMenu()
+        const row = new ActionRowBuilder().addComponents(
+            new SelectMenuBuilder()
                 .setCustomId('custom')
                 .setPlaceholder('Nothing selected')
                 .addOptions(RadioMenu.menuOptions)
