@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 
@@ -30,32 +30,36 @@ class Help extends RoxanneInteraction {
         if (command?.startsWith('/')) command = command.slice(1);
 
         if (!command) {
-            const supportButton = new MessageActionRow().addComponents(
-                [new MessageButton().setEmoji('❓').setStyle('LINK').setURL(this.client.util.supportServer).setLabel('Support Server')],
-                [new MessageButton().setStyle('LINK').setURL(Help.invite(this.client.user.id)).setLabel('Invite me!')]
+            const supportButton = new ActionRowBuilder().addComponents(
+                [new ButtonBuilder().setEmoji('❓').setStyle(ButtonStyle.Link).setURL(this.client.util.supportServer).setLabel('Support Server')],
+                [new ButtonBuilder().setStyle(ButtonStyle.Link).setURL(Help.invite(this.client.user.id)).setLabel('Invite me!')]
             );
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setAuthor({ name: this.client.user.username, iconURL: this.client.user.displayAvatarURL() })
                 .setTitle('• Help Menu')
                 .setColor(this.client.color)
                 .setDescription('Do `/help [command]` for a detailed help about that command')
-                .addField(
-                    '❓ Info',
-                    `${this.client.interactions.commands
-                        .filter((cmd) => cmd.category === 'Info')
-                        .map((cmd) => `\`/${cmd.name}`)
-                        .join('`, ')}\``
-                )
-                // .addField('❓ Owner', this.client.interactions.commands.filter(cmd => cmd.category === 'Owner').map(cmd => `/${cmd.name}`).join(', '))
-                .addField(
-                    '🎵 Music',
-                    `${this.client.interactions.commands
-                        .filter((cmd) => cmd.category === 'Music')
-                        .map((cmd) => `\`/${cmd.name}`)
-                        .join('`, ')}\``
-                )
-                .addField('🔗 GIF Tutorial', '[Full Size Link](https://i.imgur.com/yM1Q2eB.gif)')
+                .addFields([
+                    {
+                        name: '❓ Info',
+                        value: `${this.client.interactions.commands
+                            .filter((cmd) => cmd.category === 'Info')
+                            .map((cmd) => `\`/${cmd.name}`)
+                            .join('`, ')}\``,
+                    },
+                    {
+                        name: '🎵 Music',
+                        value: `${this.client.interactions.commands
+                            .filter((cmd) => cmd.category === 'Music')
+                            .map((cmd) => `\`/${cmd.name}`)
+                            .join('`, ')}\``,
+                    },
+                    {
+                        name: '🔗 GIF Tutorial',
+                        value: '[Full Size Link](https://i.imgur.com/yM1Q2eB.gif)',
+                    },
+                ])
                 .setImage('https://i.imgur.com/yM1Q2eB.gif')
                 .setFooter({ text: `The Music Project • ${this.client.interactions.commands.size} commands loaded` });
             return interaction.reply({
@@ -66,11 +70,19 @@ class Help extends RoxanneInteraction {
 
         command = this.client.interactions.commands.get(command);
         if (!command) {
-            const commandNotFound = new MessageEmbed()
+            const commandNotFound = new EmbedBuilder()
                 .setColor(this.client.color)
                 .setTitle('❗ Command Not Found')
-                .addField('Help Usage', '`/help command:grab` or `/help`')
-                .addField('🔗 GIF Tutorial', '[Full Size Link](https://cdn.discordapp.com/attachments/849007348945256458/918235109319122944/GNuAN6Ds1HxKRgCX1ykM.gif)')
+                .addFields([
+                    {
+                        name: 'Help Usage',
+                        value: '`/help command:grab` or `/help`',
+                    },
+                    {
+                        name: '🔗 GIF Tutorial',
+                        value: '[Full Size Link](https://i.imgur.com/yM1Q2eB.gif)',
+                    },
+                ])
                 .setImage('https://cdn.discordapp.com/attachments/849007348945256458/918235109319122944/GNuAN6Ds1HxKRgCX1ykM.gif')
                 .setFooter({ text: 'The Music Project • Powered by Kubernetes!' });
             return interaction.reply({
@@ -78,7 +90,7 @@ class Help extends RoxanneInteraction {
                 ephemeral: true,
             });
         }
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setAuthor({ name: this.client.user.username, iconURL: this.client.user.displayAvatarURL() })
             .setTitle(`/${command.name}`)
             .setColor(this.client.color)

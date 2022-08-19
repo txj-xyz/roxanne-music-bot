@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 
 class Stats extends RoxanneInteraction {
@@ -14,7 +14,7 @@ class Stats extends RoxanneInteraction {
         const pingTime = Date.now();
         await interaction.deferReply();
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(this.client.color)
             .setTitle('Status')
             .setDescription(

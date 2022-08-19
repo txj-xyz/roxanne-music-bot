@@ -1,6 +1,6 @@
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const { PagesBuilder } = require('discord.js-pages');
-const { Client, MessageActionRow, MessageEmbed, MessageSelectMenu } = require('discord.js');
+const { Client, ActionRowBuilder, EmbedBuilder, SelectMenuBuilder } = require('discord.js');
 
 class RadioMenu extends RoxanneInteraction {
     get name() {
@@ -76,10 +76,10 @@ class RadioMenu extends RoxanneInteraction {
             return await interaction.reply({ content: '**Human, Please stop the player or wait for the queue to finish before using this command.**', ephemeral: true });
         }
 
-        const page = new MessageEmbed().setAuthor({ name: 'Live Radio Stations!' }).setDescription('Select a stream from the drop down!');
+        const page = new EmbedBuilder().setAuthor({ name: 'Live Radio Stations!' }).setDescription('Select a stream from the drop down!');
         //prettier-ignore
-        const row = new MessageActionRow().addComponents(
-            new MessageSelectMenu()
+        const row = new ActionRowBuilder().addComponents(
+            new SelectMenuBuilder()
                 .setCustomId('custom')
                 .setPlaceholder('Nothing selected')
                 .addOptions(RadioMenu.menuOptions)

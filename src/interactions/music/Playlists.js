@@ -1,6 +1,6 @@
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 const { PagesBuilder } = require('discord.js-pages');
-const { Client, MessageActionRow, MessageEmbed, MessageSelectMenu } = require('discord.js');
+const { Client, ActionRowBuilder, EmbedBuilder, SelectMenuBuilder } = require('discord.js');
 
 class PlaylistMenu extends RoxanneInteraction {
     get name() {
@@ -21,10 +21,10 @@ class PlaylistMenu extends RoxanneInteraction {
             client.interactions.commands.get('play')[playerType](interaction, link);
         }
 
-        const page = new MessageEmbed().setAuthor({ name: 'Select a playlist from the drop down!' });
+        const page = new EmbedBuilder().setDescription('Select a playlist from the drop down!');
         //prettier-ignore
-        const row = new MessageActionRow().addComponents(
-            new MessageSelectMenu()
+        const row = new ActionRowBuilder().addComponents(
+            new SelectMenuBuilder()
                 .setCustomId('custom')
                 .setPlaceholder('Nothing selected')
                 .addOptions(this.client.playlists)
