@@ -32,7 +32,7 @@ class Eval extends RoxanneInteraction {
     }
 
     async run({ interaction }) {
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ ephemeral: false });
         const code = interaction.options.getString('code', true);
         let res;
         try {

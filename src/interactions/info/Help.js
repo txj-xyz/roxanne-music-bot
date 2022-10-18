@@ -17,6 +17,8 @@ class Help extends RoxanneInteraction {
                 name: 'command',
                 type: ApplicationCommandOptionType.String,
                 description: 'Specific command help',
+                // choices: this.client.commands.map((command) => ({ name: command.name, value: command.description })),
+                // choices: this.client.interactions.commands.filter((cmd) => cmd.category !== 'Context').map((cmd) => new Object({ name: cmd.name, value: cmd.description })),
             },
         ];
     }

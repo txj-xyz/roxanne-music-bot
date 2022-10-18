@@ -52,7 +52,7 @@ class Search extends RoxanneInteraction {
         const mappedSearch = [];
         const searchPageButtonList = [
             {
-                stop: new ButtonBuilder().setEmoji('❌').setLabel('Cancel').setStyle(ButtonStyle.Danger),
+                stop: new ButtonBuilder().setLabel('Cancel').setStyle(ButtonStyle.Danger),
             },
             {
                 back: new ButtonBuilder().setEmoji('⬅️').setStyle(ButtonStyle.Secondary),
@@ -98,6 +98,7 @@ class Search extends RoxanneInteraction {
         for (const q of _chunkedPages) {
             q.tracks
                 .map((r) => {
+                    console.log(`https://img.youtube.com/vi/${r.identifier}/hqdefault.jpg`);
                     pages.push(
                         new EmbedBuilder()
                             // .setThumbnail(`https://img.youtube.com/vi/${c.identifier}/default.jpg`)
@@ -153,7 +154,7 @@ class Search extends RoxanneInteraction {
             .setPages(pages)
             .setListenUsers(interaction.user.id)
             .setListenTimeout(60 * 1000)
-            .setListenEndMethod('edit')
+            .setListenEndMethod('delete')
             .setDefaultButtons(searchPageButtonList)
             .addComponents([new ButtonBuilder().setCustomId('custom').setEmoji('✅').setLabel('Confirm').setStyle(ButtonStyle.Primary)])
             .setTriggers([

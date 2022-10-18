@@ -91,14 +91,14 @@ class MessageCreate extends RoxanneEvent {
                 }
             }
             if (message.content.match(/global/gi)) {
-                if (!this.client.application) return message.reply({ content: `There is no client.application?` }).catch(() => {});
+                if (!this.client.application) return message.reply({ content: `There is no client.application?` });
                 let res = await this.client.application.commands.set(data).catch((e) => e);
                 if (res instanceof Error) return this.client.logger.error({ error: res.stack }, res.stack);
-                return message.reply({ content: `Deploying (**${data.length.toLocaleString()}**) slash commands, this could take up to 1 hour` }).catch(() => {});
+                return message.reply({ content: `Deploying (**${data.length.toLocaleString()}**) slash commands, this could take up to 1 hour` });
             }
             let res = await message.guild.commands.set(data).catch((e) => e);
-            if (res instanceof Error) return this.client.logger.error({ error: res.stack }, res.stack).catch(() => {});
-            return message.reply({ content: `Deploying (**${data.length.toLocaleString()}**) slash commands` }).catch(() => {});
+            if (res instanceof Error) return this.client.logger.error({ error: res.stack }, res.stack);
+            return message.reply({ content: `Deploying (**${data.length.toLocaleString()}**) slash commands` });
         }
 
         // Nickname util
