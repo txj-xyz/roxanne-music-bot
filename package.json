@@ -21,7 +21,7 @@
         "count-interval": "^1.0.1",
         "discord-api-types": "^0.24.0",
         "discord.js": "^14.2.0",
-        "discord.js-pages": "^1.4.2",
+        "discord.js-pages": "^1.4.4",
         "indomitable": "^2.0.1",
         "kurasuta": "^3.0.2",
         "petitio": "^1.4.0",
