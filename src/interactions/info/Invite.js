@@ -1,5 +1,5 @@
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
-const { ActionRowBuilder, ButtonBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 class Invite extends RoxanneInteraction {
     get name() {
