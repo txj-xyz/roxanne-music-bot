@@ -37,7 +37,6 @@ class Play extends RoxanneInteraction {
             query.includes('/shorts/') ? (query = query.replace('/shorts/', '/watch?v=')) : (query = query);
 
             const result = await node.rest.resolve(query);
-            console.log(result);
             if (!result) return await interaction.editReply("I didn't find anything on the query you provided!");
             const { loadType, tracks } = result;
             const track = tracks.shift();
