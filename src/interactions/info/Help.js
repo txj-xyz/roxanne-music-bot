@@ -18,7 +18,7 @@ class Help extends RoxanneInteraction {
                 type: ApplicationCommandOptionType.String,
                 description: 'Specific command help',
                 // choices: this.client.commands.map((command) => ({ name: command.name, value: command.description })),
-                // choices: this.client.interactions.commands.filter((cmd) => cmd.category !== 'Context').map((cmd) => new Object({ name: cmd.name, value: cmd.description })),
+                // choices: this.client.interactions.commands.filter((cmd) => cmd.category !== 'Context').map((cmd) => ({ name: cmd.name, value: cmd.description })),
             },
         ];
     }
@@ -99,7 +99,7 @@ class Help extends RoxanneInteraction {
             .setDescription(command.description)
             .setFooter({ text: `The Music Project • ${this.client.interactions.commands.size} commands loaded` });
         if (command.options?.length) {
-            for (const option of command.options) embed.addField(`/${command.name} ${option.name}`, option.description);
+            for (const option of command.options) embed.addFields({ name: `/${command.name} ${option.name}`, value: option.description });
         }
         return interaction.reply({ embeds: [embed] });
     }
