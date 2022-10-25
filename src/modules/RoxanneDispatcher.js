@@ -1,5 +1,4 @@
 const { EmbedBuilder } = require('discord.js');
-const { trend } = require('tiktok-scraper');
 const Wait = require('util').promisify(setTimeout);
 
 class RoxanneDispatcher {
@@ -49,20 +48,32 @@ class RoxanneDispatcher {
                 if (![0, 1].includes(player.connection.state)) return;
                 this.play();
             })
-            .on('closed', async (payload) => {
-                this.client.logger.log({ message: payload, errorPossible: `possible webhook failure from lavalink ${payload.code ? payload.code : player.connection.state}` });
-                if (payload.code === 4014) {
-                    // this.queue.unshift(this.current);
-                    this.queue.unshift(this.current);
-                    this.play();
-                    this.player.seekTo(this.info.position);
-                }
-            })
             .on('stuck', () => {
                 this.client.logger.log('Track is stuck, repeating song.');
-                this.queue.unshift(this.current);
-                this.play();
-                // this.destroy('Failure of Websocket or bot kicked from VC.');
+                this.channel.send('There was a stuck track playing the current song.');
+                this.destroy();
+            })
+            .on('closed', async (payload) => {
+                this.client.logger.log(`Connection is closed with payload ${payload.code}`);
+
+                // Full reconnection support for the new re-identification from Discord Gateways
+                const channel_test = await this.client.channels.fetch(this.player.connection.channelId);
+                await Wait(2000);
+                if (channel_test.members.size === 0) {
+                    this.channel.send('There was a failure with resuming the connection to the Discord Gateway');
+                    return this.destroy(`Payload failure ${payload.code}`);
+                }
+                return this.player.node
+                    .joinChannel({
+                        guildId: this.guild.id,
+                        shardId: this.guild.shardId,
+                        channelId: this.player.connection.channelId,
+                        deaf: true,
+                    })
+                    .catch((err) => {
+                        this.channel.send('There was a failure with resuming the connection to the Discord Gateway');
+                        return this.destroy(`Payload failure ${payload.code}`);
+                    });
             });
     }
 
@@ -84,13 +95,13 @@ class RoxanneDispatcher {
     }
 
     destroy(reason) {
-        this.client.logger.playerError(reason);
+        this.client.logger.playerError(reason ?? '');
         this.queue.length = 0;
         this.player.connection.disconnect();
         this.client.queue.delete(this.guild.id);
         this.client.logger.debug(`Destroyed player & connection`);
         if (this.stopped) return;
-        this.channel.send('No more songs in queue, feel free to queue more songs!').catch(() => null);
+        !reason ? this.channel.send('No more songs in queue, feel free to queue more songs!').catch(() => null) : void 0;
     }
 }
 module.exports = RoxanneDispatcher;
