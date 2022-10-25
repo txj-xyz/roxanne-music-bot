@@ -1,5 +1,6 @@
 {
     "tabWidth": 4,
+    "parser": "typescript",
     "useTabs": false,
     "singleQuote": true,
     "arrowParens": "always",
