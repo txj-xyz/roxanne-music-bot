@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const RoxanneInteraction = require('../../abstract/RoxanneInteraction.js');
 
