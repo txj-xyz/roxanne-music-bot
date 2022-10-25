@@ -29,7 +29,7 @@ class Remove extends RoxanneInteraction {
     async run({ interaction, dispatcher }) {
         await interaction.deferReply();
         const queueID = interaction.options.getInteger('id', false);
-        if (!dispatcher.queue[queueID]) return await interaction.editReply("The queue id you requested to remove does not exist, see `/queue` for full list of id's.");
+        if (!dispatcher.queue[queueID - 1]) return await interaction.editReply("The queue id you requested to remove does not exist, see `/queue` for full list of id's.");
         tempArray = dispatcher.queue;
         dispatcher.queue = this.client.util.removeArrayIndex(tempArray, queueID);
         await interaction.editReply(`Removed \`${tempArray[queueID - 1].info.author} - ${tempArray[queueID - 1].info.title}\` from the queue.`);
