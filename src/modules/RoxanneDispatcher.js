@@ -11,11 +11,12 @@ class RoxanneDispatcher {
         this.repeat = 'off';
         this.current = null;
         this.stopped = false;
+        this.nowplaying = null;
 
         let _notifiedOnce = false;
 
         this.player
-            .on('start', () => {
+            .on('start', async () => {
                 if (this.repeat === 'one' && this.queue.length < 1) {
                     if (_notifiedOnce) return;
                     else _notifiedOnce = true;
@@ -40,7 +41,11 @@ class RoxanneDispatcher {
                     ])
                     .setFooter({ text: '• Powered by Kubernetes!' })
                     .setTimestamp();
-                this.channel.send({ embeds: [embed] }).catch(() => null);
+                if (this.nowplaying !== null) {
+                    this.nowplaying = await this.nowplaying.edit({ embeds: [embed] }).catch(() => null);
+                    return;
+                }
+                this.nowplaying = await this.channel.send({ embeds: [embed] }).catch(() => null);
             })
             .on('end', async () => {
                 if (this.repeat === 'one') this.queue.unshift(this.current);
@@ -81,15 +86,12 @@ class RoxanneDispatcher {
         return this.client.queue.has(this.guild.id);
     }
 
-    get info() {
-        if (this.exists) {
-            return { track: this.current.track, position: this.current.info.position };
-        }
-        return void 0;
-    }
-
     play() {
-        if (!this.exists || !this.queue.length) return this.destroy();
+        if (!this.exists || !this.queue.length) {
+            //handle if the queue is empty
+            this.nowplaying.delete().catch((e) => e);
+            return this.destroy();
+        }
         this.current = this.queue.shift();
         this.player.setVolume(0.5).playTrack({ track: this.current.track });
     }
