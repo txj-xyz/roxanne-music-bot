@@ -1,9 +1,7 @@
 import EventEmitter = require('events');
 import Bot from '../Bot';
-import * as uuid from 'uuid';
 export default interface BotEvent {
     new (client: Bot): BotEvent;
-    uid: string;
     client: Bot;
     get name(): string;
     get fireOnce(): boolean;
@@ -15,10 +13,9 @@ export default class BotEvent extends EventEmitter {
     constructor(client: Bot) {
         super();
         this.client = client;
-        this.uid = uuid.v4();
         this.on('error', (error) => {
             console.log(error);
-            client.logger.error({ error: error, handler: this.constructor.name });
+            client.logger.error({ error: error, handler: this.constructor.name }, true);
         });
     }
 
