@@ -7,7 +7,7 @@ import EventEmitter = require('events');
 export default interface InteractionHandler {
     client: Bot;
     commands: Collection<string, BotInteraction>;
-    built: Boolean;
+    built: boolean;
 }
 
 export default class InteractionHandler extends EventEmitter {

@@ -49,13 +49,13 @@ export default class MessageCreate extends BotEvent {
                 return message.reply({ content: 'Done' });
             }
 
-            let data: SlashCommandBuilder[] = [];
+            const data: SlashCommandBuilder[] = [];
             await this.buildCommands(data);
 
             // global commands
             if (message.content.match(/global/gi)) {
                 if (!this.client.application) return message.reply({ content: `There is no client.application?` }).catch(() => {});
-                let res = await this.client.application.commands.set(data).catch((e) => e);
+                const res = await this.client.application.commands.set(data).catch((e) => e);
                 if (res instanceof Error) return this.client.logger.error({ error: res.stack, handler: this.constructor.name });
                 return message
                     .reply({
@@ -67,7 +67,7 @@ export default class MessageCreate extends BotEvent {
             }
 
             // guild commands
-            let res = await message.guild.commands.set(data).catch((e) => e);
+            const res = await message.guild.commands.set(data).catch((e) => e);
             if (res instanceof Error) return this.client.logger.error({ error: res.stack, handler: this.constructor.name });
             return message
                 .reply({

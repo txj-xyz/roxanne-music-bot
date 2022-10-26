@@ -18,7 +18,7 @@ export default class EventHandler {
     build() {
         if (this.built) return this;
         const events = readdirSync(this.client.location + '/src/events');
-        for (let event of events) {
+        for (const event of events) {
             if (event.endsWith('.ts')) {
                 import(`${this.client.location}/src/events/${event}`).then((event) => {
                     const botEvent: BotEvent = new event.default(this.client);
