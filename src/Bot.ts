@@ -5,12 +5,13 @@ import InteractionHandler from './handlers/InteractionHandler';
 import EventHandler from './handlers/EventHandler';
 import UtilityHandler from './handlers/UtilityHandler';
 
-export default interface Bot extends Client {
+export default interface Bot<Ready extends boolean = boolean> extends Client {
+    new (options: ClientOptions): Bot<true>;
     color: number;
     commandsRun: number;
     util: UtilityHandler;
-    quitting?: boolean;
-    location?: string;
+    quitting: boolean;
+    location: string;
     logger: BotLogger;
     interactions: InteractionHandler;
     events: EventHandler;
@@ -19,7 +20,6 @@ export default interface Bot extends Client {
 export default class Bot extends Client {
     constructor(options: ClientOptions) {
         super(options);
-
         this.color = 0x7e686c;
         this.commandsRun = 0;
         this.util = new UtilityHandler(this);
@@ -40,12 +40,12 @@ export default class Bot extends Client {
         ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event: string) => process.once(event, this.exit.bind(this)));
     }
 
-    async login() {
+    async login(): Promise<string> {
         await super.login(process.env.TOKEN);
         return this.constructor.name;
     }
 
-    exit() {
+    exit(): void {
         if (this.quitting) return;
         this.quitting = true;
         this.destroy();
