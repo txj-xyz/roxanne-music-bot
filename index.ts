@@ -9,8 +9,6 @@ const { Guilds, GuildMembers, GuildBans, GuildVoiceStates, GuildMessages, GuildM
 
 const sharderOptions: IndomitableOptions = {
     clientOptions: {
-        // disableMentions: 'everyone',
-        // restRequestTimeout: 30000,
         intents: [Guilds, GuildMembers, GuildBans, GuildVoiceStates, GuildMessages, GuildMessageReactions, MessageContent],
     },
     client: Bot as any,

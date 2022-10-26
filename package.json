@@ -3,7 +3,9 @@
     "version": "3.5.1",
     "description": "A music bot written in typescript.",
     "scripts": {
-        "start": "node index.js"
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "start": "ts-node ./index.ts"
     },
     "author": "TXJ",
     "license": "MIT",
