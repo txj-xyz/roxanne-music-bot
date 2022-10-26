@@ -22,11 +22,5 @@ export default class GuildDelete extends BotEvent {
             },
             true
         );
-        // this.client.logger.log({
-        //     constructor: this.constructor.name,
-        //     message: 'Left guild',
-        //     guildName: guild.name,
-        //     guildMembers: guild.memberCount,
-        // });
     }
 }
