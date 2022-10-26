@@ -49,7 +49,7 @@ export default class MessageCreate extends BotEvent {
                 return message.reply({ content: 'Done' });
             }
 
-            let data: SlashCommandBuilder[] = [];
+            const data: SlashCommandBuilder[] = [];
             await this.buildCommands(data);
 
             // global commands
@@ -67,7 +67,7 @@ export default class MessageCreate extends BotEvent {
             }
 
             // guild commands
-            let res = await message.guild.commands.set(data).catch((e) => e);
+            const res = await message.guild.commands.set(data).catch((e) => e);
             if (res instanceof Error) return this.client.logger.error({ error: res.stack, handler: this.constructor.name }, true);
             return message
                 .reply({

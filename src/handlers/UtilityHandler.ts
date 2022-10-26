@@ -43,7 +43,7 @@ export default class UtilityHandler {
 
     public convertMS(ms: number | null): string {
         if (!ms) return 'n/a';
-        let seconds = (ms / 1000).toFixed(1),
+        const seconds = (ms / 1000).toFixed(1),
             minutes = (ms / (1000 * 60)).toFixed(1),
             hours = (ms / (1000 * 60 * 60)).toFixed(1),
             days = (ms / (1000 * 60 * 60 * 24)).toFixed(1);
