@@ -37,13 +37,13 @@ export default class MessageCreate extends BotEvent {
                 // remove only the guilds commands
                 if (message.content.match(/guild/gi))
                     await message.guild?.commands.set([]).catch((err) => {
-                        this.client.logger.error({ error: err.stack, handler: this.constructor.name });
+                        this.client.logger.error({ error: err.stack, handler: this.constructor.name }, true);
                         message.react('❎');
                     });
                 // remove all slash commands globally
                 else
                     await this.client.application?.commands.set([]).catch((err) => {
-                        this.client.logger.error({ error: err.stack, handler: this.constructor.name });
+                        this.client.logger.error({ error: err.stack, handler: this.constructor.name }, true);
                         message.react('❎');
                     });
                 return message.reply({ content: 'Done' });
@@ -56,7 +56,7 @@ export default class MessageCreate extends BotEvent {
             if (message.content.match(/global/gi)) {
                 if (!this.client.application) return message.reply({ content: `There is no client.application?` }).catch(() => {});
                 let res = await this.client.application.commands.set(data).catch((e) => e);
-                if (res instanceof Error) return this.client.logger.error({ error: res.stack, handler: this.constructor.name });
+                if (res instanceof Error) return this.client.logger.error({ error: res.stack, handler: this.constructor.name }, true);
                 return message
                     .reply({
                         content: `Deploying (**${data.length.toLocaleString()}**) slash commands, This could take up to 1 hour.\n\`\`\`diff\n${data
@@ -68,7 +68,7 @@ export default class MessageCreate extends BotEvent {
 
             // guild commands
             let res = await message.guild.commands.set(data).catch((e) => e);
-            if (res instanceof Error) return this.client.logger.error({ error: res.stack, handler: this.constructor.name });
+            if (res instanceof Error) return this.client.logger.error({ error: res.stack, handler: this.constructor.name }, true);
             return message
                 .reply({
                     content: `Deploying (**${data.length.toLocaleString()}**) slash commands\n\`\`\`diff\n${data
@@ -80,12 +80,12 @@ export default class MessageCreate extends BotEvent {
     }
 
     private async buildCommands(data: any[]) {
-        for await (const directory of readdirSync(`${this.client.location}/dist/src/interactions`, { withFileTypes: true })) {
+        for await (const directory of readdirSync(`${this.client.location}/src/interactions`, { withFileTypes: true })) {
             if (!directory.isDirectory()) continue;
-            for await (const command of readdirSync(`${this.client.location}/dist/src/interactions/${directory.name}`, { withFileTypes: true })) {
+            for await (const command of readdirSync(`${this.client.location}/src/interactions/${directory.name}`, { withFileTypes: true })) {
                 if (!command.isFile()) continue;
-                if (command.name.endsWith('.js')) {
-                    import(`${this.client.location}/dist/src/interactions/${directory.name}/${command.name}`).then((interaction) => {
+                if (command.name.endsWith('.ts')) {
+                    import(`${this.client.location}/src/interactions/${directory.name}/${command.name}`).then((interaction) => {
                         const Command: BotInteraction = new interaction.default(this.client);
                         Command.slashData ? data.push(Command.slashData) : void 0;
                     });

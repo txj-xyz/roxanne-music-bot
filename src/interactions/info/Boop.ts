@@ -17,5 +17,6 @@ export default class Boop extends BotInteraction {
     async run(interaction: ChatInputCommandInteraction) {
         await interaction.deferReply({ ephemeral: false });
         await interaction.editReply(`<a:majjnow:1006284731928805496>`);
+
     }
 }

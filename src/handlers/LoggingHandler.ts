@@ -1,16 +1,14 @@
-import isMaster from 'cluster';
 import { webhookUrl } from '../../config.json';
 import { WebhookClient } from 'discord.js';
 
 export default interface BotLogger {
-    webhookUrl: typeof webhookUrl;
-    webhook: WebhookClient;
+    webhookUrl: string;
+    webhook: WebhookClient | null;
 }
 
 export type BotLog = {
-    uid?: string;
     args?: unknown;
-    handler?: string;
+    handler: string;
     user?: string;
     message: string;
     error?: unknown;
@@ -23,33 +21,27 @@ export type BotError = {
     error: unknown;
 };
 
-
-
-export default class BotLogger {
+export default class BotLogger implements BotLogger {
     constructor() {
         this.webhookUrl = webhookUrl ?? null;
-        if (!this.webhookUrl) throw new Error('Webhook URL is missing in config file.');
-        this.webhook = new WebhookClient({ url: webhookUrl });
-        this.webhook.send('Health check initialized').catch((reason) => console.log(reason));
+        if (!this.webhookUrl) this.log({ handler: this.constructor.name, message: 'Webhook URL is missing in config file.' }, false);
+        this.webhook = webhookUrl ? new WebhookClient({ url: webhookUrl }) : null;
+        this.webhook?.send(this.webhook_formatter({ handler: this.constructor.name, message: 'Webhook Initialized.' })).catch((reason) => this.error({ error: reason }, false));
     }
 
     private webhook_formatter(incoming: BotLog | BotError): string {
         return `\`\`\`json\n${JSON.stringify(incoming, null, 2)}\n\`\`\``;
     }
 
-    get id() {
-        return isMaster ? 'Parent' : process.env.CLUSTER_ID;
-    }
-
     public log(incoming: BotLog, webhook_enabled: boolean): void {
         const _format: string = JSON.stringify(incoming, null, 2);
-        webhook_enabled ? this.webhook.send(this.webhook_formatter(incoming)) : void 0;
+        webhook_enabled && this.webhook ? this.webhook.send(this.webhook_formatter(incoming)) : void 0;
         return console.log('[INFO]', _format);
     }
 
-    public error(incoming: BotError): void {
+    public error(incoming: BotError, webhook_enabled: boolean): void {
         const _format: string = JSON.stringify(incoming, null, 2);
-        this.webhook.send(this.webhook_formatter(incoming));
+        webhook_enabled && this.webhook ? this.webhook.send(this.webhook_formatter(incoming)) : void 0;
         return console.log('[ERROR]', _format);
     }
 }
