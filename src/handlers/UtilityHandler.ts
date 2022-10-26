@@ -1,11 +1,11 @@
 import * as config from '../../config.json';
-import { EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
+import { EmbedBuilder, ChatInputCommandInteraction, Message } from 'discord.js';
 import Bot from '../Bot';
 
 export default interface UtilityHandler {
     client: Bot;
     config: typeof config;
-    random(array: Array<any>): Array<number>;
+    random(array: Array<number>): number;
     loadingEmbed: EmbedBuilder;
     loadingText: string;
 }
@@ -20,12 +20,12 @@ export default class UtilityHandler {
         this.loadingText = '<a:Typing:598682375303593985> **Loading...**';
     }
 
-    public deleteMessage(interaction: ChatInputCommandInteraction<any>, id: string) {
-        return interaction.channel?.messages.fetch(id).then((message) => message.delete());
+    public deleteMessage(interaction: ChatInputCommandInteraction, id: string) {
+        return interaction.channel?.messages.fetch(id).then((message: Message<true | false>) => message.delete());
     }
 
     public removeArrayIndex(array: Array<any>, indexID: number): Array<string> {
-        return array.filter((_: any, index) => index != indexID - 1);
+        return array.filter((_: Array<string>, index: number) => index != indexID - 1);
     }
 
     public checkURL(string: string): boolean {

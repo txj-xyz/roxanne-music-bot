@@ -28,7 +28,7 @@ export default class Eval extends BotInteraction {
         return string.length > max ? string.slice(0, max) : string;
     }
 
-    async run(interaction: ChatInputCommandInteraction<any>) {
+    async run(interaction: ChatInputCommandInteraction) {
         const type = interaction.options.getBoolean('ephemeral');
         await interaction.deferReply(type ? { ephemeral: type } : undefined);
         const code = interaction.options.getString('code', true);

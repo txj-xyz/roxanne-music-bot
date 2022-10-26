@@ -1,5 +1,5 @@
 import { readdirSync } from 'fs';
-import { EmbedBuilder, Collection, Interaction } from 'discord.js';
+import { EmbedBuilder, Collection, Interaction, Awaitable } from 'discord.js';
 import Bot from '../Bot';
 import BotInteraction from '../types/BotInteraction';
 import EventEmitter = require('events');
@@ -17,7 +17,7 @@ export default class InteractionHandler extends EventEmitter {
         this.built = false;
         this.client = client;
         this.on('error', (error: unknown) => client.logger.error({ error: error }, true));
-        this.client.on('interactionCreate', (interaction: Interaction): Promise<any> => this.exec(interaction));
+        this.client.on('interactionCreate', (interaction: Interaction): Awaitable<void> => this.exec(interaction));
     }
 
     build() {
@@ -66,7 +66,7 @@ export default class InteractionHandler extends EventEmitter {
             .setFooter({ text: this.client.user?.username ?? '', iconURL: this.client.user?.displayAvatarURL() });
     }
 
-    async exec(interaction: Interaction): Promise<any> {
+    async exec(interaction: Interaction): Promise<void> {
         if (interaction.isCommand() && interaction.isRepliable() && interaction.inCachedGuild()) {
             try {
                 const command = this.commands.get(interaction.commandName);
@@ -81,7 +81,8 @@ export default class InteractionHandler extends EventEmitter {
                                 },
                                 true
                             );
-                            return await interaction.reply({ content: 'You do not have permissions to run this command. This incident has been logged.', ephemeral: true });
+                            await interaction.reply({ content: 'You do not have permissions to run this command. This incident has been logged.', ephemeral: true });
+                            return;
                         }
                         break;
                     default:
