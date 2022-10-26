@@ -20,7 +20,10 @@ export default class Ready extends BotEvent {
 
     //test comment
     async run(client: Bot) {
-        client.logger.log({ message: `[${client.user?.username}] Ready! Serving ${this.client.guilds.cache.size} guild(s) with ${this.client.users.cache.size} user(s)` }, true);
+        client.logger.log(
+            { handler: this.constructor.name, message: `[${client.user?.username}] Ready! Serving ${this.client.guilds.cache.size} guild(s) with ${this.client.users.cache.size} user(s)` },
+            true
+        );
         setInterval((): void => {
             const current = this.statuses.shift() ?? '';
             this.client.user?.setActivity(current);

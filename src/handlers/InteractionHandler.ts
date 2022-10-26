@@ -16,10 +16,8 @@ export default class InteractionHandler extends EventEmitter {
         this.commands = new Collection();
         this.built = false;
         this.client = client;
-        this.on('error', (error: unknown) => client.logger.error({ error }));
-        this.client.on('interactionCreate', (interaction): Promise<any> => {
-            return this.exec(interaction);
-        });
+        this.on('error', (error: unknown) => client.logger.error({ error: error }, true));
+        this.client.on('interactionCreate', (interaction: Interaction): Promise<any> => this.exec(interaction));
     }
 
     build() {
@@ -30,12 +28,12 @@ export default class InteractionHandler extends EventEmitter {
             const commands = readdirSync(`${this.client.location}/src/interactions/${directory.name}`, { withFileTypes: true });
             for (const command of commands) {
                 if (!command.isFile()) continue;
-                if (!command.name.endsWith('.js')) continue;
+                if (!command.name.endsWith('.ts')) continue;
                 import(`${this.client.location}/src/interactions/${directory.name}/${command.name}`).then((interaction) => {
                     const Command: BotInteraction = new interaction.default(this.client);
                     Command.category = directory.name.charAt(0).toUpperCase() + directory.name.substring(1);
                     this.commands.set(Command.name, Command);
-                    this.client.logger.log({ message: `Command '${Command.name}' loaded`, handler: this.constructor.name, uid: `(@${Command.uid})` }, false);
+                    this.client.logger.log({ message: `Command '${Command.name}' loaded`, handler: this.constructor.name }, false);
                 });
             }
         }
@@ -59,6 +57,15 @@ export default class InteractionHandler extends EventEmitter {
         return _containsRole;
     }
 
+    private errorEmbed(error: any): EmbedBuilder {
+        return new EmbedBuilder()
+            .setColor(0xff99cc)
+            .setTitle('Something errored!')
+            .setDescription(`\`\`\`js\n ${error.toString()}\`\`\``)
+            .setTimestamp()
+            .setFooter({ text: this.client.user?.username ?? '', iconURL: this.client.user?.displayAvatarURL() });
+    }
+
     async exec(interaction: Interaction): Promise<any> {
         if (interaction.isCommand() && interaction.isRepliable() && interaction.inCachedGuild()) {
             try {
@@ -80,40 +87,37 @@ export default class InteractionHandler extends EventEmitter {
                     default:
                         break;
                 }
+
                 this.client.logger.log(
                     {
                         handler: this.constructor.name,
                         user: `${interaction.user.username} | ${interaction.user.id}`,
                         message: `Executing Command ${command.name}`,
-                        uid: `(@${command.uid})`,
                     },
                     true
                 );
+
                 await command.run(interaction);
                 this.client.commandsRun++;
             } catch (error: any) {
-                const embed = new EmbedBuilder()
-                    .setColor(0xff99cc)
-                    .setTitle('Something errored!')
-                    .setDescription(`\`\`\`js\n ${error.toString()}\`\`\``)
-                    .setTimestamp()
-                    .setFooter({ text: this.client.user?.username ?? '', iconURL: this.client.user?.displayAvatarURL() });
-
-                this.client.logger.error({
-                    handler: this.constructor.name,
-                    message: 'Something errored!',
-                    error: error.stack,
-                });
+                this.client.logger.error(
+                    {
+                        handler: this.constructor.name,
+                        message: 'Something errored!',
+                        error: error.stack,
+                    },
+                    true
+                );
 
                 // This section will attempt to catch all errors coming from the bots and feed back to the channel
                 try {
-                    interaction.reply({ embeds: [embed] });
+                    interaction.reply({ embeds: [this.errorEmbed(error)] });
                 } catch {}
                 try {
-                    interaction.editReply({ embeds: [embed] });
+                    interaction.editReply({ embeds: [this.errorEmbed(error)] });
                 } catch {}
                 try {
-                    interaction.followUp({ embeds: [embed] });
+                    interaction.followUp({ embeds: [this.errorEmbed(error)] });
                 } catch {}
             }
         }

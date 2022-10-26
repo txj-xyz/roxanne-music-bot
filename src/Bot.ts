@@ -1,20 +1,17 @@
 import 'dotenv/config';
 import { Client, ClientOptions } from 'discord.js';
-import BotLogger from './handlers/LoggingHandler';
-import InteractionHandler from './handlers/InteractionHandler';
-import EventHandler from './handlers/EventHandler';
-import UtilityHandler from './handlers/UtilityHandler';
+import * as Handlers from './handlers';
+import { Roxanne } from './handlers/PreloadHandler';
 
-export default interface Bot<Ready extends boolean = boolean> extends Client {
-    new (options: ClientOptions): Bot<true>;
+export default interface Bot {
     color: number;
-    commandsRun: number;
-    util: UtilityHandler;
+    util: Handlers.UtilityHandler;
     quitting: boolean;
     location: string;
-    logger: BotLogger;
-    interactions: InteractionHandler;
-    events: EventHandler;
+    logger: Handlers.LoggingHandler;
+    interactions: Handlers.InteractionHandler;
+    events: Handlers.EventHandler;
+    commandsRun: typeof Roxanne.commandsRun;
 }
 
 export default class Bot extends Client {
@@ -22,12 +19,12 @@ export default class Bot extends Client {
         super(options);
         this.color = 0x7e686c;
         this.commandsRun = 0;
-        this.util = new UtilityHandler(this);
+        this.util = new Handlers.UtilityHandler(this);
         this.quitting = false;
         this.location = process.cwd();
-        this.logger = new BotLogger();
-        this.interactions = new InteractionHandler(this).build();
-        this.events = new EventHandler(this).build();
+        this.logger = new Handlers.LoggingHandler();
+        this.interactions = new Handlers.InteractionHandler(this).build();
+        this.events = new Handlers.EventHandler(this).build();
 
         // process.on('unhandledRejection', (err: any): void => {
         //     this.logger.error({ message: `UnhandledRejection from Process`, error: err.stack });
