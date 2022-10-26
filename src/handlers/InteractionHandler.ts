@@ -57,11 +57,11 @@ export default class InteractionHandler extends EventEmitter {
         return _containsRole;
     }
 
-    private errorEmbed(error: any): EmbedBuilder {
+    private errorEmbed(error: unknown): EmbedBuilder {
         return new EmbedBuilder()
             .setColor(0xff99cc)
             .setTitle('Something errored!')
-            .setDescription(`\`\`\`js\n ${error.toString()}\`\`\``)
+            .setDescription(`\`\`\`js\n ${error?.toString() ?? 'Internal Error Occurred.'}\`\`\``)
             .setTimestamp()
             .setFooter({ text: this.client.user?.username ?? '', iconURL: this.client.user?.displayAvatarURL() });
     }
@@ -99,12 +99,12 @@ export default class InteractionHandler extends EventEmitter {
 
                 await command.run(interaction);
                 this.client.commandsRun++;
-            } catch (error: any) {
+            } catch (error: unknown) {
                 this.client.logger.error(
                     {
                         handler: this.constructor.name,
                         message: 'Something errored!',
-                        error: error.stack,
+                        error: error?.toString() ?? 'Internal Error Occurred.',
                     },
                     true
                 );
