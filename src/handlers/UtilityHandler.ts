@@ -24,7 +24,7 @@ export default class UtilityHandler {
         return interaction.channel?.messages.fetch(id).then((message) => message.delete());
     }
 
-    public removeArrayIndex(array: Array<any>, indexID: number): any[] {
+    public removeArrayIndex(array: Array<any>, indexID: number): Array<string> {
         return array.filter((_: any, index) => index != indexID - 1);
     }
 
