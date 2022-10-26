@@ -16,19 +16,9 @@ export default class MessageCreate extends BotEvent {
         return true;
     }
 
-    static ryChooseMatch = new RegExp(/(?:[^\s('|")]+|(?:'|")[^('|")]*(?:'|"))+/g);
-
     async run(message: Message): Promise<any> {
         if (message.author.bot) return;
         if (!message.inGuild()) return;
-        if (this.client.util.config.guildMessageDisabled.includes(message.guild.id)) return;
-
-        // boop message
-        if (message.content.startsWith(`<@${this.client.user?.id}> boop`)) {
-            this.client.commandsRun++;
-            this.client.logger.log({ message: `${message.author.username} booped the bot.`, uid: `(@${this.uid})` }, true);
-            return message.reply({ content: '<a:majjnow:1006284731928805496>' });
-        }
 
         // slash command handler
         if (this.client.util.config.owners.includes(message.author.id) && message.content.startsWith(`<@${this.client.user?.id}> build`)) {
