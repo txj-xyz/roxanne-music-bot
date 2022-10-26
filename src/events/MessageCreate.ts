@@ -16,7 +16,7 @@ export default class MessageCreate extends BotEvent {
         return true;
     }
 
-    async run(message: Message): Promise<any> {
+    async run(message: Message): Promise<Message<true> | undefined | void> {
         if (message.author.bot) return;
         if (!message.inGuild()) return;
 
@@ -55,7 +55,7 @@ export default class MessageCreate extends BotEvent {
             // global commands
             if (message.content.match(/global/gi)) {
                 if (!this.client.application) return message.reply({ content: `There is no client.application?` }).catch(() => {});
-                let res = await this.client.application.commands.set(data).catch((e) => e);
+                const res = await this.client.application.commands.set(data).catch((e) => e);
                 if (res instanceof Error) return this.client.logger.error({ error: res.stack, handler: this.constructor.name }, true);
                 return message
                     .reply({

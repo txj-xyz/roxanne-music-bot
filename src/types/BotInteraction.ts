@@ -1,4 +1,4 @@
-import { ApplicationCommandOption, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from 'discord.js';
+import { ApplicationCommandOption, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder, Message } from 'discord.js';
 import Bot from '../Bot';
 
 export default interface BotInteraction {
@@ -9,7 +9,7 @@ export default interface BotInteraction {
     get description(): string;
     get slashData(): SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
     get permissions(): ApplicationCommandOption[] | string;
-    run(args: unknown): Promise<any>;
+    run(args: unknown): Promise<Message<true> | undefined | void>;
 }
 
 export default class BotInteraction {

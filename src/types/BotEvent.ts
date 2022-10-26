@@ -1,12 +1,13 @@
 import EventEmitter = require('events');
 import Bot from '../Bot';
+import { Message } from 'discord.js';
 export default interface BotEvent {
     new (client: Bot): BotEvent;
     client: Bot;
     get name(): string;
     get fireOnce(): boolean;
     get enabled(): boolean;
-    run(args: unknown | unknown[]): Promise<void>;
+    run(args: unknown | unknown[]): Promise<Message<true> | undefined | void>;
 }
 
 export default class BotEvent extends EventEmitter {
