@@ -17,7 +17,7 @@ export default class InteractionHandler extends EventEmitter {
         this.built = false;
         this.client = client;
         this.on('error', (error: unknown) => client.logger.error({ error: error }, true));
-        this.client.on('interactionCreate', (interaction: Interaction): Awaitable<void> => this.exec(interaction));
+        client.on('interactionCreate', (interaction: Interaction): Awaitable<void> => this.exec(interaction));
     }
 
     build() {
