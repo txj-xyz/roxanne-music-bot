@@ -1,9 +1,8 @@
 import 'dotenv/config';
 import { Client, ClientOptions } from 'discord.js';
 import * as Handlers from './handlers';
-import { Roxanne } from './handlers/PreloadHandler';
-
-export default interface Bot {
+export default interface Bot extends Client {
+    constructor(options: ClientOptions): Bot;
     color: number;
     util: Handlers.UtilityHandler;
     quitting: boolean;
@@ -11,7 +10,10 @@ export default interface Bot {
     logger: Handlers.LoggingHandler;
     interactions: Handlers.InteractionHandler;
     events: Handlers.EventHandler;
-    commandsRun: typeof Roxanne.commandsRun;
+    modules: Handlers.ModuleHandler;
+    commandsRun: number;
+    login(): Promise<string>;
+    exit(): void;
 }
 
 export default class Bot extends Client {
@@ -25,15 +27,7 @@ export default class Bot extends Client {
         this.logger = new Handlers.LoggingHandler();
         this.interactions = new Handlers.InteractionHandler(this).build();
         this.events = new Handlers.EventHandler(this).build();
-
-        // process.on('unhandledRejection', (err: any): void => {
-        //     this.logger.error({ message: `UnhandledRejection from Process`, error: err.stack });
-        // });
-
-        // process.on('uncaughtException', (err: Error, origin: NodeJS.UncaughtExceptionOrigin): void => {
-        //     this.logger.error({ message: `uncaughtException from ${origin}`, error: err.stack });
-        // });
-
+        this.modules = new Handlers.ModuleHandler(this).build();
         ['beforeExit', 'SIGUSR1', 'SIGUSR2', 'SIGINT', 'SIGTERM'].map((event: string) => process.once(event, this.exit.bind(this)));
     }
 
