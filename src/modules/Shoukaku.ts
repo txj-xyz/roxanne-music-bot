@@ -1,7 +1,19 @@
-import { Shoukaku, Connectors } from 'shoukaku';
+import { Channel, Guild, GuildMember } from 'discord.js';
+import { Shoukaku, Connectors, Player, WebSocketClosedEvent, Node, Track } from 'shoukaku';
 import Bot from '../Bot';
 import { BotModule } from '../handlers/ModuleHandler';
 
+export interface MusicDispatcher {
+    client: Bot;
+    guild: Guild;
+    channel: Channel;
+    player: Player;
+    queue: Array<Track>;
+    repeat: 'off';
+    current: null | object;
+    stopped: boolean;
+    nowplaying: null;
+}
 export default class Music extends Shoukaku implements BotModule {
     get enabled() {
         return true;
@@ -31,5 +43,56 @@ export default class Music extends Shoukaku implements BotModule {
                 true
             );
         });
+    }
+}
+
+export class MusicDispatcher {
+    constructor(client: Bot, guild: Guild, channel: Channel, player: Player) {
+        this.client = client;
+        this.guild = guild;
+        this.channel = channel;
+        this.player = player;
+        this.queue = new Array<Track>
+        this.repeat = 'off';
+        this.current = null;
+        this.stopped = false;
+        this.nowplaying = null;
+
+        this.player
+            .on('start', async () => {})
+            .on('end', async () => {})
+            .on('stuck', () => {})
+            .on('closed', async (payload: WebSocketClosedEvent) => {});
+    }
+}
+
+export interface MusicQueue {
+    client: Bot;
+    player?: Player;
+    dispatcher: MusicDispatcher;
+    handle(guild: Guild, member: GuildMember, channel: Channel, node: Node, track: Track, first: boolean): Promise<MusicDispatcher>;
+}
+
+export class MusicQueue extends Map implements MusicQueue {
+    constructor(client: Bot) {
+        super();
+        this.client = client;
+    }
+
+    public async handle(guild: Guild, member: GuildMember, channel: Channel, node: Node, track: Track, first: boolean): Promise<MusicDispatcher> {
+        const existing = this.get(guild.id);
+
+        // TODO: HANDLE THE MISSING VOID CONNECTION CONNECTION FLAGS VIA BEFORE INTERACTION HANDLES IN `<Bot>.modules.<ModuleName>.queue.<Handle>`
+        if (!existing && member.voice.channelId) {
+            this.player = await node.joinChannel({ guildId: guild.id, shardId: guild.shardId, channelId: member.voice.channelId, deaf: true })
+            this.dispatcher = new MusicDispatcher(this.client, guild, channel, this.player);
+            this.dispatcher.queue.push(track);
+            this.set(guild.id, this.dispatcher);
+            return this.dispatcher;
+        }
+
+        first ? existing.queue.unshift(track) : existing.queue.push(track);
+
+        return this.dispatcher;
     }
 }
