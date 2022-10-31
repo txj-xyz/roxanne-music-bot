@@ -30,9 +30,9 @@ export default class ModuleHandler extends Collection<string, BotModule> impleme
                 if (module.default.enabled) {
                     const botModule: BotModule = new module.default(this.client);
                     this.set(botModule.name.toLowerCase(), botModule);
-                    this.client.logger.log({ handler: this.constructor.name, message: `Dynamic Module '${module.default.name}' loaded.` }, false);
+                    this.client.logger.log({ handler: this.constructor.name, message: `Module '${module.default.name}' loaded.` }, false, '[MODULE LOADER]');
                 } else {
-                    this.client.logger.error({ handler: this.constructor.name, error: `Dynamic Module '${module.default.name}' not loaded` }, true);
+                    this.client.logger.log({ handler: this.constructor.name, message: `Module '${module.default.name}' not loaded` }, false, '[MODULE LOADER]');
                 }
             });
         }
