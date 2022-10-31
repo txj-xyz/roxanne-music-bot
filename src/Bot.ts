@@ -16,7 +16,7 @@ export default interface Bot extends Client {
     exit(): void;
 }
 
-export default class Bot extends Client {
+export default class Bot extends Client implements Bot {
     constructor(options: ClientOptions) {
         super(options);
         this.color = 0x7e686c;
