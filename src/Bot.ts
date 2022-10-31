@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { Client, ClientOptions } from 'discord.js';
 import * as Handlers from './handlers';
-export default interface Bot extends Client {
+export default interface Bot {
     color: number;
     util: Handlers.UtilityHandler;
     quitting: boolean;

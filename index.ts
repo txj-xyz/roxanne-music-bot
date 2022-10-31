@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { GatewayIntentBits } from 'discord.js';
+import { Client, GatewayIntentBits } from 'discord.js';
 import { Indomitable, IndomitableOptions } from 'indomitable';
 import Bot from './src/Bot';
 
@@ -11,7 +11,7 @@ const sharderOptions: IndomitableOptions = {
     clientOptions: {
         intents: [Guilds, GuildMembers, GuildBans, GuildVoiceStates, GuildMessages, GuildMessageReactions, MessageContent],
     },
-    client: Bot as any,
+    client: Bot as typeof Client,
     autoRestart: true,
     token: process.env.TOKEN ?? '',
     clusterCount: 1,
