@@ -2,10 +2,7 @@ import { Collection } from 'discord.js';
 import { readdirSync } from 'fs';
 import Bot from '../Bot';
 
-export interface BotModule {
-    get name(): string;
-    get enabled(): boolean;
-}
+export interface BotModule {}
 
 export default interface ModuleHandler {
     client: Bot;
@@ -18,7 +15,6 @@ export default class ModuleHandler extends Collection<string, BotModule> impleme
         super();
         this.client = client;
         this.built = false;
-        this.modules = new Collection<string, BotModule>();
     }
 
     build() {
@@ -27,12 +23,12 @@ export default class ModuleHandler extends Collection<string, BotModule> impleme
         for (const module of modules) {
             if (!module.endsWith('.ts')) continue;
             import(`${this.client.location}/src/modules/${module}`).then((module) => {
-                if (module.default.enabled) {
+                if (module.enabled) {
                     const botModule: BotModule = new module.default(this.client);
-                    this.set(botModule.name.toLowerCase(), botModule);
-                    this.client.logger.log({ handler: this.constructor.name, message: `Module '${module.default.name}' loaded.` }, false, '[MODULE LOADER]');
+                    this.set(module.default.name.toLowerCase(), botModule);
+                    this.client.logger.log({ handler: this.constructor.name, message: `Module '${module.default.name}' loaded.` }, true, '[MODULE LOADER]');
                 } else {
-                    this.client.logger.log({ handler: this.constructor.name, message: `Module '${module.default.name}' not loaded` }, false, '[MODULE LOADER]');
+                    this.client.logger.log({ handler: this.constructor.name, message: `Module '${module.default.name}' not loaded` }, true, '[MODULE LOADER]');
                 }
             });
         }
