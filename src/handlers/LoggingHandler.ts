@@ -33,15 +33,15 @@ export default class BotLogger implements BotLogger {
         return `\`\`\`json\n${JSON.stringify(incoming, null, 2)}\n\`\`\``;
     }
 
-    public log(incoming: BotLog, webhook_enabled: boolean): void {
+    public log(incoming: BotLog, webhook_enabled: boolean, name?: string): void {
         const _format: string = JSON.stringify(incoming, null, 2);
         webhook_enabled && this.webhook ? this.webhook.send(this.webhook_formatter(incoming)) : void 0;
-        return console.log('[INFO]', _format);
+        return console.log(name ?? '[INFO]', _format);
     }
 
-    public error(incoming: BotError, webhook_enabled: boolean): void {
+    public error(incoming: BotError, webhook_enabled: boolean, name?: string): void {
         const _format: string = JSON.stringify(incoming, null, 2);
         webhook_enabled && this.webhook ? this.webhook.send(this.webhook_formatter(incoming)) : void 0;
-        return console.log('[ERROR]', _format);
+        return console.log(name ?? '[ERROR]', _format);
     }
 }
