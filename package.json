@@ -1,6 +1,6 @@
 {
     "name": "roxanne",
-    "version": "3.5.1",
+    "version": "4.0.0",
     "description": "A music bot written in typescript.",
     "scripts": {
         "build": "tsc",
