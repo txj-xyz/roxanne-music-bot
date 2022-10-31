@@ -3,6 +3,8 @@ import { Shoukaku, Connectors, Player, Node, Track } from 'shoukaku';
 import Bot from '../Bot';
 import { BotModule } from '../handlers/ModuleHandler';
 
+export const enabled = true;
+export const name = "Music";
 export interface MusicDispatcher {
     client: Bot;
     guild: Guild;
@@ -15,12 +17,6 @@ export interface MusicDispatcher {
     nowplaying: null;
 }
 export default class Music extends Shoukaku implements BotModule {
-    get enabled() {
-        return true;
-    }
-    get name() {
-        return this.constructor.name;
-    }
     constructor(client: Bot) {
         super(new Connectors.DiscordJS(client), client.util.config.lavalinkOptions, client.util.config.shoukakuOptions);
         this.on('ready', (name, resumed) => {
