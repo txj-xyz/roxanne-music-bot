@@ -35,9 +35,9 @@ export default class Eval extends BotInteraction {
         let res;
         try {
             res = await eval(code);
-            res = inspect(res, { depth: 1 });
+            res = inspect(res, { depth: 0 });
         } catch (error) {
-            res = inspect(error, { depth: 1 });
+            res = inspect(error, { depth: 0 });
         }
         const embed = new EmbedBuilder()
             .setColor(this.client.color)
