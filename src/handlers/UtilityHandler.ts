@@ -15,7 +15,6 @@ export default class UtilityHandler {
         this.client = client;
         this.config = config;
         this.random = (array) => array[Math.floor(Math.random() * array.length)];
-        this.deleteMessage = this.deleteMessage;
         this.loadingEmbed = new EmbedBuilder().setAuthor({ name: 'Loading...' });
         this.loadingText = '<a:Typing:598682375303593985> **Loading...**';
     }

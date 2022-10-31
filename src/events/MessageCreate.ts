@@ -79,7 +79,7 @@ export default class MessageCreate extends BotEvent {
         }
     }
 
-    private async buildCommands(data: any[]) {
+    private async buildCommands(data: Array<SlashCommandBuilder | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>>) {
         for await (const directory of readdirSync(`${this.client.location}/src/interactions`, { withFileTypes: true })) {
             if (!directory.isDirectory()) continue;
             for await (const command of readdirSync(`${this.client.location}/src/interactions/${directory.name}`, { withFileTypes: true })) {
@@ -87,7 +87,7 @@ export default class MessageCreate extends BotEvent {
                 if (command.name.endsWith('.ts')) {
                     import(`${this.client.location}/src/interactions/${directory.name}/${command.name}`).then((interaction) => {
                         const Command: BotInteraction = new interaction.default(this.client);
-                        Command.slashData ? data.push(Command.slashData) : void 0;
+                        data.push(Command.slashData);
                     });
                 }
             }
