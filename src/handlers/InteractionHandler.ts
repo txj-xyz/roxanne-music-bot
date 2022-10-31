@@ -1,5 +1,5 @@
 import { readdirSync } from 'fs';
-import { EmbedBuilder, Collection, Interaction, Awaitable } from 'discord.js';
+import { EmbedBuilder, Collection, Interaction, Message, InteractionResponse } from 'discord.js';
 import Bot from '../Bot';
 import BotInteraction from '../types/BotInteraction';
 import EventEmitter = require('events');
@@ -10,14 +10,17 @@ export default interface InteractionHandler {
     built: boolean;
 }
 
-export default class InteractionHandler extends EventEmitter {
+export default class InteractionHandler extends EventEmitter implements InteractionHandler {
     constructor(client: Bot) {
         super();
         this.commands = new Collection();
         this.built = false;
         this.client = client;
         this.on('error', (error: unknown) => client.logger.error({ error: error }, true));
-        client.on('interactionCreate', (interaction: Interaction): Awaitable<void> => this.exec(interaction));
+        client.on('interactionCreate', (interaction: Interaction): Promise<any> => {
+            this.client.commandsRun++;
+            return this.exec(interaction);
+        });
     }
 
     build() {
@@ -66,14 +69,14 @@ export default class InteractionHandler extends EventEmitter {
             .setFooter({ text: this.client.user?.username ?? '', iconURL: this.client.user?.displayAvatarURL() });
     }
 
-    async exec(interaction: Interaction): Promise<void> {
+    async exec(interaction: Interaction): Promise<Message<true> | InteractionResponse<true> | void> {
         if (interaction.isCommand() && interaction.isRepliable() && interaction.inCachedGuild()) {
             try {
                 const command = this.commands.get(interaction.commandName);
-                if (!command) return;
+                if (!command) return void 0;
                 switch (command.permissions) {
                     case 'OWNER':
-                        if (interaction.isRepliable() && !this.client.util.config.owners.includes(interaction.user.id)) {
+                        if (!this.client.util.config.owners.includes(interaction.user.id)) {
                             this.client.logger.log(
                                 {
                                     message: `Attempted restricted permissions. { command: ${command.name}, user: ${interaction.user.username}, channel: ${interaction.channel} }`,
@@ -81,8 +84,7 @@ export default class InteractionHandler extends EventEmitter {
                                 },
                                 true
                             );
-                            await interaction.reply({ content: 'You do not have permissions to run this command. This incident has been logged.', ephemeral: true });
-                            return;
+                            return await interaction.reply({ content: 'You do not have permissions to run this command. This incident has been logged.', ephemeral: true });
                         }
                         break;
                     default:
@@ -97,9 +99,7 @@ export default class InteractionHandler extends EventEmitter {
                     },
                     true
                 );
-
                 await command.run(interaction);
-                this.client.commandsRun++;
             } catch (error: unknown) {
                 this.client.logger.error(
                     {
@@ -112,13 +112,13 @@ export default class InteractionHandler extends EventEmitter {
 
                 // This section will attempt to catch all errors coming from the bots and feed back to the channel
                 try {
-                    interaction.reply({ embeds: [this.errorEmbed(error)] });
+                    return interaction.editReply({ embeds: [this.errorEmbed(error)] });
                 } catch {}
                 try {
-                    interaction.editReply({ embeds: [this.errorEmbed(error)] });
+                    return interaction.followUp({ embeds: [this.errorEmbed(error)] });
                 } catch {}
                 try {
-                    interaction.followUp({ embeds: [this.errorEmbed(error)] });
+                    return interaction.reply({ embeds: [this.errorEmbed(error)] });
                 } catch {}
             }
         }
