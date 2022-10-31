@@ -2,7 +2,6 @@ import { ApplicationCommandOption, SlashCommandBuilder, SlashCommandSubcommandsO
 import Bot from '../Bot';
 
 export default interface BotInteraction {
-    new (client: Bot): BotInteraction;
     client: Bot;
     category: string;
     get name(): string;

@@ -1,5 +1,5 @@
 import { Channel, Guild, GuildMember } from 'discord.js';
-import { Shoukaku, Connectors, Player, WebSocketClosedEvent, Node, Track } from 'shoukaku';
+import { Shoukaku, Connectors, Player, Node, Track } from 'shoukaku';
 import Bot from '../Bot';
 import { BotModule } from '../handlers/ModuleHandler';
 
@@ -61,8 +61,8 @@ export class MusicDispatcher {
         this.player
             .on('start', async () => {})
             .on('end', async () => {})
-            .on('stuck', () => {})
-            .on('closed', async (payload: WebSocketClosedEvent) => {});
+            .on('stuck', () => {});
+            // .on('closed', async (payload: WebSocketClosedEvent) => {});
     }
 }
 
@@ -73,7 +73,7 @@ export interface MusicQueue {
     handle(guild: Guild, member: GuildMember, channel: Channel, node: Node, track: Track, first: boolean): Promise<MusicDispatcher>;
 }
 
-export class MusicQueue extends Map implements MusicQueue {
+export class MusicQueue extends Map {
     constructor(client: Bot) {
         super();
         this.client = client;
