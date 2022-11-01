@@ -60,6 +60,7 @@ export default class Play extends BotInteraction {
 
     async run(interaction: ChatInputCommandInteraction<'cached'>) {
         await interaction.deferReply({ ephemeral: false });
+        interaction.editReply({ content: '<:peepoSpy:762571392494338068>' });
         const song: string = interaction.options.getString('song', true);
         const node: Node | undefined = this.client.music.shoukaku.getNode('auto');
         // Catch if there is no node found
