@@ -1,5 +1,5 @@
 import BotInteraction from '../../types/BotInteraction';
-import { Channel, ChatInputCommandInteraction, Guild, Message, SlashCommandBuilder } from 'discord.js';
+import { Channel, ChatInputCommandInteraction, Message, SlashCommandBuilder } from 'discord.js';
 import { LavalinkResponse, Node, Track } from 'shoukaku';
 // import { BotModule } from '../../handlers/ModuleHandler';
 
@@ -19,9 +19,6 @@ export default class Play extends BotInteraction {
             .addStringOption((option) => option.setName('song').setDescription('The song you want to play.').setRequired(true));
     }
     public async playURL(interaction: ChatInputCommandInteraction<'cached'>, options: { node: Node; query: string }): Promise<Message<true>> {
-        const guild: Guild = await this.client.guilds.fetch(interaction.guild.id);
-        const channel: Channel | null = await this.client.channels.fetch(interaction.channelId, { force: true });
-        if (!channel) return interaction.editReply({ content: 'There was an error fetching the channel' });
         options.query.includes('/shorts/') ? (options.query = options.query.replace('/shorts/', '/watch?v=')) : (options.query = options.query);
         const result: LavalinkResponse | null = await options.node.rest.resolve(options.query);
         if (!result) return await interaction.editReply({ content: 'I did not find anything on the query you provided!' });
@@ -29,11 +26,11 @@ export default class Play extends BotInteraction {
         const track: Track | undefined = tracks.shift();
         const playlist = loadType === 'PLAYLIST_LOADED';
         if (!track) return await interaction.editReply({ content: 'I did not find anything on the query you provided!' });
-        const dispatcher = await this.client.music.queue.handle(guild, interaction.member, channel, options.node, track, false);
+        const dispatcher = await this.client.music.queue.handle(interaction.guild, interaction.member, interaction.channel as Channel, options.node, track, false);
         if (playlist) {
             this.client.logger.log({ handler: this.constructor.name, message: `Handling new music playlist request | guild: ${interaction.guildId} | node: ${options.node.name}` }, true);
             for (const song of tracks) {
-                await this.client.music.queue.handle(guild, interaction.member, channel, options.node, song, false);
+                await this.client.music.queue.handle(interaction.guild, interaction.member, interaction.channel as Channel, options.node, song, false);
             }
             dispatcher.play();
             return interaction.editReply({ content: `Added \`${tracks.length}\` tracks from the playlist \`${result.playlistInfo.name}\` in queue!` });
@@ -45,15 +42,12 @@ export default class Play extends BotInteraction {
     }
 
     public async playSearch(interaction: ChatInputCommandInteraction<'cached'>, options: { node: Node; query: string }): Promise<Message<true>> {
-        const guild: Guild = await this.client.guilds.fetch(interaction.guild.id);
-        const channel: Channel | null = await this.client.channels.fetch(interaction.channelId, { force: true });
-        if (!channel) return interaction.editReply({ content: 'There was an error fetching the channel' });
         // Single search request
         const search: LavalinkResponse | null = await options.node.rest.resolve(`ytsearch:${options.query}`);
         if (!search) return await interaction.editReply({ content: 'I did not find anything on the query you provided!' });
         const track: Track | undefined = search.tracks.shift();
         if (!track) return await interaction.editReply({ content: 'I did not find anything on the query you provided!' });
-        const dispatcher = await this.client.music.queue.handle(guild, interaction.member, channel, options.node, track, false);
+        const dispatcher = await this.client.music.queue.handle(interaction.guild, interaction.member, interaction.channel as Channel, options.node, track, false);
         dispatcher.play();
         return await interaction.editReply(`Added the track \`${track.info.title}\` in queue!`);
     }
