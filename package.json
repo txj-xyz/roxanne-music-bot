@@ -1,28 +1,26 @@
 {
     "name": "roxanne",
-    "version": "3.5.1",
-    "description": "A Music bot made from Azuma & Shoukaku & Kongoku",
+    "version": "4.0.0",
+    "description": "A music bot written in typescript.",
     "scripts": {
-        "test": "node test.js",
-        "start": "node index.js"
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "start": "ts-node ./index.ts"
     },
     "author": "TXJ",
     "license": "MIT",
     "dependencies": {
-        "@colors/colors": "^1.5.0",
-        "@discordjs/collection": "^0.3.2",
-        "@discordjs/rest": "^0.1.0-canary.0",
-        "@godaddy/terminus": "^4.9.0",
+        "@sapphire/discord.js-utilities": "^5.1.0-pr-434.549335e.0",
         "@types/node": "^18.6.5",
-        "async-await-retry": "^1.2.4",
         "axios": "^0.24.0",
         "bufferutil": "^4.0.5",
         "cheshire": "github:Deivu/Cheshire#2.0.2",
         "count-interval": "^1.0.1",
-        "discord-api-types": "^0.24.0",
-        "discord.js": "^14.2.0",
+        "discord-api-types": "^0.37.8",
+        "discord.js": "^14.6.0",
         "discord.js-pages": "^1.4.4",
-        "indomitable": "^2.0.1",
+        "dotenv": "^16.0.2",
+        "indomitable": "^2.0.2",
         "kurasuta": "^3.0.2",
         "petitio": "^1.4.0",
         "shoukaku": "^3.1.0",
@@ -32,6 +30,10 @@
         "uuid": "^8.3.2"
     },
     "devDependencies": {
-        "eslint": "^8.1.0"
+        "@types/uuid": "^8.3.4",
+        "eslint": "^8.1.0",
+        "ts-loader": "^9.3.1",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.8.2"
     }
 }

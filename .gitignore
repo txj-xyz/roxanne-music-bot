@@ -12,3 +12,7 @@ out
 node_modules
 db
 package-lock.json
+.env
+node_modules/
+config.json
+dist/
