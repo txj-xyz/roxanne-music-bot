@@ -21,7 +21,27 @@ export default class Eval extends BotInteraction {
             .setName(this.name)
             .setDescription(this.description)
             .addStringOption((option: SlashCommandStringOption) => option.setName('code').setDescription('Evaluate Code from interaction scope.').setRequired(true))
-            .addBooleanOption((option: SlashCommandBooleanOption) => option.setName('ephemeral').setDescription('Respond privately or in the channel.'));
+            .addStringOption((option: SlashCommandStringOption) =>
+                option
+                    .setName('depth')
+                    .setDescription('Evaluation depth if needed')
+                    .setChoices(
+                        {
+                            name: '0',
+                            value: '0',
+                        },
+                        {
+                            name: '1',
+                            value: '1',
+                        },
+                        {
+                            name: '2',
+                            value: '2',
+                        }
+                    )
+                    .setRequired(false)
+            )
+            .addBooleanOption((option: SlashCommandBooleanOption) => option.setName('ephemeral').setDescription('Respond privately or in the channel.').setRequired(false));
     }
 
     static trim(string: string, max: number): string {
@@ -30,14 +50,15 @@ export default class Eval extends BotInteraction {
 
     async run(interaction: ChatInputCommandInteraction) {
         const type = interaction.options.getBoolean('ephemeral');
+        const depth = interaction.options.getString('depth');
         await interaction.deferReply(type ? { ephemeral: type } : undefined);
         const code = interaction.options.getString('code', true);
         let res;
         try {
             res = await eval(code);
-            res = inspect(res, { depth: 0 });
+            res = inspect(res, { depth: Number(depth) ?? 0 });
         } catch (error) {
-            res = inspect(error, { depth: 0 });
+            res = inspect(error, { depth: Number(depth) ?? 0 });
         }
         const embed = new EmbedBuilder()
             .setColor(this.client.color)

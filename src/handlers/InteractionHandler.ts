@@ -91,25 +91,10 @@ export default class InteractionHandler extends EventEmitter implements Interact
                         break;
                 }
 
-                this.client.logger.log(
-                    {
-                        handler: this.constructor.name,
-                        user: `${interaction.user.username} | ${interaction.user.id}`,
-                        message: `Executing Command ${command.name}`,
-                    },
-                    true
-                );
+                this.client.logger.log({ handler: this.constructor.name, user: `${interaction.user.username} | ${interaction.user.id}`, message: `Executing Command ${command.name}` }, true);
                 await command.run(interaction);
             } catch (error: unknown) {
-                this.client.logger.error(
-                    {
-                        handler: this.constructor.name,
-                        message: 'Something errored!',
-                        error: error?.toString() ?? 'Internal Error Occurred.',
-                    },
-                    true
-                );
-
+                this.client.logger.error({ handler: this.constructor.name, message: 'Something errored!', error: error?.toString() ?? 'Internal Error Occurred.' }, true);
                 // This section will attempt to catch all errors coming from the bots and feed back to the channel
                 try {
                     return interaction.editReply({ embeds: [this.errorEmbed(error)] });

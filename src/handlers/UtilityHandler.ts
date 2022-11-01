@@ -58,4 +58,11 @@ export default class UtilityHandler {
         if (MB >= 1000) return `${GB.toFixed(1)} GB`;
         else return `${Math.round(MB)} MB`;
     }
+
+    public humanizeTime(ms: any, sec: any = (ms / 1000).toFixed(0), min: any = Math.floor(sec / 60), hr: any = 0) {
+        if (min > 59) hr = ((hr = Math.floor(min / 60)) => (hr >= 10 ? hr : `0${hr}`))();
+        min = ((m = min - hr * 60) => (m >= 10 ? m : `0${m}`))();
+        sec = ((s = Math.floor(sec % 60)) => (s >= 10 ? s : `0${s}`))();
+        return hr > 59 ? 'Live! 🔴' : hr != '' ? `${hr}:${min}:${sec}` : `${min}:${sec}`;
+    }
 }
