@@ -22,24 +22,7 @@ export default class Eval extends BotInteraction {
             .setDescription(this.description)
             .addStringOption((option: SlashCommandStringOption) => option.setName('code').setDescription('Evaluate Code from interaction scope.').setRequired(true))
             .addStringOption((option: SlashCommandStringOption) =>
-                option
-                    .setName('depth')
-                    .setDescription('Evaluation depth if needed')
-                    .setChoices(
-                        {
-                            name: '0',
-                            value: '0',
-                        },
-                        {
-                            name: '1',
-                            value: '1',
-                        },
-                        {
-                            name: '2',
-                            value: '2',
-                        }
-                    )
-                    .setRequired(false)
+                option.setName('depth').setDescription('Evaluation depth if needed').setChoices({ name: '0', value: '0' }, { name: '1', value: '1' }, { name: '2', value: '2' }).setRequired(false)
             )
             .addBooleanOption((option: SlashCommandBooleanOption) => option.setName('ephemeral').setDescription('Respond privately or in the channel.').setRequired(false));
     }
