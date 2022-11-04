@@ -59,6 +59,7 @@ class RoxanneDispatcher {
                 this.destroy();
             })
             .on('closed', async (payload) => {
+                console.log(payload);
                 this.client.logger.log(`Connection is closed with payload ${payload.code}`);
 
                 // Full reconnection support for the new re-identification from Discord Gateways
@@ -76,7 +77,8 @@ class RoxanneDispatcher {
                         deaf: true,
                     })
                     .catch((err) => {
-                        this.channel.send('There was a failure with resuming the connection to the Discord Gateway');
+                        console.log(err);
+                        this.channel.send('There was a failure with resuming the connection to Discord.');
                         return this.destroy(`Payload failure ${payload.code}`);
                     });
             });
