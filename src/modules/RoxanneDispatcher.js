@@ -59,13 +59,14 @@ class RoxanneDispatcher {
                 this.destroy();
             })
             .on('closed', async (payload) => {
+                console.log(payload);
                 this.client.logger.log(`Connection is closed with payload ${payload.code}`);
 
                 // Full reconnection support for the new re-identification from Discord Gateways
                 const channel_test = await this.client.channels.fetch(this.player.connection.channelId);
                 await Wait(2000);
                 if (channel_test.members.size === 0) {
-                    this.channel.send('There was a failure with resuming the connection to the Discord Gateway');
+                    this.channel.send('There is nobody in the voice channel so I left :)');
                     return this.destroy(`Payload failure ${payload.code}`);
                 }
                 return this.player.node
@@ -76,7 +77,8 @@ class RoxanneDispatcher {
                         deaf: true,
                     })
                     .catch((err) => {
-                        this.channel.send('There was a failure with resuming the connection to the Discord Gateway');
+                        console.log(err);
+                        this.channel.send('There was a failure with resuming the connection to Discord.');
                         return this.destroy(`Payload failure ${payload.code}`);
                     });
             });
@@ -88,7 +90,6 @@ class RoxanneDispatcher {
 
     play() {
         if (!this.exists || !this.queue.length) {
-            //handle if the queue is empty
             this.nowplaying.delete().catch((e) => e);
             return this.destroy();
         }
