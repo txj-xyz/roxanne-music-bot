@@ -64,23 +64,30 @@ class RoxanneDispatcher {
 
                 // Full reconnection support for the new re-identification from Discord Gateways
                 const channel_test = await this.client.channels.fetch(this.player.connection.channelId);
-                await Wait(2000);
                 if (channel_test.members.size === 0) {
                     this.channel.send('There is nobody in the voice channel so I left :)');
                     return this.destroy(`Payload failure ${payload.code}`);
                 }
-                return this.player.node
-                    .joinChannel({
-                        guildId: this.guild.id,
-                        shardId: this.guild.shardId,
-                        channelId: this.player.connection.channelId,
-                        deaf: true,
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        this.channel.send('There was a failure with resuming the connection to Discord.');
-                        return this.destroy(`Payload failure ${payload.code}`);
-                    });
+
+                try {
+                    await this.player.connection.resendServerUpdate();
+                    await Wait(20 * 1000);
+                    this.player.node
+                        .joinChannel({
+                            guildId: this.guild.id,
+                            shardId: this.guild.shardId,
+                            channelId: this.player.connection.channelId,
+                            deaf: true,
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            this.channel.send('There was a failure with resuming the connection to Discord.');
+                            return this.destroy(`Payload failure ${payload.code}`);
+                        });
+                } catch (err) {
+                    console.log(err);
+                    // this.client.logger.log(err.stack);
+                }
             });
     }
 
